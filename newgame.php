@@ -1806,11 +1806,12 @@ experience
         var roomName;
         //CONNECTION
         var socket;
-        socket = io('wss://morning-island-26413.herokuapp.com');
+        //morning-island-26413.herokuapp.com
+        socket = io('wss://134.119.221.139:3000');
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
-
+/*
             
             thatUserId = socket.io.engine.id;
 
@@ -1824,7 +1825,7 @@ experience
               //brodcast connection message
               var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               socket.emit(eventName, JSON.stringify(msgToSend));  
-            
+            */
         });
         function ConnectSocket(){            
             socket.emit('joinRoom', 'Connected.');
