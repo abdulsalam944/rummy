@@ -1,0 +1,49 @@
+.center {
+width:60%;
+margin:20px auto 0 auto;
+}
+
+.marginbot {
+margin-bottom:15px;
+}
+
+ul.list li {
+list-style-type:none;
+margin-left:20px;
+
+}
+
+ul.tabs {
+width:100%;
+overflow:hidden;
+}
+
+ul.tabs li {
+list-style-type:none;
+display:block;
+float:left;
+color:#fff;
+padding:8px;
+margin-right:2px;
+background-color:#a72c2f;
+
+cursor:pointer;
+
+}
+
+ul.tabs li:hover {
+background-color:#f57300;
+}
+
+ul.tabs li.current {
+background-color:#f57300;
+padding:8px;
+}
+
+.tabscontent {
+
+padding:0px 0 0 0;
+display:none;
+width:100%;
+
+}

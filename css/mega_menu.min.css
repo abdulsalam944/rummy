@@ -1,0 +1,215 @@
+.menu-container {
+	width: 100%;
+	margin: 0 auto;
+	background:nne; 
+}
+.menu-mobile {
+	display: none;
+	padding: 10px 20px;
+	color: #fff!important
+}
+.menu-mobile:after {
+	content: "\f0c9";
+	font-family: FontAwesome;
+	font-size: 2.5rem;
+	padding: 0;
+	float: right;
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-25%);
+	-ms-transform: translateY(-25%);
+	transform: translateY(-25%);
+	color: #fff
+}
+.menu-dropdown-icon:before {
+	content: "\f067";
+	font-family: FontAwesome;
+	display: none;
+	cursor: pointer;
+	float: right;
+	padding: 8px 15px;
+	background: none;
+	color: #fff;
+	position: absolute;
+	right: 0
+}
+.menu > ul {
+	margin: 0 auto;
+	width: 100%;
+	list-style: none;
+	padding: 0;
+	position: relative;
+	box-sizing: border-box; text-align:right;
+}
+.menu > ul:before, .menu > ul:after {
+	content: "";
+	display: table
+}
+.menu > ul:after {
+	clear: both
+}
+.menu > ul > li {	
+	padding: 0;
+	margin: 0;
+	display:inline-block;
+}
+.menu > ul > li a {
+	text-decoration: none;
+	padding: 24px 15px 37px 15px;
+	display: block;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 14px
+}
+.menu > ul > li a:before{}
+.menu > ul > li:hover {
+	background: #a72c2f;
+	color: #1cf2fd;
+}
+.menu > ul > li.active> a {
+	background: #a72c2f;
+	color: #fff
+}
+.menu > ul > li:hover> a {
+	color: #fff
+}
+.menu > ul > li > ul {
+	display: none;
+	width: 100%;
+	background: #2b2a26;
+	padding: 20px;
+	position: absolute;
+	z-index: 99;
+	left: 0;
+	margin:0px 0 0 0;
+	list-style: none;
+	box-sizing: border-box;border-top: 30px solid #a72c2f;
+}
+.menu > ul > li > ul:before, .menu > ul > li > ul:after {
+	content: "";
+	display: table
+}
+.menu > ul > li > ul:after {
+	clear: both
+}
+.menu > ul > li > ul > li {
+	margin: 0;
+	padding-bottom: 0;
+	list-style: none;
+	width:auto;
+	background: none;
+	float: left;
+        text-align: left;
+        padding: 0 10px;
+}
+.menu > ul > li > ul > li a {
+	color: #fff;
+	padding: .2em 0;
+	width: 100%;
+	display: block;
+	border-bottom:none;
+}
+.menu > ul > li > ul > li a:hover {
+	color: #ff9536
+}
+.menu > ul > li > ul > li > ul {
+	display: none;
+	padding: 0;
+	margin: 10px 0 0;
+	list-style: none;
+	box-sizing: border-box
+}
+.menu > ul > li > ul > li:hover ul {display:block;}
+.menu > ul > li > ul > li > ul:before, .menu > ul > li > ul > li > ul:after {
+	content: "";
+	display: table
+}
+.menu > ul > li > ul > li > ul:after {
+	clear: both
+}
+.menu > ul > li > ul > li > ul > li {
+	float: left;
+	width: 100%;
+	padding: 10px 0;
+	margin: 0;
+	font-size: .8em;
+        clear: both;
+}
+.menu > ul > li > ul > li > ul > li a {
+	border: 0
+}
+/*.menu > ul > li > ul.normal-sub {
+	width: 300px;
+	left: auto;
+	padding: 10px 20px; text-align:left;
+}
+.menu > ul > li > ul.normal-sub > li {
+	width: 100%
+}
+.menu > ul > li > ul.normal-sub > li a {
+	border: 0;
+	padding: 10px 0
+}*/
+@media only screen and (max-width: 1000px) {
+    
+.menu-container {
+	width: 100%;float:left;
+}
+.menu-mobile {
+	display: block;
+	color: #000
+}
+.menu-mobile a {
+	color: #fff
+}
+.menu-mobile:hover {
+	color: #000
+}
+a:focus, a:hover {
+	color: #000;
+	text-decoration: none
+}
+.menu-dropdown-icon:before {
+	display: block
+}
+.menu > ul {
+	display: none; text-align:left;
+}
+.menu > ul > li {
+	width: 100%;
+	float: none;
+	display: block
+}
+.menu > ul > li a {
+	padding: 8px 15px;
+	width: 100%;
+	display: block
+}
+.menu > ul > li > ul {
+	position: relative; margin-top: 0; border-top: 0;
+}
+
+.menu > ul > li > ul.normal-sub {
+	width: 100%
+}
+.menu > ul > li > ul > li {
+	float: none;
+	width: 100%;
+	margin-top: 5px
+}
+.menu > ul > li > ul > li:first-child {
+	margin: 0
+}
+.menu > ul > li > ul > li > ul {
+	position: relative; 
+}
+.menu > ul > li > ul > li > ul > li {
+	float: none
+}
+.menu .show-on-mobile {
+	display: block
+}
+.menu > ul > li > ul > li > ul{background: #a72c2f; padding: 10px;}
+
+
+}

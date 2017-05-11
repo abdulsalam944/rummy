@@ -1,0 +1,165 @@
+https://www.youtube.com/watch?v=mL5MM4-omks
+
+Game Code Process.
+
+1. Player Create Room  ( create-room-btn - click )
+    ---------------
+
+    i. Ajax: Room Update (roomUpdate.php)
+    ii. Ajax: Player Update (playerUpdate.php)
+    iii. Set Cookies : room, game-type, game-players, creator (bool)
+
+
+Connection on new Session
+
+2. Player Join Room ( join btn click )
+--------------------
+
+    i. Set Cookies: room, game-type, players
+    ii. Ajax: Player Update (playerUpdate.php)
+
+
+   Connection on Open (trigger)
+
+     Player Positioning:
+
+    i. Ajax: Get player count, Assign user id to players (getPlayers.php)
+    ii. Create "playersPlaying" Array. Push Players
+    iii. Ajax: Get Player name for opponent (getPlayerName.php), Display
+
+     Card Positioning:
+        
+
+    i. Timer Set for game start (gameStartHandler)  
+    ii. Deck Cards Shown
+    iii. Ajax: Shuffle Deck for once. Shuffle from Creator end. (shuffleDeck.php)
+    
+    iv. Send signal to All Players. (toss-shuffle)
+
+
+        Toss: 
+
+        i. Signal Received for Both Players
+        ii. Timer start for selecting toss cards
+        iii. Ajax: Get shuffled deck (getShuffledDeck.php)
+        iv. Getting 2 cards, setting each card different values, save in "tossArray"
+        v. Adding "clickable" class on deck for tossWinner
+        vi. Ajax: Getting player name to show the winner
+        vii. Timer -> Empty "tossArray" 
+        viii. Ajax: Enter tossWinner into db once (insertTossWinner.php) [Creator]
+
+          Success Toss
+
+         Choose Joker:
+
+          i. Ajax: Choosing a card from db once (chooseJoker.php) [Creator]
+         
+          ii. Send signal ("select-joker")
+         
+          iii. Display joker on creator end
+
+
+          Catch ("select-joker") signal by Other Players
+
+          i. Show the joker card on the frontend
+
+             Success showing joker
+
+            Dealing Time:
+
+            i. Ajax: Deal Cards, db insert cards in hand (dealCards.php)
+            ii. Send signal to the Creator ("deal-card")
+            iii. Ajax: Get the cards in hand from db (getMyCards.php)
+            
+            iv. Timer Started to cover all the rest of the functions
+            
+            v. Deal other player cards and show card back for the room creator
+            vi. Get throw cards (getThrowCard.php)
+            vii. Send Signal ("throw-card")
+            viii. Ajax: get toss winner (getTossWinner.php)
+
+
+            Catch Signal ("deal-card") | [Creator]
+
+             i. Ajax: Deal Cards, db insert cards in hand (dealCards.php)
+             ii. Ajax: Get the cards in hand from db (getMyCards.php)
+            
+             iii.  Timer Started to cover all the rest of the functions
+
+             iv. Deal room creator cards and show card back for other players
+             v.  Ajax: get toss winner (getTossWinner.php) 
+
+
+            Catch Signal ("throw-card") | [Creator]
+            
+             i. Show the show card
+             ii. Ajax: Update current player (updateCurrentPlayer.php)
+
+
+
+
+  
+
+
+
+
+
+  Meld Points
+
+
+
+for loop , get all values add them up
+
+
+
+
+
+for loop, 
+
+check for pure seq,
+if pure then , add pure seq array.
+
+check for impure seq
+
+if impure then, add impure seq array.
+
+if samevalue
+
+add samevalue array
+
+
+if neither of them
+
+add in victimsgroup array
+
+
+
+
+
+
+
+if(pureseq == 0){
+    80 points
+}else{
+    
+    if(pureseq == 1 && (pureseq+impureseq) == 1 ){
+    
+        getRid of pure seq from the total
+
+
+    }else if( pureseq == 1 && (pureSeq + impure) >= 2){
+
+        getrid of pureseq from total
+        if(impureseq.length > 0) get rid of impure seq from total
+        if(samevalue.length > 0) get rid of samevalues from the total
+
+
+    }   
+    
+
+
+}
+
+
+
+1. check for wrong meld

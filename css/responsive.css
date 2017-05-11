@@ -1,0 +1,114 @@
+
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    
+h1 {font-size: 24px !important;font-family: OpenSans-Regular; color: #fff;margin: 0 0 10px;padding: 0 0 10px; position: relative}
+
+h2 {font-size: 22px !important;font-family: OpenSans-Regular; color: #fff;margin: 0 0 10px;padding: 0 0 10px; position: relative}
+
+h3 {font-size: 20px !important;font-family: OpenSans-Regular; color: #fff;margin: 0 0 10px;padding: 0 0 10px; position: relative}
+
+h4 {font-size: 16px !important;font-family: OpenSans-Regular; color: #fff;margin: 0 0 10px;padding: 0 0 10px; position: relative}
+
+p {font-size: 14px !important;font-family: OpenSans-Regular;color: #fff;margin: 0 0 10px;}
+    
+.margin_top_1 {margin-top: 10px}
+.margin_top_2 {	margin-top: 10px}
+.margin_top_3 {	margin-top: 10px}
+.margin_top_4 {	margin-top: 10px}
+.margin_top_5 {	margin-top: 10px}
+.margin_top_6 {	margin-top: 10px}
+.margin_top_7 {	margin-top: 10px}
+.margin_top_8 {	margin-top: 10px}
+.margin_top_9 {	margin-top: 10px}
+
+.margin_bottom_1 {margin-bottom: 10px}
+.margin_bottom_2 {margin-bottom: 1px}
+.margin_bottom_3 {margin-bottom: 10px}
+.margin_bottom_4 {margin-bottom: 10px}
+.margin_bottom_5 {margin-bottom: 10px}
+.margin_bottom_6 {margin-bottom: 10px}
+.margin_bottom_7 {margin-bottom: 10px}
+.margin_bottom_8 {margin-bottom: 10px}
+.margin_bottom_9 {margin-bottom: 10px}
+
+.padding_top_1 {padding-top: 10px}
+.padding_top_2 {padding-top: 10px}
+.padding_top_3 {padding-top: 10px}
+.padding_top_4 {padding-top: 10px}
+.padding_top_5 {padding-top: 10px}
+.padding_top_6 {padding-top: 10px}
+.padding_top_7 {padding-top: 10px}
+.padding_top_8 {padding-top: 10px}
+.padding_top_9 {padding-top: 10px}
+
+.padding_bottom_1 {padding-bottom: 10px}
+.padding_bottom_2 {padding-bottom: 10px}
+.padding_bottom_3 {padding-bottom: 10px}
+.padding_bottom_4 {padding-bottom: 10px}
+.padding_bottom_5 {padding-bottom: 10px}
+.padding_bottom_6 {padding-bottom: 10px}
+.padding_bottom_7 {padding-bottom: 10px}
+.padding_bottom_8 {padding-bottom: 10px}
+.padding_bottom_9 {padding-bottom: 10px}
+
+
+header{position: relative; background: #000;}
+.top_login_sec{margin: 10px 0;}
+.top_login_sec_top{text-align:center;}
+.top_login_sec_bolg{margin:0; max-width: 32%; width: 100%;}
+.top_login_sec_bottom .top_login_sec_bolg{max-width: 49%;}
+.banner{height: 100%; min-height:170px;}
+.card{display:none;}
+.footer_bottom_blog ul li{display: inline-block; font-size: 13px; margin: 0 1px;}
+.footer_text_left{text-align:left;}
+
+.chips_count_sec{width: 100%; position: relative;}
+.chips_count_sec div{display: inline-block; text-align: center;}
+.chips_count_sec h3{font-size: 15px !important;}
+.bye_real_chips{background: none;
+    border: 0px solid #fff;
+    border-top-left-radius: 136px;
+    border-top-right-radius: 136px;
+    height:100px;
+    left: 50%;
+    margin-left: -50px;
+    position: absolute;
+    top: -30px;
+    width: 100px;}
+
+.bye_real_chips_inner{width: 100px; height: 100px; border-radius: 50%; background: #f57300; margin: -11px 0 0 -7px; font-size: 15px; font-weight: bold;
+color: #fff; display: table;}
+.bye_real_chips_inner span{ margin: 30px 0 0 0; display: inline-block;}
+.chips_count_sec .count{ font-size: 20px; color: #fff;}
+
+.wallet ul li{padding: 3px 5px;}
+
+.payment_step{width: 100%;}
+.payment_step ul{margin: 0; text-align: center; width: 100%;}
+.payment_step ul li{display: inline-block; width: 60px; height: 60px; margin: 0 4px;}
+.payment_step ul li:after{content:""; border: 2px solid #fff; position: absolute; border: 0px solid #fff; width: 0px; top: 50%; right:-46px;}
+.payment_step ul li:last-child:after{ border: none;}
+.payment_step ul li span{background: #fff; width: 40px; height: 40px; border-radius: 50%; display:block; }
+.payment_step ul li:hover span{background: #ffae00; cursor: pointer;}
+.payment_step ul li.select span {background:#538b1c}
+
+ul.wallet_2 li a{ padding:14px 5px;}
+.navbar{border: none;}
+
+
+
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 1400px) {
+  .top_login_sec_bolg{margin: 0 15px; display: inline-block; max-width:150px; width: 100%; text-align: left;}  
+
+}
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+     ul.wallet_2 li a{ padding:14px 2px; text-transform: lowercase;}
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1400px) {
+ .banner{width: 100%;height:100%; min-height: 648px;}   
+}

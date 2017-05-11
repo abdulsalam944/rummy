@@ -1,0 +1,24 @@
+
+Testing:
+
+1. Game Rejoining after losing
+2. Leave Tables
+3. 
+
+
+Needed to be done:
+
+2. While rejoining or play again situation, check chips required < chips available
+3. While joining do as above
+
+4. while discarding or dragging cards, omit the gaps (done)
+5. deal me out of next game button work for 2 pl in 6 pl game
+
+
+
+Game Rejoining (Rejoin)
+	1. Right meld 1st pl
+	2. All wrong melds
+
+
+Game Rejoining (Don't Rejoin)

@@ -1,0 +1,44 @@
+
+When only player:
+
+	Please wait while other players join the table
+
+When atleast 2 players:
+
+	Please wait while the game starts in 90 secs counter
+
+
+
+
+
+
+Display of cards:
+
+1. Player will join
+2. Counter starts or Show popup to wait (if 2 players)
+3. When counter ends, check for player count
+4. If player count < 2 , reset counter
+5. If player count >= 2, reset counter for once, then start the game
+
+
+
+Start the game:
+
+ 1. Display cards in deck
+ 2. Toss by picking 2 random cards
+ 3. Check card values. One who wins will start the game
+ 4. Distribute the cards 13 each player, 14 the player who won.
+ 5. Select a joker and remaining deck cards
+ 6. Keep the 14th card of the winning player in the side of the deck
+
+
+
+
+
+
+ if no rows, insert the player
+
+ if rows
+ 	find the player
+ 		if that player != exist, then concat
+ 		if that player exist, then do nothing
