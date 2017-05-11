@@ -1616,7 +1616,7 @@ experience
     <script type="text/javascript" src="js/tytabs.jquery.min.js"></script>
 
     <script src="webrtc/RTCMulticonnection.js"></script>
-    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="http://134.119.221.139:8080/socket.io/socket.io.js"></script>
     <script src="webrtc/gumAdapter.js"></script>
  
   
@@ -1806,7 +1806,7 @@ experience
         var roomName;
         //CONNECTION
         var socket;
-        socket = io('wss://morning-island-26413.herokuapp.com');
+        socket = io('http://134.119.221.139:8080');
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
@@ -1814,16 +1814,16 @@ experience
             
             thatUserId = socket.io.engine.id;
 
-            if(!userid){ 
-              userid=socket.io.engine.id; 
-            }
+            // if(!userid){ 
+            //   userid=socket.io.engine.id; 
+            // }
             
 
 
-              console.log('my_user_id:',userid);
+              // console.log('my_user_id:',userid);
               //brodcast connection message
-              var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
-              socket.emit(eventName, JSON.stringify(msgToSend));  
+              // var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
+              // socket.emit(eventName, JSON.stringify(msgToSend));  
             
         });
         function ConnectSocket(){            

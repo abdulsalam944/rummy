@@ -7,10 +7,10 @@ error_reporting(0);
 	$db_name="rummydb"; // Database name
 	//$tbl_name="swabhumi"; // Table name
 */
-	$host= '172.16.16.35';
-	$username ='web-db_dev-3';
-	$password ='MNSVTYer#$*&^%';
-	$db_name = 'DEV_LAB3_DB_P732_RUMMY';
+	$host= 'localhost';
+	$username ='root';
+	$password ='1234';
+	$db_name = 'rummydb';
 	
 	// Connect to server and select databse.
 	$con=mysql_connect("$host", "$username", "$password")or die("cannot connect");
