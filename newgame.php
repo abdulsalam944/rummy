@@ -36,8 +36,8 @@ if($_REQUEST['id']!='')
    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
    <script src="js/jquery.min.js"></script>
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <!-- <script type="text/javascript" src="js/offline.min.js"></script> -->
-  <!--<script type="text/javascript" src="js/offline-simulate-ui.js"></script>-->
+  <script type="text/javascript" src="js/offline.min.js"></script>
+  <script type="text/javascript" src="js/offline-simulate-ui.js"></script>
   
 
    <script>
