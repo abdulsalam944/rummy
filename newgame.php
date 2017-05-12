@@ -1629,7 +1629,7 @@ experience
      <!-- custom scrollbar plugin -->
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 
     <script src="js/tabs.js"></script>
-    <script type="text/javascript" src="js/checkConnection.js"></script>
+    <!--<script type="text/javascript" src="js/checkConnection.js"></script>-->
 
      <!-- Added by abdul on 2/5/2017 -->
     <script src="js/socket.io.js"></script>
