@@ -36,8 +36,8 @@ if($_REQUEST['id']!='')
    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
    <script src="js/jquery.min.js"></script>
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <!-- <script type="text/javascript" src="js/offline.min.js"></script> -->
-  <!--<script type="text/javascript" src="js/offline-simulate-ui.js"></script>-->
+   <script type="text/javascript" src="js/offline.min.js"></script> 
+ <!-- <script type="text/javascript" src="js/offline-simulate-ui.js"></script> -->
   
 
    <script>
@@ -3156,6 +3156,27 @@ if($_REQUEST['id']=='') {
     }
 } 
  ?>
-
+<style type="text/css">
+.offlineOverlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 9999999
+}
+</style>
+<div class="offlineOverlay">
+</div>
+<script>
+Offline.on('confirmed-down',function(){
+  $('.offlineOverlay').fadeIn();
+});
+Offline.on('confirmed-up',function(){
+  $('.offlineOverlay').fadeOut();   
+});
+</script>  
 </body>
 </html>
