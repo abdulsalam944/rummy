@@ -1810,17 +1810,34 @@ experience
 
 
 
+
+
+        var userid;
+
+
         socket = io('http://134.119.221.139:8080');
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
+
+            //reconnect
+            if(!userid){ 
+               userid=socket.io.engine.id; 
+            }
+            
+            /*var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
+              socket.emit(eventName, JSON.stringify(msgToSend));  
+*/
+
+              var msgToSend = {room:roomName, type: 'code', msg: 're-connect',oldid:userid,newid:socket.io.engine.id};
+              socket.emit(socketEventName, JSON.stringify(msgToSend));
+
+
 /*
             
             thatUserId = socket.io.engine.id;
 
-            // if(!userid){ 
-            //   userid=socket.io.engine.id; 
-            // }
+            
             
 
 

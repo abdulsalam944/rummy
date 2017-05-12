@@ -25,7 +25,7 @@ socket.on(socketEventName, function(e){
             */
             setTimeout(function(){
               $.post('ajax/check_dissconnect_status.php',{room:roomName,user:dataReceived.userid},function(data){
-                data = data.trim()
+                data = data.trim();
                 console.log('Data recieve after dissconnect signal ',data);   
                 console.log();   
                 if(data=="1"){
@@ -33,7 +33,10 @@ socket.on(socketEventName, function(e){
                   disconnected(dataReceived.userid);
                   return;
                 }else if(data=="2"){
+
+
                   alert('Internet connection gone of that user. Starting autoplay mode');
+
                 }
                 /*else{                  
                   alert('Unable to detect how user disconnected. ');
@@ -69,6 +72,14 @@ socket.on(socketEventName, function(e){
           if(dataReceived.room==roomName){ 
             console.log('Message from room: '+dataReceived.room+' my room '+roomName);
            // return; 
+
+           if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
+             alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
+
+             console.log(dataReceived);
+           }
+
+
           }else{
             console.log('Other room data recieved ',dataReceived.room, 'my room '+roomName);
             return; 
