@@ -1806,36 +1806,46 @@ experience
         var roomName;
         //CONNECTION
         var socket;
-<<<<<<< HEAD
+        var userid;
+
         //morning-island-26413.herokuapp.com
-        socket = io('wss://134.119.221.139:3000');
-=======
         socket = io('http://134.119.221.139:8080');
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
+
+            //reconnect
+            if(!userid){ 
+               userid=socket.io.engine.id; 
+            }
+            
+            /*var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
+              socket.emit(eventName, JSON.stringify(msgToSend));  
+*/
+
+              var msgToSend = {room:roomName, type: 'code', msg: 're-connect',oldid:userid,newid:socket.io.engine.id};
+              socket.emit(socketEventName, JSON.stringify(msgToSend));
+
+
 /*
             
             thatUserId = socket.io.engine.id;
 
-            // if(!userid){ 
-            //   userid=socket.io.engine.id; 
-            // }
+            
             
 
 
               // console.log('my_user_id:',userid);
               //brodcast connection message
-<<<<<<< HEAD
+
               var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               socket.emit(eventName, JSON.stringify(msgToSend));  
             */
-=======
+
               // var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               // socket.emit(eventName, JSON.stringify(msgToSend));  
             
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
+
         });
         function ConnectSocket(){            
             socket.emit('joinRoom', 'Connected.');
