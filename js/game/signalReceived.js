@@ -23,28 +23,29 @@ socket.on(socketEventName, function(e){
             /*
               Check whether user closed tab/window or internet dissconnects
             */
-            setTimeout(function(){
-              $.post('ajax/check_dissconnect_status.php',{room:roomName,user:dataReceived.userid},function(data){
+           // setTimeout(function(){
+              dataToSend = {room:roomName,user:dataReceived.userid};
+
+              $.post('ajax/check_dissconnect_status.php',dataToSend,function(data){
                 data = data.trim()
-                console.log('Data recieve after dissconnect signal ',data);   
-                console.log();   
-                if(data=="1"){
-                  alert('User colsed the game.');
-                  disconnected(dataReceived.userid);
-                  return;
-                }else if(data=="2"){
-                  alert('Internet connection gone of that user. Starting autoplay mode');
+               // console.log('Data recieve after dissconnect signal ',data);   
+                
+
+                if(data!=0 && data!=""){
+                    if($.inArray(data,playersPlaying)){
+                      data = parseInt(data.trim());
+                        console.log('Dissconnected user is fronm this table.',data);
+                        if(dissconnectedUsers.indexOf(data)<0){
+                          dissconnectedUsers.push(data);
+                        }
+                    }
+                }else{
+                    console.log('dissconnected user not found in db. ');
                 }
-                /*else{                  
-                  alert('Unable to detect how user disconnected. ');
-                }*/
-                //disconnected(dataReceived.userid);
-                //return;
-              
-               // disconnected();
-               
+
+
               });
-            },5000);
+            //},2000);
 
 
 
@@ -69,6 +70,21 @@ socket.on(socketEventName, function(e){
           if(dataReceived.room==roomName){ 
             console.log('Message from room: '+dataReceived.room+' my room '+roomName);
            // return; 
+
+           if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
+
+            //if(userid==dataReceived.oldid){
+            //  console.log("I am reconnected");
+              $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid});
+            //}
+ 
+
+             //alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
+
+             console.log(dataReceived);
+           }
+
+
           }else{
             console.log('Other room data recieved ',dataReceived.room, 'my room '+roomName);
             return; 

@@ -1695,6 +1695,26 @@
                                     PlayerCounterHandler.run();
                                     intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
+                                    /*  update db current player */
+
+                                    var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                                        player: nextPlayerToSend, sessionKey: sessionKeyCookie};
+
+                                         $.ajax({
+
+                                            type: 'POST',
+                                            url: 'ajax/updateCurrentPlayer.php',
+                                            cache: false,
+                                            data: ajxData270,
+                                            success: function(result){ 
+                                                if($.trim(result) == "ok"){
+                                                    console.log("current player updated");
+
+                                                }
+                                                
+                                            }
+                                         });  
+
 
                                 /* send discard signal to other players  */
 
@@ -1803,6 +1823,29 @@
                                 PlayerCounterHandler.playerCounter = 30;
                                 PlayerCounterHandler.run();
                                 intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+                                 /*  update db current player */
+
+                                var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                                    player: nextPlayerToSend, sessionKey: sessionKeyCookie};
+
+                                     $.ajax({
+
+                                        type: 'POST',
+                                        url: 'ajax/updateCurrentPlayer.php',
+                                        cache: false,
+                                        data: ajxData270,
+                                        success: function(result){ 
+                                            if($.trim(result) == "ok"){
+                                                console.log("current player updated");
+
+
+                                                checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
+
+                                            }
+                                            
+                                        }
+                                     });
 
 
                           

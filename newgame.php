@@ -36,8 +36,8 @@ if($_REQUEST['id']!='')
    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
    <script src="js/jquery.min.js"></script>
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <!-- <script type="text/javascript" src="js/offline.min.js"></script> -->
-  <!--<script type="text/javascript" src="js/offline-simulate-ui.js"></script>-->
+   <script type="text/javascript" src="js/offline.min.js"></script> 
+ <!-- <script type="text/javascript" src="js/offline-simulate-ui.js"></script> -->
   
 
    <script>
@@ -1629,7 +1629,7 @@ experience
      <!-- custom scrollbar plugin -->
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 
     <script src="js/tabs.js"></script>
-    <script type="text/javascript" src="js/checkConnection.js"></script>
+    <!--<script type="text/javascript" src="js/checkConnection.js"></script>-->
 
      <!-- Added by abdul on 2/5/2017 -->
     <script src="js/socket.io.js"></script>
@@ -1784,6 +1784,8 @@ experience
 
 
 
+    var dissconnectedUsers = [];
+
     </script>
 
     <script>
@@ -1806,36 +1808,52 @@ experience
         var roomName;
         //CONNECTION
         var socket;
-<<<<<<< HEAD
-        //morning-island-26413.herokuapp.com
-        socket = io('wss://134.119.221.139:3000');
-=======
+
+
+
+
+
+
+        var userid;
+
+
         socket = io('http://134.119.221.139:8080');
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
+
+            //reconnect
+            if(!userid){ 
+               userid=socket.io.engine.id; 
+            }
+            
+            /*var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
+              socket.emit(eventName, JSON.stringify(msgToSend));  
+*/
+
+              var msgToSend = {room:roomName, type: 'code', msg: 're-connect',oldid:userid,newid:socket.io.engine.id};
+              socket.emit(socketEventName, JSON.stringify(msgToSend));
+
+
 /*
             
             thatUserId = socket.io.engine.id;
 
-            // if(!userid){ 
-            //   userid=socket.io.engine.id; 
-            // }
+            
             
 
 
               // console.log('my_user_id:',userid);
               //brodcast connection message
-<<<<<<< HEAD
+
               var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               socket.emit(eventName, JSON.stringify(msgToSend));  
             */
-=======
+
               // var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               // socket.emit(eventName, JSON.stringify(msgToSend));  
             
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
+
         });
         function ConnectSocket(){            
             socket.emit('joinRoom', 'Connected.');
@@ -1851,6 +1869,42 @@ experience
              url: 'ajax/makeUserDissconnect.php?userId='+userId+'&sessionId='+$.trim($.cookie("sessionKey"))
            });
         });
+
+        function checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerId){
+          console.log('checkDissconnected : this function is called.');
+          console.log(dissconnectedUsers,nextPlayerId);
+          console.log(dissconnectedUsers.indexOf(nextPlayerId));
+            var index = dissconnectedUsers.indexOf(nextPlayerId);
+            if(index>=0){
+                console.log('Found in dissconnected members.');
+                var nextPlrId = getNextUserId(playersPlaying,nextPlayerId);
+                console.log('Check is who is next : ',parseInt(userId),nextPlrId);
+                var crntUser = parseInt(userId.trim());
+                var nxtUsr = parseInt(nextPlrId);
+                if(crntUser==nxtUsr){
+                  alert('Last player is dissconnected, I will play now.');
+                }else{
+                  alert('Last player is dissconnected, User id '+parseInt($nextPlayersId)+' will play now.');
+                }
+            }
+        }
+
+        function getNextUserId(playersPlaying, nextPlayerId){
+          console.log('Next player called.');
+          var temp_totalUserCount = (playersPlaying.length - 1);
+          var temp_curuserPos = playersPlaying.indexOf(nextPlayerId);      
+          var temp_nextUser = "";
+          //checkIfLastUser
+          if(temp_curuserPos >= temp_totalUserCount){
+            temp_nextUser = playersPlaying[0];
+
+          }else{
+            ++temp_curuserPos;
+            temp_nextUser = playersPlaying[temp_curuserPos];
+          }
+          console.log('Next player is : '+temp_nextUser)
+          return temp_nextUser;
+        }
 
     </script>
 
@@ -3140,6 +3194,27 @@ if($_REQUEST['id']=='') {
     }
 } 
  ?>
-
+<style type="text/css">
+.offlineOverlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 9999999
+}
+</style>
+<div class="offlineOverlay">
+</div>
+<script>
+Offline.on('confirmed-down',function(){
+  $('.offlineOverlay').fadeIn();
+});
+Offline.on('confirmed-up',function(){
+  $('.offlineOverlay').fadeOut();   
+});
+</script>  
 </body>
 </html>
