@@ -1840,7 +1840,7 @@
                                                 console.log("current player updated");
 
 
-                                                checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
+checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
 
                                             }
                                             

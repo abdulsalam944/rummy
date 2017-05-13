@@ -23,6 +23,7 @@ socket.on(socketEventName, function(e){
             /*
               Check whether user closed tab/window or internet dissconnects
             */
+
            // setTimeout(function(){
               dataToSend = {room:roomName,user:dataReceived.userid};
 
@@ -72,6 +73,7 @@ socket.on(socketEventName, function(e){
            // return; 
 
            if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
+<<<<<<< HEAD
 
             //if(userid==dataReceived.oldid){
             //  console.log("I am reconnected");
@@ -80,6 +82,9 @@ socket.on(socketEventName, function(e){
  
 
              //alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
+=======
+             alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
+>>>>>>> e2f677acbb323fcf0113812d5b17116e4392cca6
 
              console.log(dataReceived);
            }
