@@ -73,18 +73,19 @@ socket.on(socketEventName, function(e){
            // return; 
 
            if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
-<<<<<<< HEAD
 
-            //if(userid==dataReceived.oldid){
-            //  console.log("I am reconnected");
-              $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid});
-            //}
- 
 
-             //alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
-=======
-             alert('User connected again. old id '+dataReceived.oldid+'. New id '+dataReceived.newid)
->>>>>>> e2f677acbb323fcf0113812d5b17116e4392cca6
+              $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid},function(data){
+                  if(data){
+                    var thisUserId = data.trim();
+                    if($.inArray(thisUserId,dissconnectedUsers)){                                              
+                        var thisIndex = dissconnectedUsers.indexOf(thisUserId);
+                        delete dissconnectedUsers[thisIndex];                      
+                      }
+                  }
+              });
+           
+
 
              console.log(dataReceived);
            }
