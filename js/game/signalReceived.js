@@ -76,13 +76,11 @@ socket.on(socketEventName, function(e){
 
 
               $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid},function(data){
-                  if(data){
-                    var thisUserId = data.trim();
-                    if($.inArray(thisUserId,dissconnectedUsers)){                                              
-                        var thisIndex = dissconnectedUsers.indexOf(thisUserId);
-                        delete dissconnectedUsers[thisIndex];                      
-                      }
-                  }
+                  var thisUserId = data.trim();
+                  if($.inArray(thisUserId,dissconnectedUsers)){                                              
+                      var thisIndex = dissconnectedUsers.indexOf(thisUserId);
+                      delete dissconnectedUsers[thisIndex];                      
+                    }
               });
            
 
@@ -3251,6 +3249,9 @@ socket.on(socketEventName, function(e){
 
               }else if(dataReceived.type == "card-discarded"){
 
+
+                //alert('Discarded message recieved.');
+
                  intervalCounter = window.clearInterval(intervalCounter);
                  playerCounterFlag = 0;
 
@@ -3287,32 +3288,26 @@ socket.on(socketEventName, function(e){
 
 
 
+                                if(cardToBeShown!=""){
+                                  if(cardToBeShown != "Joker"){
+                                    var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                                    var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
 
+                                    $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                                     '<span class="rank">'+cardNumber1+'</span>'+
+                                     '<span class="suit">&'+cardHouse1+';</span>'+
+                                     '</span></li>');
 
-                                if(cardToBeShown != "Joker"){
+                                  }else{
+                                      $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
 
-                                var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
-                                var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
-
-                                $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
-                                 '<span class="rank">'+cardNumber1+'</span>'+
-                                 '<span class="suit">&'+cardHouse1+';</span>'+
-                                 '</span></li>');
-
-                                }else{
-
-                                     $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
-
-
-                                }            
-
-
-                              
+                                  } 
+                                }
 
                                 $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand li:empty').remove();
 
 
-
+                                  if(cardToBeShown!=""){
 
                                      if(cardToBeShown != "Joker"){
 
@@ -3338,7 +3333,7 @@ socket.on(socketEventName, function(e){
                                              
                                         }
 
-                                       
+                                      } 
                                          
 
                                         console.log("PLAYERRRRRRRRRRRRRR YOOOOOOOOOOOO ", nextPlayer);

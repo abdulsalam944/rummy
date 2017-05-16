@@ -1,7 +1,3 @@
-
-
-
-
 function getScoreBoardWrongVal2(roomIdCookie, gameType, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie){ 
 
    console.log("AIAIAIBIBI");

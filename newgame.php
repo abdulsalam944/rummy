@@ -1884,8 +1884,30 @@ experience
                 var nxtUsr = parseInt(nextPlrId);
                 if(crntUser==nxtUsr){
                   alert('Last player is dissconnected, I will play now.');
+
+
+                  //starting automation
+
+                   intervalCounter = window.clearInterval(intervalCounter);
+
+                   var PlayerCounterHandler = new playerCounterHandler(nextPlayerToSend);
+                   
+                    
+                    PlayerCounterHandler.playerCounter = 30;
+                    PlayerCounterHandler.run();
+                    intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+
+                    var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: dissconnectedUsers, cardDiscarded: '', nextPlayer: nextPlayerId};
+
+                    console.log(signal10);
+                                   
+                   // connection.send(JSON.stringify(signal10));
+                    socket.emit(socketEventName, JSON.stringify(signal10));  
+
+
                 }else{
-                  alert('Last player is dissconnected, User id '+parseInt($nextPlayersId)+' will play now.');
+                  //alert('Last player is dissconnected, User id '+parseInt($nextPlayersId)+' will play now.');
                 }
             }
         }
