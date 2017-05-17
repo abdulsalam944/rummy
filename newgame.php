@@ -1874,6 +1874,7 @@ experience
           console.log('checkDissconnected : this function is called.');
           console.log(dissconnectedUsers,nextPlayerId);
           console.log(dissconnectedUsers.indexOf(nextPlayerId.toString()));
+            
             var index = dissconnectedUsers.indexOf(nextPlayerId.toString());
 
             if(index>=0){
@@ -1935,9 +1936,12 @@ experience
 
                                                    if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
                                                       /* Drop the player */
-                                                      intervalCounter = window.clearInterval(intervalCounter);
-                                                      playerCounterFlag = 0;
-                                                      dropFunction();
+                                                      // intervalCounter = window.clearInterval(intervalCounter);
+                                                      // playerCounterFlag = 0;
+                                                      // dropFunction();
+
+
+                                                      console.log("  Round Over........ ================ !!!!!!!!!!  ");
 
 
                                                   }else{
@@ -1947,7 +1951,8 @@ experience
                                                     playerCounterFlag = 0;
                                                    
                                                    $('.result_sec').css({'display': 'block'});   
-                                               wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+                                               
+                                                    wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
 
 
                                                   }  
@@ -1956,7 +1961,50 @@ experience
                                                 cardPull = 0;
                                                //var elem = $('#cardDeckSelect'+userId);
                                                 console.log('Card pulled ', cardPull);  
-                                               if(cardPull == 0){
+
+
+                                                if(playersPlayingTemp.length == 2){
+
+                                                     if(cardPull == 0){
+
+                                                        cardPulledClosedDeck_offline(null, nextPlayerId);
+                                               
+                                                     
+                                                       setTimeout(function(){ 
+
+                                                          cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                            cardPull = 0;
+
+
+                                
+                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
+                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
+                                                           
+
+
+                                                            intervalCounter = window.clearInterval(intervalCounter);
+                                                            var PlayerCounterHandler = new playerCounterHandler(nextPlrId);
+                                                                
+                                                                
+                                                            PlayerCounterHandler.playerCounter = 30;
+                                                            PlayerCounterHandler.run();
+                                                            intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+                                                        
+                                                        }, 10000);
+
+                                               /* Discard the last card from group or from hand  */
+
+                                               
+                                               }
+
+
+
+                                        }else if(playersPlayingTemp.length > 2){
+
+                                                if(cardPull == 0){
+
+                                                 
                                                
                                                   cardPulledClosedDeck(null);
 
@@ -1980,6 +2028,16 @@ experience
 
 
                                                } 
+
+
+
+
+
+                                        }
+
+
+
+                                              
                               
                                              }
                                              
@@ -2011,7 +2069,10 @@ experience
                                 } });
 
 
-                        var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: '', nextPlayer: nextPlrId};
+                        var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
+                        cardsSelected.length = 0;
+                           cardGotPulled = '';
+
                         console.log(signal10);                    
                         
                         socket.emit('allmsg', JSON.stringify(signal10));   
