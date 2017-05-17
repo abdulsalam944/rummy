@@ -380,7 +380,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
   
 
 
-   function cardPulledClosedDeck_offline(self){
+   function cardPulledClosedDeck(self){
 
        if(cardPull == 0){
 
@@ -591,9 +591,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
    }
 
-
-
-
+function cardPulledClosedDeck_offline(self){
 
        if(cardPull == 0){
 
@@ -803,6 +801,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
    }
+
 
     $('#cardDeckSelect'+userId).click(function(){
             if( $(this).hasClass('clickable') ){
