@@ -473,11 +473,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
                                           $('.group_blog5[data-group="'+groupNumber+'"] .playingCards .hand').append(li);
 
-
-                                 
                                          /* Send card Pull signal to others */
-
-
 
                                           var signal11 = {room:roomName, type: 'card-pulled-show-card', message: 'card pulled', player: userId, cardPulled: card};
                                                          
@@ -593,12 +589,12 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
     $('#cardDeckSelect'+userId).click(function(){
-            if( $(this).hasClass('clickable') ){
-               var self = $(this);
-               cardPulledClosedDeck(self);
+          if( $(this).hasClass('clickable') ){
+             var self = $(this);
+             cardPulledClosedDeck(self);
 
            }else{
-            return false;
+              return false;
            } 
 
      })

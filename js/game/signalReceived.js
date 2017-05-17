@@ -24,21 +24,33 @@ socket.on(socketEventName, function(e){
               Check whether user closed tab/window or internet dissconnects
             */
 
-           // setTimeout(function(){
+            setTimeout(function(){
               dataToSend = {room:roomName,user:dataReceived.userid};
 
               $.post('ajax/check_dissconnect_status.php',dataToSend,function(data){
-                data = data.trim()
+
+               // data = data.trim()
                // console.log('Data recieve after dissconnect signal ',data);   
                 
-
-                if(data!=0 && data!=""){
-                    if($.inArray(data,playersPlaying)){
-                      data = parseInt(data.trim());
-                        console.log('Dissconnected user is fronm this table.',data);
-                        if(dissconnectedUsers.indexOf(data)<0){
-                          dissconnectedUsers.push(data);
+               console.log(JSON.parse(data));
+               data = JSON.parse(data);
+                if(data.user_id!=""){
+                    if($.inArray(data.user_id,playersPlaying)){
+                      console.log('User is playing in this room.',dissconnectedUsers,data.user_id,dissconnectedUsers.indexOf(data.user_id));
+                        if(dissconnectedUsers.indexOf(data.user_id)<0){
+                          console.log('Not dissconnected before',data);
+                          if(data.self_dis == 1){
+                              console.log('Other user closed the game.');  
+                              leaveTable();
+                          }else{
+                              console.log('Other user internet gone');
+                              dissconnectedUsers.push(data.user_id); 
+                          }
+                        }else{
+                          console.log('User dissconnected before.');
                         }
+                    }else{
+                        console.log('dissconnected user not found in db. ');
                     }
                 }else{
                     console.log('dissconnected user not found in db. ');
@@ -46,7 +58,7 @@ socket.on(socketEventName, function(e){
 
 
               });
-            //},2000);
+            },2000);
 
 
 
