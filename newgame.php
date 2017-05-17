@@ -38,8 +38,7 @@ if($_REQUEST['id']!='')
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
    <script type="text/javascript" src="js/offline.min.js"></script> 
  <!-- <script type="text/javascript" src="js/offline-simulate-ui.js"></script> -->
-
-   
+  
 
    <script>
     $(document).ready(function(){
@@ -1874,8 +1873,9 @@ experience
         function checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerId){
           console.log('checkDissconnected : this function is called.');
           console.log(dissconnectedUsers,nextPlayerId);
-          console.log(dissconnectedUsers.indexOf(nextPlayerId));
-            var index = dissconnectedUsers.indexOf(nextPlayerId);
+          console.log(dissconnectedUsers.indexOf(nextPlayerId.toString()));
+            var index = dissconnectedUsers.indexOf(nextPlayerId.toString());
+
             if(index>=0){
                 console.log('Found in dissconnected members.');
                 var nextPlrId = getNextUserId(playersPlaying,nextPlayerId);
@@ -1883,27 +1883,142 @@ experience
                 var crntUser = parseInt(userId.trim());
                 var nxtUsr = parseInt(nextPlrId);
                 if(crntUser==nxtUsr){
-                  alert('Last player is dissconnected, I will play now.');
+                  //alert('Last player is dissconnected, I will play now.');
+
+                  cardPulledClosedDeck(null);   
+
+                  setTimeout(function(){
 
 
-                  //starting automation
+                    var roomIdCookie = $.cookie("room");
+                    var gamePlayersCookie = $.cookie("game-players");
+                    var creatorCookie = $.cookie("creator");
+                    var gameTypeCookie = $.cookie("game-type");
+                    var sessionKeyCookie = $.trim($.cookie("sessionKey"));
 
-                   intervalCounter = window.clearInterval(intervalCounter);
-
-                   var PlayerCounterHandler = new playerCounterHandler(nextPlayerToSend);
-                   
-                    
-                    PlayerCounterHandler.playerCounter = 30;
-                    PlayerCounterHandler.run();
-                    intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+                    var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+                    var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
+                    var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
+                    var betValueCookie = $.trim($.cookie("betValue"));
+                    var netSpeed = $.trim($.cookie("netSpeed"));
 
 
-                    var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: dissconnectedUsers, cardDiscarded: '', nextPlayer: nextPlayerId};
 
-                    console.log(signal10);
-                                   
-                   // connection.send(JSON.stringify(signal10));
-                    socket.emit(socketEventName, JSON.stringify(signal10));  
+
+
+                    var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+
+                              $.ajax({
+                                  type: 'POST',
+                                  data: ajxDataCheckDropType,
+                                  cache: false,
+                                  url: 'ajax/checkDropType.php',
+                                  success: function(dropCount){
+                                    console.log(' DROPCOUNT : ',dropCount); 
+                                    if(dropCount > 0){   
+                                    
+                                    /* Check how many times autoplayed  */
+
+
+                                      var ajxDataCheckAutoplayedCount = {'action': 'check-autoplayed-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+
+                                      $.ajax({
+                                          type: 'POST',
+                                          data: ajxDataCheckAutoplayedCount,
+                                          cache: false,
+                                          url: 'ajax/checkAutoPlayedCount.php',
+                                          success: function(count){
+
+                                             console.log("AUTOPLAYED COUNT ", count); 
+                                             
+                                             if(count >= 2){ 
+
+                                                   if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                                                      /* Drop the player */
+                                                      intervalCounter = window.clearInterval(intervalCounter);
+                                                      playerCounterFlag = 0;
+                                                      dropFunction();
+
+
+                                                  }else{
+                                                    /* for deals game 80 points */
+
+                                                    intervalCounter = window.clearInterval(intervalCounter);
+                                                    playerCounterFlag = 0;
+                                                   
+                                                   $('.result_sec').css({'display': 'block'});   
+                                               wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+
+
+                                                  }  
+                                             
+                                             }else if(count < 2){ 
+                                                cardPull = 0;
+                                               //var elem = $('#cardDeckSelect'+userId);
+                                                console.log('Card pulled ', cardPull);  
+                                               if(cardPull == 0){
+                                               
+                                                  cardPulledClosedDeck(null);
+
+                                                   setTimeout(function(){ 
+
+                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                        cardPull = 0;
+
+                                                    }, 10000);
+
+                                               /* Discard the last card from group or from hand  */
+
+                                               
+                                               }else if(cardPull == 1){  
+
+                                                   setTimeout(function(){ 
+
+                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                
+                                                    }, 6000);
+
+
+                                               } 
+                              
+                                             }
+                                             
+                                         } });  
+
+
+                                    }else if(parseInt(dropCount.trim()) == 0){
+
+                                      if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                                            console.log('Not deals2 or deals3');
+                                           intervalCounter = window.clearInterval(intervalCounter);
+                                           playerCounterFlag = 0;
+                                           dropFunction();
+
+
+                                      }else{
+                                            console.log('Else of deals2 or deals3');
+                                           intervalCounter = window.clearInterval(intervalCounter);
+                                           playerCounterFlag = 0;
+                                          
+                                          $('.result_sec').css({'display': 'block'});   
+                                          wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+
+
+                                      }
+
+                                    }    
+
+                                } });
+
+
+                        var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: '', nextPlayer: nextPlrId};
+                        console.log(signal10);                    
+                        
+                        socket.emit('allmsg', JSON.stringify(signal10));   
+
+
+                    },10000); 
+
 
 
                 }else{

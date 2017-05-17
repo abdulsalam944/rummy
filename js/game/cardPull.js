@@ -473,7 +473,11 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
                                           $('.group_blog5[data-group="'+groupNumber+'"] .playingCards .hand').append(li);
 
+
+                                 
                                          /* Send card Pull signal to others */
+
+
 
                                           var signal11 = {room:roomName, type: 'card-pulled-show-card', message: 'card pulled', player: userId, cardPulled: card};
                                                          
@@ -512,7 +516,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
                                   success: function(result){
                                       if( $.trim(result == "ok") ){
                                       
-                                          console.log("Got from deck show card in Hand!!!");
+                                          console.log("Got from deck show card in Hand!!!",card);
 
 
 
@@ -526,24 +530,24 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
                                               
-                                              $('.player_card_me .hand').append('<li class="ui-sortable-handle">'+
+                                              /*$('.player_card_me .hand').append('<li class="ui-sortable-handle">'+
                                               '<a href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+'  class="card handCard card_2 rank-'+cardNumber+' '+cardHouse+'">'+
                                                   '<span class="rank">'+cardNumber+'</span>'+
                                                   '<span class="suit">&'+cardHouse+';</span>'+    
-                                                  '</a></li>');
+                                                  '</a></li>');*/
 
-                                          }else{
+                                          }else{ 
 
-                                              $('.player_card_me .hand').append('<li class="ui-sortable-handle">'+
+                                              /*$('.player_card_me .hand').append('<li class="ui-sortable-handle">'+
                                               '<a href="javascript:;" data-rank="joker" class="card handCard card_2 joker">'+ 
-                                              '</a></li>');
+                                              '</a></li>');*/
 
                                           }    
 
                                           $('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
 
 
-                                           cardPull = 1;
+                                           cardPull = 0;
 
                                          /* Send card Pull signal to others */
 
@@ -589,12 +593,12 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
     $('#cardDeckSelect'+userId).click(function(){
-          if( $(this).hasClass('clickable') ){
-             var self = $(this);
-             cardPulledClosedDeck(self);
+            if( $(this).hasClass('clickable') ){
+               var self = $(this);
+               cardPulledClosedDeck(self);
 
            }else{
-              return false;
+            return false;
            } 
 
      })
