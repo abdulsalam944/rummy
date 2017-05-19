@@ -289,7 +289,7 @@ function cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed){
 
 
 
-function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed){
+function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId = "", nextPlrId = ""){
     playerCounterFlag = 0;
 
     cardGotPulled = $.trim(cardGotPulled); 
@@ -321,7 +321,31 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed){
                  
                     
 
-            }    
+            }
+
+            console.log('Card pull ---- ---- --- Done -- || ');
+            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
+            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
+           
+
+
+            intervalCounter = window.clearInterval(intervalCounter);
+            var PlayerCounterHandler = new playerCounterHandler(nextPlrId);
+                
+                
+            PlayerCounterHandler.playerCounter = 30;
+            PlayerCounterHandler.run();
+            intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+
+            // place msg emit here  
+            var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
+                        cardsSelected.length = 0;
+                           cardGotPulled = '';
+
+            console.log(signal10);                    
+            
+            socket.emit('allmsg', JSON.stringify(signal10));     
 
 
 }
