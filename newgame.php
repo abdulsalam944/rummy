@@ -1932,17 +1932,20 @@ experience
 
                                              console.log("AUTOPLAYED COUNT ", count); 
                                              
-                                             if(count >= 2){ 
+                                             if(count >= 3){ 
 
                                                    if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
-                                                      /* Drop the player */
-                                                      // intervalCounter = window.clearInterval(intervalCounter);
-                                                      // playerCounterFlag = 0;
-                                                      // dropFunction();
+                                                      
 
 
                                                       console.log("  Round Over........ ================ !!!!!!!!!!  ");
 
+
+                                                      /* Drop the player */
+                                                      intervalCounter = window.clearInterval(intervalCounter);
+                                                      playerCounterFlag = 0;
+                                                      dropFunction();
+                                                      
 
                                                   }else{
                                                     /* for deals game 80 points */
@@ -1957,7 +1960,7 @@ experience
 
                                                   }  
                                              
-                                             }else if(count < 2){ 
+                                             }else if(count < 3){ 
                                                 cardPull = 0;
                                                //var elem = $('#cardDeckSelect'+userId);
                                                 console.log('Card pulled ', cardPull);  
@@ -1972,10 +1975,10 @@ experience
                                                      
                                                        setTimeout(function(){ 
 
-                                                          cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                          cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId); 
                                                             cardPull = 0;
 
-
+                                                            /*
                                 
                                                             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
                                                             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
@@ -1990,12 +1993,12 @@ experience
                                                             PlayerCounterHandler.run();
                                                             intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
-                                                        
+                                                            */
                                                         }, 10000);
 
                                                /* Discard the last card from group or from hand  */
 
-                                               
+                                                
                                                }
 
 
@@ -2068,15 +2071,15 @@ experience
 
                                 } });
 
-                        /*
-                        var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
+
+                        /*var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
                         cardsSelected.length = 0;
                            cardGotPulled = '';
 
                         console.log(signal10);                    
                         
-                        socket.emit('allmsg', JSON.stringify(signal10));   
-*/
+                        socket.emit('allmsg', JSON.stringify(signal10));   */
+
 
                     },10000); 
 
