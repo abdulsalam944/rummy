@@ -2068,7 +2068,7 @@ experience
 
                                 } });
 
-
+                        /*
                         var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
                         cardsSelected.length = 0;
                            cardGotPulled = '';
@@ -2076,7 +2076,7 @@ experience
                         console.log(signal10);                    
                         
                         socket.emit('allmsg', JSON.stringify(signal10));   
-
+*/
 
                     },10000); 
 
