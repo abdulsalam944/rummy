@@ -295,7 +295,7 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
     cardGotPulled = $.trim(cardGotPulled); 
 
 
-
+            /*
 
             if(cardGotPulled != "Joker"){
 
@@ -322,7 +322,7 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
                     
 
             }
-
+*/
             console.log('Card pull ---- ---- --- Done -- || ');
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
