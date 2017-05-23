@@ -44,7 +44,14 @@ socket.on(socketEventName, function(e){
                               leaveTable();
                           }else{
                               console.log('Other user internet gone');
-                              dissconnectedUsers.push(data.user_id); 
+
+                              var curUserId = parseInt(data.user_id);
+                              if(curUserId!="Nan"){
+                                dissconnectedUsers.push(curUserId); 
+                                console.log('pushed ', curUserId);
+                              }else{
+                                  console.log('Not pushed ',curUserId);
+                              } 
                           }
                         }else{
                           console.log('User dissconnected before.');
@@ -89,10 +96,49 @@ socket.on(socketEventName, function(e){
 
               $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid},function(data){
                   var thisUserId = data.trim();
-                  if($.inArray(thisUserId,dissconnectedUsers)){                                              
-                      var thisIndex = dissconnectedUsers.indexOf(thisUserId);
-                      delete dissconnectedUsers[thisIndex];                      
+                  console.log('thisUserId',thisUserId);
+
+                  console.log(dissconnectedUsers);
+
+                  var reOrderArray = [];
+
+                  $(dissconnectedUsers).each(function(e,j){
+                    console.log(e,j);
+                    if(parseInt(j)==parseInt(thisUserId)){
+                        delete dissconnectedUsers[e];
+                        console.log('User Detected....!!');
+
+                        $.post('ajax/checkWhoIsCurrentPlayer.php',{room:roomName},function(data){
+
+                            var NewData = parseInt(data.trim());
+                            if(NewData!=0){
+                                if(thisUserId==NewData){
+                                  // restart counter
+                                  intervalCounter = window.clearInterval(intervalCounter);
+                                  var PlayerCounterHandler = new playerCounterHandler(thisUserId);
+                                  PlayerCounterHandler.playerCounter = 30;
+                                  PlayerCounterHandler.run();
+                                  intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+                                }
+                            }
+
+
+                        })
+
+                        
+
+
+                    }else{
+                        reOrderArray.push(j);
                     }
+                  });
+                  dissconnectedUsers = reOrderArray;
+                  // if($.inArray(thisUserId,dissconnectedUsers)){       
+                  // console.log(dissconnectedUsers);                                       
+                  //     var thisIndex = dissconnectedUsers.indexOf(parseString(thisUserId));
+                  //     console.log('Removing ',dissconnectedUsers,thisUserId);
+                  //     delete dissconnectedUsers[parseString(thisIndex)];                      
+                  //   }
               });
            
 

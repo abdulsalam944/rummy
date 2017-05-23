@@ -1833,8 +1833,8 @@ experience
 
               var msgToSend = {room:roomName, type: 'code', msg: 're-connect',oldid:userid,newid:socket.io.engine.id};
               socket.emit(socketEventName, JSON.stringify(msgToSend));
-
-
+                userid = currentUsersId;
+                count = 0;
 /*
             
             thatUserId = socket.io.engine.id;
@@ -1873,9 +1873,9 @@ experience
         function checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerId){
           console.log('checkDissconnected : this function is called.');
           console.log(dissconnectedUsers,nextPlayerId);
-          console.log(dissconnectedUsers.indexOf(nextPlayerId.toString()));
+          console.log(dissconnectedUsers.indexOf(nextPlayerId));
             
-            var index = dissconnectedUsers.indexOf(nextPlayerId.toString());
+            var index = dissconnectedUsers.indexOf(nextPlayerId);
 
             if(index>=0){
                 console.log('Found in dissconnected members.');
@@ -1888,7 +1888,7 @@ experience
 
                   cardPulledClosedDeck(null);   
 
-                  setTimeout(function(){
+                  //setTimeout(function(){
 
 
                     var roomIdCookie = $.cookie("room");
@@ -2081,7 +2081,7 @@ experience
                         socket.emit('allmsg', JSON.stringify(signal10));   */
 
 
-                    },10000); 
+                    //},10000); 
 
 
 
