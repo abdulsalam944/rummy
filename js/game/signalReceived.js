@@ -112,13 +112,37 @@ socket.on(socketEventName, function(e){
 
                             var NewData = parseInt(data.trim());
                             if(NewData!=0){
+
+
+                                // Resetting Auto Play to Zero
+                                  $.cookie("connectionIssue", 0);
+                                  var roomIdCookie = $.cookie("room");
+                                  var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+                                  var ajxDataUpdateHandCount = {'action': 'update-hand-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: thisUserId};
+
+                                  $.ajax({
+                                      type: 'POST',
+                                      data: ajxDataUpdateHandCount,
+                                      cache: false,
+                                      url: 'ajax/updateHandCount.php',
+                                      success: function(result){
+                                         // console.log("hand count updated to 0");
+
+                                  } })  ;
+
+
+
                                 if(thisUserId==NewData){
                                   // restart counter
+
                                   intervalCounter = window.clearInterval(intervalCounter);
                                   var PlayerCounterHandler = new playerCounterHandler(thisUserId);
                                   PlayerCounterHandler.playerCounter = 30;
                                   PlayerCounterHandler.run();
                                   intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+                                  
+
                                 }
                             }
 

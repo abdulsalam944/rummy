@@ -1,5 +1,5 @@
 Issues:
 
-1. While autoplaying, After auto card discard. If user pull a card, from "shown cards" section. Card added to his hand but that card not removing from show card section.
+1. During autoplay, Auto discarded card showing on oponent's discard card list. But not updating in database table.
 
-2. If user pull card from closed cards. that card does not adds to hand. Card discard option also not appearing after pulling card from closed cards.
+2. After reconnect, reconnected user need to be refresh his card.
