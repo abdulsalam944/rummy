@@ -3,3 +3,5 @@ Issues:
 1. During autoplay, Auto discarded card showing on oponent's discard card list. But not updating in database table.
 
 2. After reconnect, reconnected user need to be refresh his card.
+
+3. If a user pull a card and then after he got dissconnected, Autoplay not discarding that pulled card, instead its pulling new card and discarding the same.
