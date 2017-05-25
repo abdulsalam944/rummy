@@ -1835,6 +1835,44 @@ experience
               socket.emit(socketEventName, JSON.stringify(msgToSend));
                 userid = currentUsersId;
                 count = 0;
+
+
+                //Update Discareded cards
+
+                $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
+                    var thisData = JSON.parse(thisData);
+                    console.log(thisData);
+
+                    $(thisData).each(function(e,j){
+
+                        var playerPlayed = j.user;  
+                        $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
+                        $(j.discarded_cards).each(function(i,k){
+
+                            var cardToBeShown = k;
+
+
+                            if(cardToBeShown != "Joker"){
+                            var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                            var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
+
+                            $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                             '<span class="rank">'+cardNumber1+'</span>'+
+                             '<span class="suit">&'+cardHouse1+';</span>'+
+                             '</span></li>');
+
+                          }else{
+                              $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
+
+                          } 
+                        });
+
+                    });
+
+                });
+
+
+
 /*
             
             thatUserId = socket.io.engine.id;

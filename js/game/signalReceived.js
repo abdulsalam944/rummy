@@ -46,7 +46,7 @@ socket.on(socketEventName, function(e){
                               console.log('Other user internet gone');
 
                               var curUserId = parseInt(data.user_id);
-                              if(curUserId!="Nan"){
+                              if(curUserId!="NaN"){
                                 dissconnectedUsers.push(curUserId); 
                                 console.log('pushed ', curUserId);
                               }else{
@@ -91,6 +91,19 @@ socket.on(socketEventName, function(e){
             console.log('Message from room: '+dataReceived.room+' my room '+roomName);
            // return; 
 
+
+           if(dataReceived.type=="code" && dataReceived.msg=="deck-show-card-refresh"){
+              if(parseInt(userId)==dataReceived.updateTouser){
+
+                $('.card-throw .playingCards').html(dataReceived.showcards);
+
+                $('.card-throw .playingCards .cardDeckSelect').prop('id','cardDeckSelectShow'+parseInt(userId));
+                $('.card-throw .playingCards .cardDeckSelect').replaceClass('clickable','noSelect');
+
+              }
+           }
+
+
            if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
 
 
@@ -107,6 +120,12 @@ socket.on(socketEventName, function(e){
                     if(parseInt(j)==parseInt(thisUserId)){
                         delete dissconnectedUsers[e];
                         console.log('User Detected....!!');
+
+
+                        //update show card from deck
+                        var msgToSend = {room:roomName, type: 'code', msg: 'deck-show-card-refresh',showcards:$('.card-throw .playingCards').clone().html().trim(),updateTouser:parseInt(thisUserId)};
+                        socket.emit(socketEventName, JSON.stringify(msgToSend));
+
 
                         $.post('ajax/checkWhoIsCurrentPlayer.php',{room:roomName},function(data){
 
@@ -129,6 +148,9 @@ socket.on(socketEventName, function(e){
                                          // console.log("hand count updated to 0");
 
                                   } })  ;
+
+
+
 
 
 
@@ -3292,9 +3314,9 @@ socket.on(socketEventName, function(e){
                    }else{
                     
                         if(dataReceived.tossWinner == userId){
-                         $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect clickable"><div class="card joker card_2"></div></a>');
+                            $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect clickable"><div class="card joker card_2"></div></a>');
                         }else{
-                             $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect"><div class="card joker card_2"></div></a>');
+                            $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect"><div class="card joker card_2"></div></a>');
                         }
 
                     } 

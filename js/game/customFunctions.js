@@ -338,6 +338,19 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
             intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
 
+            // insert discarded card into db
+            var ajxDataCardDiscard = {'action': 'add-card-discard', roomId: roomIdCookie, playerId: nextPlayerId, sessionKey: sessionKeyCookie, card:cardGotPulled};
+
+            $.ajax({
+            type: 'POST',
+            data: ajxDataCardDiscard,
+            cache: false,
+            url: 'ajax/addCardDiscard.php',
+            success: function(result){
+              console.log("Card discarded added ======================== ", result);
+            } });
+
+
             // place msg emit here  
             var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
                         cardsSelected.length = 0;
