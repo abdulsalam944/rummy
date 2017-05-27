@@ -3448,13 +3448,48 @@ if($_REQUEST['id']=='') {
 </style>
 <div class="offlineOverlay">
 </div>
+
+
 <script>
+
+var checkOffline = false;
+
 Offline.on('confirmed-down',function(){
   $('.offlineOverlay').fadeIn();
+  checkOffline = true;
 });
 Offline.on('confirmed-up',function(){
   $('.offlineOverlay').fadeOut();   
+  if(checkOffline && tossFlag==1) $('.tempBackdrop').fadeIn();
 });
 </script>  
+
+<style>
+    .tempBackdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.72);
+        z-index: 999;
+        display: none;
+    }
+    .tempBackdrop .backdropMsg {
+        position: fixed;
+        color: #fff;
+        top: 50%;
+        bottom: 50%;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+<div class="tempBackdrop">
+    <div class="backdropMsg">
+        You are connected to again. Please wait while we processing.
+    </div>
+</div>
+
 </body>
 </html>

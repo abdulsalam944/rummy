@@ -98,7 +98,8 @@ socket.on(socketEventName, function(e){
                 $('.card-throw .playingCards').html(dataReceived.showcards);
 
                 $('.card-throw .playingCards .cardDeckSelect').prop('id','cardDeckSelectShow'+parseInt(userId));
-                $('.card-throw .playingCards .cardDeckSelect').replaceClass('clickable','noSelect');
+                $('.card-throw .playingCards .cardDeckSelect').removeClass('clickable').addClass('noSelect');
+
 
               }
            }
@@ -154,18 +155,18 @@ socket.on(socketEventName, function(e){
 
 
 
-                                if(thisUserId==NewData){
-                                  // restart counter
+                                // if(thisUserId==NewData){
+                                //   // restart counter
 
-                                  intervalCounter = window.clearInterval(intervalCounter);
-                                  var PlayerCounterHandler = new playerCounterHandler(thisUserId);
-                                  PlayerCounterHandler.playerCounter = 30;
-                                  PlayerCounterHandler.run();
-                                  intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+                                //   intervalCounter = window.clearInterval(intervalCounter);
+                                //   var PlayerCounterHandler = new playerCounterHandler(thisUserId);
+                                //   PlayerCounterHandler.playerCounter = 30;
+                                //   PlayerCounterHandler.run();
+                                //   intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
                                   
 
-                                }
+                                // }
                             }
 
 
@@ -3353,7 +3354,8 @@ socket.on(socketEventName, function(e){
 
               }else if(dataReceived.type == "card-discarded"){
 
-
+                $('.tempBackdrop').fadeOut();
+                checkOffline = false;
                 //alert('Discarded message recieved.');
 
                  intervalCounter = window.clearInterval(intervalCounter);
