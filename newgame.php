@@ -1692,7 +1692,7 @@ experience
 
 
 
-
+    var reconnectedUser;
 
     var direction;
     var _session;
@@ -1912,8 +1912,18 @@ experience
           console.log('checkDissconnected : this function is called.');
           console.log(dissconnectedUsers,nextPlayerId);
           console.log(dissconnectedUsers.indexOf(nextPlayerId));
-            
+            console.log('Check if any one reconneced but not detected in dissconnect array', reconnectedUser);
             var index = dissconnectedUsers.indexOf(nextPlayerId);
+
+           
+
+            if(reconnectedUser){
+                 index = playersPlaying.indexOf(reconnectedUser);
+                 nextPlayerId = reconnectedUser;
+                 reconnectedUser = null;
+            }
+
+           
 
             if(index>=0){
                 console.log('Found in dissconnected members.');
@@ -3487,7 +3497,7 @@ Offline.on('confirmed-up',function(){
 
 <div class="tempBackdrop">
     <div class="backdropMsg">
-        You are connected to again. Please wait while we processing.
+        You are connected to again. Please wait while we sync you with current game.
     </div>
 </div>
 

@@ -67,8 +67,6 @@ socket.on(socketEventName, function(e){
               });
             },2000);
 
-
-
             /*
             $.post('ajax/getUserIdFromSocketId.php',{room:roomName,user:dataReceived.userid},function(data){
               console.log('Getting id after dissconnect one user.',data);
@@ -152,7 +150,11 @@ socket.on(socketEventName, function(e){
 
 
 
+                                  if(thisUserId==NewData){
 
+                                    reconnectedUser = parseInt(thisUserId);
+
+                                  }
 
 
                                 // if(thisUserId==NewData){
