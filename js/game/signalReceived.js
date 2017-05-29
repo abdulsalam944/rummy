@@ -243,6 +243,16 @@ socket.on(socketEventName, function(e){
                     $('.cardDeckSelect').removeClass("noSelect");
                      cardPull = 0;
                      cardDiscard = 0;
+                     
+                     var dataTosend = {
+                        room:roomName,
+                        player: userId,
+                        field:"card_discard = 0 , card_pull",
+                        value:0
+                      };
+                      $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                        console.log(data);
+                      });
 
                      $('#cardDeckSelect'+userDropped).attr('id', 'cardDeckSelect'+userId);
                      $('#cardDeckSelectShow'+userDropped).attr('id', 'cardDeckSelectShow'+userId);
@@ -1496,7 +1506,15 @@ socket.on(socketEventName, function(e){
                                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                                 cardPull = 0;
                                                                 cardDiscard = 0;
-
+                                                                var dataTosend = {
+                                                                  room:roomName,
+                                                                  player: userId,
+                                                                  field:"card_discard = 0 , card_pull",
+                                                                  value:0
+                                                                };
+                                                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                  console.log(data);
+                                                                });
                                                                 $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                 $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -1721,7 +1739,15 @@ socket.on(socketEventName, function(e){
                                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                                 cardPull = 0;
                                                                 cardDiscard = 0;
-
+                                                                var dataTosend = {
+                                                                  room:roomName,
+                                                                  player: userId,
+                                                                  field:"card_discard = 0 , card_pull",
+                                                                  value:0
+                                                                };
+                                                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                  console.log(data);
+                                                                });
                                                                 $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                 $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -1792,7 +1818,15 @@ socket.on(socketEventName, function(e){
                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                  cardPull = 0;
                                                  cardDiscard = 0;
-
+                                                 var dataTosend = {
+                                                    room:roomName,
+                                                    player: userId,
+                                                    field:"card_discard = 0 , card_pull",
+                                                    value:0
+                                                  };
+                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                    console.log(data);
+                                                  });
                                                  $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                  $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
                                             }
@@ -2962,7 +2996,15 @@ socket.on(socketEventName, function(e){
                      $('.cardDeckSelect').removeClass("noSelect");
                      cardPull = 0;
                      cardDiscard = 0;
-
+                     var dataTosend = {
+                        room:roomName,
+                        player: userId,
+                        field:"card_discard = 0 , card_pull",
+                        value:0
+                      };
+                      $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                        console.log(data);
+                      });
                      $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                      $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -3484,6 +3526,16 @@ socket.on(socketEventName, function(e){
                                                         cardPull = 0;
                                                         cardDiscard = 0;
 
+                                                        var dataTosend = {
+                                                          room:roomName,
+                                                          player: userId,
+                                                          field:"card_discard = 0 , card_pull",
+                                                          value:0
+                                                        };
+                                                        $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                          console.log(data);
+                                                        });
+
                                                         $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
                                                         $('.drop button').attr('disabled', false);
                                                         $('.drop button').css({'cursor':'pointer'});
@@ -3799,6 +3851,16 @@ socket.on(socketEventName, function(e){
 
                                     cardPull = 0;
                                     cardDiscard = 0;
+
+                                    var dataTosend = {
+                                      room:roomName,
+                                      player: userId,
+                                      field:"card_discard = 0 , card_pull",
+                                      value:0
+                                    };
+                                    $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                      console.log(data);
+                                    });
 
 
 
@@ -4670,6 +4732,17 @@ socket.on(socketEventName, function(e){
                                                         cardPull = 1;
                                                         cardDiscard = 1;
                                                         cardMelded = 1;
+
+                                                        var dataTosend = {
+                                                          room:roomName,
+                                                          player: userId,
+                                                          field:"card_discard = 1 , card_pull",
+                                                          value:1
+                                                        };
+                                                        $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                          console.log(data);
+                                                        });
+
 
                                                         $('.discard button').attr('disabled', true);
 
@@ -7992,7 +8065,15 @@ socket.on(socketEventName, function(e){
                                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                                   cardPull = 0;
                                                                                   cardDiscard = 0;
-
+                                                                                  var dataTosend = {
+                                                                                    room:roomName,
+                                                                                    player: userId,
+                                                                                    field:"card_discard = 0 , card_pull",
+                                                                                    value:0
+                                                                                  };
+                                                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                                    console.log(data);
+                                                                                  });
                                                                                   $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                                   $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -8217,7 +8298,15 @@ socket.on(socketEventName, function(e){
                                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                                   cardPull = 0;
                                                                                   cardDiscard = 0;
-
+                                                                                  var dataTosend = {
+                                                                                    room:roomName,
+                                                                                    player: userId,
+                                                                                    field:"card_discard = 0 , card_pull",
+                                                                                    value:0
+                                                                                  };
+                                                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                                    console.log(data);
+                                                                                  });
                                                                                   $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                                   $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -8288,7 +8377,15 @@ socket.on(socketEventName, function(e){
                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                    cardPull = 0;
                                                                    cardDiscard = 0;
-
+                                                                   var dataTosend = {
+                                                                      room:roomName,
+                                                                      player: userId,
+                                                                      field:"card_discard = 0 , card_pull",
+                                                                      value:0
+                                                                    };
+                                                                    $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                      console.log(data);
+                                                                    });
                                                                    $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                    $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
                                                               }

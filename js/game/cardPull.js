@@ -76,6 +76,16 @@ function updateJokerPulledCount(roomIdCookie, sessionKeyCookie){
 
 
                            cardPull = 1;
+                           var dataTosend = {
+                              room:roomName,
+                              player: userId,
+                              field:"card_pull",
+                              value:1,
+                              cardPulled: card
+                            };
+                            $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                              console.log(data);
+                            });
 
     
                             var signal11 = {room:roomName, type: 'card-pulled-show-card', message: 'card pulled', player: userId, cardPulled: card};
@@ -148,7 +158,16 @@ function updateJokerPulledCount(roomIdCookie, sessionKeyCookie){
 
 
                              cardPull = 1;
-
+                             var dataTosend = {
+                                room:roomName,
+                                player: userId,
+                                field:"card_pull",
+                                value:1,
+                                cardPulled: card
+                              };
+                              $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                console.log(data);
+                              });
                            /* Send card Pull signal to others */
 
 
@@ -185,20 +204,34 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
   if( $(this).hasClass('clickable') ){
 
+    var this_ = this; 
+
+  var dataTosend = {
+    room:roomName,
+    player: userId,
+    field:"card_pull" 
+  };
+  $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
+    var resps = data.trim();
+    cardPull = resps
+    console.log('cardPulls',resps);
+  
+
+
       if(cardPull == 0){
          
 
           var roomIdCookie = $.cookie("room");
           var sessionKeyCookie = $.trim($.cookie("sessionKey"));
-          var self = $(this);
+          var self = $(this_);
           var cardJCR;
           
 
           var flagGroup = 0;
           var card;
   
-          var rank = $(this).attr('data-rank');
-          var suit = $(this).attr('data-suit');
+          var rank = $(this_).attr('data-rank');
+          var suit = $(this_).attr('data-suit');
 
           
 
@@ -367,11 +400,12 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
             }
 
 
-           
+           });
 
         }else{
             return false;
-        }      
+        }     
+
 
   });
 
@@ -381,6 +415,18 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
    function cardPulledClosedDeck(self){
+
+    var this_ = this; 
+
+    var dataTosend = {
+      room:roomName,
+      player: userId,
+      field:"card_pull" 
+    };
+    $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
+      var resps = data.trim();
+      cardPull = resps
+      console.log('cardPulls',resps);
 
        if(cardPull == 0){
 
@@ -399,7 +445,16 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
                
                $('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
                cardPull = 1;
-
+               var dataTosend = {
+                  room:roomName,
+                  player: userId,
+                  field:"card_pull",
+                  value:1,
+                  cardPulled: card
+                };
+                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                  console.log(data);
+                });
                
 
               
@@ -548,7 +603,16 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
 
                                            cardPull = 1;
-
+                                          var dataTosend = {
+                                            room:roomName,
+                                            player: userId,
+                                            field:"card_pull",
+                                            value:1,
+                                            cardPulled: card
+                                          };
+                                          $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                            console.log(data);
+                                          });
                                          /* Send card Pull signal to others */
 
 
@@ -588,11 +652,24 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
           
           }
 
-
+        });
    }
 
 
 function cardPulledClosedDeck_offline(self, player){
+
+
+var dataTosend = {
+  room:roomName,
+  player: userId,
+  field:"card_pull"
+};
+$.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
+  var resps = data.trim();
+  cardPull = resps
+
+
+  console.log('Offline js card pull ', cardPull);
 
        if(cardPull == 0){
 
@@ -611,7 +688,16 @@ function cardPulledClosedDeck_offline(self, player){
                
                $('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
                cardPull = 1;
-
+               var dataTosend = {
+                  room:roomName,
+                  player: userId,
+                  field:"card_pull",
+                  value:1,
+                  cardPulled: card
+                };
+                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                  console.log(data);
+                });
                
 
               
@@ -694,6 +780,7 @@ function cardPulledClosedDeck_offline(self, player){
           
           }
 
+      });
 
    }
 
@@ -707,8 +794,4 @@ function cardPulledClosedDeck_offline(self, player){
             return false;
            } 
 
-     })
-
-
-
-  
+     })  

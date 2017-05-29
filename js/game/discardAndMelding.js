@@ -1672,7 +1672,19 @@
                             if( $.trim(result == "ok") ){
                                 console.log("card discard done");
                                 cardDiscard = 1;
+                                
 
+                                var dataTosend = {
+                                  room:roomName,
+                                  player: userId,
+                                  field:"card_discard",
+                                  value:1
+                                };
+                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                  console.log(data);
+                                });
+                               
+                               
                                 if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
@@ -1680,8 +1692,6 @@
                                 }
 
 
-                               
-                                
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').hide(); 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').text(""); 
                                
@@ -1808,6 +1818,17 @@
                             if( $.trim(result == "ok") ){
                                 console.log("card discard done");
                                 cardDiscard = 1;
+
+                                var dataTosend = {
+                                  room:roomName,
+                                  player: userId,
+                                  field:"card_discard",
+                                  value:1
+                                };
+                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                  console.log(data);
+                                });
+
 
 
                                 if(getItem(playersPlayingTemp, parseInt(userId)) ){

@@ -40,7 +40,7 @@ if(isset($_POST['action']) && $_POST['action'] == "toss-done"){
 
 
 
-						$sql_insert2 = mysql_query("INSERT INTO game_running VALUES (null, '".$roomId."', '".$sessionKey."', '', 1, 0, '".$playerId."', '', '', 0, 0, 0, '', 0,'')");
+						$sql_insert2 = mysql_query("INSERT INTO game_running VALUES (null, '".$roomId."', '".$sessionKey."', '', 1, 0, '".$playerId."', '', '', 0, 0, 0, '', 0,'','')");
 
 						if($sql_insert2){
 							echo "ok";
@@ -72,7 +72,7 @@ if(isset($_POST['action']) && $_POST['action'] == "toss-done"){
 					}else{
 
 					
-						$sql_insert2 = mysql_query("INSERT INTO game_running VALUES (null, '".$roomId."', '".$sessionKey."', '', 1, 0, '".$playerId."', '', '', 0, 0, 0, '', 0,'')");
+						$sql_insert2 = mysql_query("INSERT INTO game_running VALUES (null, '".$roomId."', '".$sessionKey."', '', 1, 0, '".$playerId."', '', '', 0, 0, 0, '', 0,'','')");
 
 						if($sql_insert2){
 							echo "ok";
