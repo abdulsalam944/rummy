@@ -2023,8 +2023,17 @@ experience
                                                      
                                                        setTimeout(function(){ 
 
-                                                          cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId); 
+                                                         var dataTosend = {
+                                                            room:roomName,
+                                                            player: nextPlayerId,
+                                                            field:"card_pull" 
+                                                          };
+                                                          $.post('ajax/get_card_if_pulled.php',dataTosend,function(cardPulledByUser){
+
+                                                                cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId, cardPulledByUser); 
+                                                            
                                                             cardPull = 0;
+                                                        });
 
                                                             /*
                                 

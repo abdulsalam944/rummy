@@ -289,12 +289,20 @@ function cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed){
 
 
 
-function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId = "", nextPlrId = ""){
-    playerCounterFlag = 0;
+function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId = "", nextPlrId = "", cardPulledByUser){
+    
+    console.log('Card pulled by that user is : ',cardPulledByUser);
 
+    playerCounterFlag = 0;
     cardGotPulled = $.trim(cardGotPulled); 
 
+    if(cardPulledByUser){
+      cardPulledByUser = $.trim(cardPulledByUser);
+      if(!cardPulledByUser.toString() =="0"){
+          cardGotPulled = cardPulledByUser;
+      }
 
+    }
             /*
 
             if(cardGotPulled != "Joker"){
