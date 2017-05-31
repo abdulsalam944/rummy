@@ -3319,7 +3319,78 @@ experience
             });
 
             
+            /********** Update Crad in  **********/ 
             
+            var updateMYCardInHand = function(){
+
+                var dataTosend = {
+                    room:roomName,
+                    player: userId
+                  };
+
+                $.post('ajax/getCardsInMyHand.php',dataTosend,function(data){
+
+                    data = JSON.parse(data);
+                    console.log('Cards fetched : ',data);
+                    $('.me .playingCards .hand').html('');
+                    if(data.hand_type=="in_hand"){
+
+                            //if(playersPlayingTemp[j] == userId){
+                                cardsInHand = [];
+                                myCards = data.cards_in_hand;
+                                for(var i = 0; i < myCards.length; i++){
+                                    cardsInHand.push(myCards[i]);
+                                    if(myCards[i] != "Joker"){
+                                        var cardNumber = myCards[i].substr(0, myCards[i].indexOf('OF'));
+                                        var cardHouse =  myCards[i].substr(myCards[i].indexOf("OF") + 2);
+
+                                        $('.me .playingCards .hand').append(
+                                            '<li><a class="card handCard card_2 rank-'+cardNumber.toUpperCase()+' '+cardHouse+'" href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+'>'+
+                                                '<span class="rank">'+cardNumber.toUpperCase()+'</span>'+
+                                                '<span class="suit">&'+cardHouse+';</span>'+
+                                                '</a></li>');
+
+                                    }else{
+                                         $('.me .playingCards .hand').append('<li class="ui-sortable-handle"><a href="javascript:;" class=" card joker card_2 handCard " data-rank="joker"></a></li>');
+                                    } 
+                                }
+                           // }
+
+                            // if(playersPlayingTemp[j] != userId){
+
+                            //     $('.current-player[data-user='+playersPlayingTemp[j]+'] .playingCards .deck').append('<li>'+
+                            //                     '<div class="card card_2 back">*</div>'+
+                            //                 '</li><li>'+
+                            //                     '<div class="card card_2 back">*</div>'+
+                            //                 '</li><li>'+
+                            //                     '<div class="card card_2 back">*</div>'+
+                            //                 '</li><li>'+
+                            //                     '<div class="card card_2 back">*</div>'+
+                            //                 '</li><li>'+
+                            //                     '<div class="card card_2 back">*</div>'+
+                            //                 '</li>'
+                            //            );
+                            // }
+
+                            // console.log("COUNT ", j);
+
+                        //}
+
+
+                    }else if(data.hand_type=="group"){
+
+
+
+                    }
+
+                });
+
+
+
+
+
+            }
+
 
             /**** =========== VALIDATE ******* ============== */
 
@@ -3472,14 +3543,25 @@ if($_REQUEST['id']=='') {
 <script>
 
 var checkOffline = false;
-
+var calSingleTimeOnOnline = false;
 Offline.on('confirmed-down',function(){
   $('.offlineOverlay').fadeIn();
   checkOffline = true;
+  calSingleTimeOnOnline = false;
 });
 Offline.on('confirmed-up',function(){
   $('.offlineOverlay').fadeOut();   
-  if(checkOffline && tossFlag==1) $('.tempBackdrop').fadeIn();
+  if(checkOffline && tossFlag==1){
+    console.log('flag called');    
+    $('.tempBackdrop').fadeIn();
+    tossFlag = 0;
+  } 
+
+  if(!calSingleTimeOnOnline){
+    updateMYCardInHand();
+    calSingleTimeOnOnline = true;
+  }
+
 });
 </script>  
 
