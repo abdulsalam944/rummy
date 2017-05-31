@@ -300,6 +300,16 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
       cardPulledByUser = $.trim(cardPulledByUser);
       if(!cardPulledByUser.toString() =="0"){
           cardGotPulled = cardPulledByUser;
+
+          var dataToSend = {
+            room:sessionKeyCookie,
+            player:nextPlayerId,
+            card:cardGotPulled
+          };
+          $.post('ajax/removeCardFromHand.php',dataToSend,function(data){
+              console.log(data);
+          });
+
       }
 
     }
