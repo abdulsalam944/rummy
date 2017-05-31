@@ -1,7 +1,9 @@
 socket.on('joinRoom', function(e){
   console.log('Message Recieved: ',e);
   if(e=="Connected."){
-    onOpen();
+    setTimeout(function(){
+      onOpen();
+    },3000)
   }
 });
 socket.on(socketEventName, function(e){

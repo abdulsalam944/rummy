@@ -363,11 +363,13 @@ var gameStartHandler = function(callback){
 
                   }else{
                     //alert();
-                    if(getItem(playersPlayingTemp, parseInt(userId)) ){
-                        nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
+                    console.log(playersPlayingTemp, userId);
+                    if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                        nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
                     }else{
                         nextPlayerToSend = playersPlayingTemp[0];
                     }
+                    console.log(nextPlayerToSend);
                     checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
                   }
 

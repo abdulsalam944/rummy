@@ -1860,7 +1860,11 @@
                                             if($.trim(result) == "ok"){
                                                 console.log("current player updated");
 
-
+                                                if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                                                    nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
+                                                }else{
+                                                    nextPlayerToSend = playersPlayingTemp[0];
+                                                }
                                                 checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
 
                                             }

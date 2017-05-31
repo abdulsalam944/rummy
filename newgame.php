@@ -1927,12 +1927,14 @@ experience
 
             if(index>=0){
                 console.log('Found in dissconnected members.');
-                var nextPlrId = getNextUserId(playersPlaying,nextPlayerId);
+                var nextPlrId = getNextUserId(playersPlaying,nextPlayerId, dissconnectedUsers);
                 console.log('Check is who is next : ',parseInt(userId),nextPlrId);
                 var crntUser = parseInt(userId.trim());
                 var nxtUsr = parseInt(nextPlrId);
+                console.log('Curuser',crntUser,'NextUsre',nxtUsr);
+
                 if(crntUser==nxtUsr){
-                  //alert('Last player is dissconnected, I will play now.');
+                 // alert('Last player is dissconnected, I will play now.');
 
                   cardPulledClosedDeck(null);   
 
@@ -2014,7 +2016,7 @@ experience
                                                 console.log('Card pulled ', cardPull);  
 
 
-                                                if(playersPlayingTemp.length == 2){
+                                                /*if(playersPlayingTemp.length == 2){*/
 
                                                      if(cardPull == 0){
 
@@ -2030,6 +2032,20 @@ experience
                                                           };
                                                           $.post('ajax/get_card_if_pulled.php',dataTosend,function(cardPulledByUser){
 
+
+                                                                /*if(getItem(playersPlayingTemp, parseInt(nextPlayerId)) ){
+                                                                    nextPlayerId = getItem(playersPlayingTemp, parseInt(nextPlayerId));
+                                                                }else{
+                                                                    nextPlayerId = playersPlayingTemp[0];
+                                                                }
+
+                                                                if(getItem(playersPlayingTemp, parseInt(nextPlrId)) ){
+                                                                    nextPlrId = getItem(playersPlayingTemp, parseInt(nextPlrId));
+                                                                }else{
+                                                                    nextPlrId = playersPlayingTemp[0];
+                                                                }*/
+
+                                                                console.log('auto Discard',nextPlayerId, nextPlrId);
                                                                 cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId, cardPulledByUser); 
                                                             
                                                             cardPull = 0;
@@ -2060,7 +2076,7 @@ experience
 
 
 
-                                        }else if(playersPlayingTemp.length > 2){
+                                        /*}else if(playersPlayingTemp.length > 2){
 
                                                 if(cardPull == 0){
 
@@ -2075,7 +2091,7 @@ experience
 
                                                     }, 10000);
 
-                                               /* Discard the last card from group or from hand  */
+                                            
 
                                                
                                                }else if(cardPull == 1){  
@@ -2093,7 +2109,7 @@ experience
 
 
 
-                                        }
+                                        }*/
 
 
 
@@ -2143,12 +2159,12 @@ experience
 
 
                 }else{
-                  //alert('Last player is dissconnected, User id '+parseInt($nextPlayersId)+' will play now.');
-                }
+                  //alert('Last player is dissconnected, User id '+parseInt(nextPlayerId)+' will play now.');
+                } 
             }
         }
 
-        function getNextUserId(playersPlaying, nextPlayerId){
+        function getNextUserId(playersPlaying, nextPlayerId, dissconnectedUsers){
           console.log('Next player called.');
           var temp_totalUserCount = (playersPlaying.length - 1);
           var temp_curuserPos = playersPlaying.indexOf(nextPlayerId);      
@@ -2163,6 +2179,28 @@ experience
           }
           console.log('Next player is : '+temp_nextUser)
           return temp_nextUser;
+
+          // console.log('Next user called ',playersPlaying, nextPlayerId, dissconnectedUsers);
+
+          // var temp_nextUser;
+          // var temp_totalUserCount = (playersPlaying.length - 1);
+          // console.log('temp_totalUserCount', temp_totalUserCount);
+          // $(dissconnectedUsers).each(function(e,j){
+          //       console.log('loop',e,j);
+          //       var temp_curuserPos = playersPlaying.indexOf(j); 
+          //       console.log('temp_curuserPos', temp_curuserPos);
+          //       if(temp_curuserPos>=0){
+          //               console.log(temp_curuserPos, temp_totalUserCount, )
+          //               if(temp_curuserPos >= temp_totalUserCount){
+          //                   temp_nextUser = playersPlaying[0];
+          //               }else{
+          //                   ++temp_curuserPos;
+          //                   temp_nextUser = playersPlaying[temp_curuserPos];
+          //               }
+          //               console.log('temp_nextUser',temp_nextUser);
+          //       }
+          // });
+          // return temp_nextUser;
         }
 
     </script>
@@ -3353,33 +3391,61 @@ experience
                                     }else{
                                          $('.me .playingCards .hand').append('<li class="ui-sortable-handle"><a href="javascript:;" class=" card joker card_2 handCard " data-rank="joker"></a></li>');
                                     } 
-                                }
-                           // }
-
-                            // if(playersPlayingTemp[j] != userId){
-
-                            //     $('.current-player[data-user='+playersPlayingTemp[j]+'] .playingCards .deck').append('<li>'+
-                            //                     '<div class="card card_2 back">*</div>'+
-                            //                 '</li><li>'+
-                            //                     '<div class="card card_2 back">*</div>'+
-                            //                 '</li><li>'+
-                            //                     '<div class="card card_2 back">*</div>'+
-                            //                 '</li><li>'+
-                            //                     '<div class="card card_2 back">*</div>'+
-                            //                 '</li><li>'+
-                            //                     '<div class="card card_2 back">*</div>'+
-                            //                 '</li>'
-                            //            );
-                            // }
-
-                            // console.log("COUNT ", j);
-
-                        //}
-
+                                }                         
 
                     }else if(data.hand_type=="group"){
 
+                        $('.group_blog5').remove();
+                        var $groupParent = $('.group');
 
+                        console.log(data);
+
+
+                        for(var i = 1; i < 7; i++){                           
+
+                            if( eval(data.groups[(i-1)]).length > 0){
+
+                                var $each_group = $('<div class="group_blog5" data-group="'+i+'"></div>');
+                                var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="'+i+'">Meld</button></div>');
+                                var $playingCards = $('<div class="playingCards"></div>');
+                                var $hand = $('<ul class="hand"></ul>');
+
+                                $hand.append('<li></li>');
+
+                                console.log("Group ", eval(data.groups[(i-1)]));
+                                
+                                if(eval(data.groups[(i-1)])[j]!=""){
+
+                                for(var j = 0; j < eval(data.groups[(i-1)]).length; j++){
+
+                                    
+
+                                        if(eval(data.groups[(i-1)])[j] != "Joker"){
+
+                                             var cardNumber = eval(data.groups[(i-1)])[j].substr(0, eval(data.groups[(i-1)])[j].indexOf('OF'));
+                                             var cardHouse =  eval(data.groups[(i-1)])[j].substr(eval(data.groups[(i-1)])[j].indexOf("OF") + 2);
+
+                                              var li = '<li>'+
+                                                '<a class="card card_2 rank-'+cardNumber+' '+cardHouse+' ui-widget-content handCard" href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+'>'+
+                                                '<span class="rank">'+cardNumber+'</span>'+
+                                                '<span class="suit">&'+cardHouse+';</span></a></li>';
+
+                                        }else{
+
+                                             var li = '<li><a href="javascript:;" class="card joker card_2 handCard ui-widget-content" data-rank="joker"></a></li>';
+                                        } 
+                                        $hand.append(li);
+
+                                    }
+                                }
+
+                                $hand.append('<li></li>');
+                                $playingCards.append($hand);
+                                $each_group.append($meld_group_btn);
+                                $each_group.append($playingCards);
+                                $groupParent.append($each_group);
+                            }                           
+                        }
 
                     }
 

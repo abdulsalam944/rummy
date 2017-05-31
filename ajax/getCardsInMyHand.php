@@ -17,23 +17,37 @@
 		$arr = mysql_fetch_array($query);
 
 		if(
-			$arr['group_1']!="" &&
-			$arr['group_2']!="" &&
-			$arr['group_3']!="" &&
-			$arr['group_4']!="" &&
-			$arr['group_5']!="" &&
+			$arr['group_1']!="" ||
+			$arr['group_2']!="" ||
+			$arr['group_3']!="" ||
+			$arr['group_4']!="" ||
+			$arr['group_5']!="" ||
 			$arr['group_6']!=""
 		){
 
 			$resp['hand_type'] = "group";
-			$resp['groups'] = array(
-				explode(',', $arr['group_1']),
-				explode(',', $arr['group_2']),
-				explode(',', $arr['group_3']),
-				explode(',', $arr['group_4']),
-				explode(',', $arr['group_5']),
-				explode(',', $arr['group_6'])
-			);
+			$resp['groups'] = array();
+
+			if($arr['group_1']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_1']));
+			}
+			if($arr['group_2']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_2']));
+			}
+			if($arr['group_3']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_3']));
+			}
+			if($arr['group_4']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_4']));
+			}
+			if($arr['group_5']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_5']));
+			}
+			if($arr['group_6']!=""){
+				array_push($resp['groups'], explode(',', $arr['group_6']));
+			}	
+
+			
 			$resp['msg'] = "Cards found in group";
 
 		}else{
