@@ -14,7 +14,8 @@ if($arr['card_pull']==1){
 	$sqlCard = mysql_query($cardQuery);
 	$arrCard = mysql_fetch_array($sqlCard);
 
-	if(mysql_num_rows($sqlCard)>0){		
+
+	if(mysql_num_rows($sqlCard)>0){
 		echo $arrCard['card_pulled'];
 	}else{
 		echo 0;

@@ -1,24 +1,7 @@
+Issues:
 
-Testing:
+1. During autoplay, Auto discarded card showing on opponent's discarded card list. But not updating in database table.
 
-1. Game Rejoining after losing
-2. Leave Tables
-3. 
+2. After reconnect, reconnected user need to be refresh his card.
 
-
-Needed to be done:
-
-2. While rejoining or play again situation, check chips required < chips available
-3. While joining do as above
-
-4. while discarding or dragging cards, omit the gaps (done)
-5. deal me out of next game button work for 2 pl in 6 pl game
-
-
-
-Game Rejoining (Rejoin)
-	1. Right meld 1st pl
-	2. All wrong melds
-
-
-Game Rejoining (Don't Rejoin)
+3. If a user pull a card and then after he got dissconnected, Autoplay not discarding that pulled card, instead its pulling new card and discarding the same.
