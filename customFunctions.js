@@ -289,31 +289,13 @@ function cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed){
 
 
 
-function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId = "", nextPlrId = "", cardPulledByUser){
-    
-    console.log('Card pulled by that user is : ',cardPulledByUser);
-
+function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId = "", nextPlrId = ""){
     playerCounterFlag = 0;
+
     cardGotPulled = $.trim(cardGotPulled); 
 
-    if(cardPulledByUser){
-      cardPulledByUser = $.trim(cardPulledByUser);
-      if(!cardPulledByUser.toString() =="0"){
-          cardGotPulled = cardPulledByUser;
 
-          var dataToSend = {
-            room:sessionKeyCookie,
-            player:nextPlayerId,
-            card:cardGotPulled
-          };
-          $.post('ajax/removeCardFromHand.php',dataToSend,function(data){
-              console.log(data);
-          });
 
-      }
-
-    }
-            /*
 
             if(cardGotPulled != "Joker"){
 
@@ -340,8 +322,8 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
                     
 
             }
-*/
-            console.log('Card pull ---- ---- --- Done -- || ');
+
+             alert();  
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
            
@@ -354,19 +336,6 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
             PlayerCounterHandler.playerCounter = 30;
             PlayerCounterHandler.run();
             intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
-
-
-            // insert discarded card into db
-            var ajxDataCardDiscard = {'action': 'add-card-discard', roomId: roomIdCookie, playerId: nextPlayerId, sessionKey: sessionKeyCookie, card:cardGotPulled};
-
-            $.ajax({
-            type: 'POST',
-            data: ajxDataCardDiscard,
-            cache: false,
-            url: 'ajax/addCardDiscard.php',
-            success: function(result){
-              console.log("Card discarded added ======================== ", result);
-            } });
 
 
             // place msg emit here  

@@ -36,8 +36,8 @@ if($_REQUEST['id']!='')
    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
    <script src="js/jquery.min.js"></script>
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <!-- <script type="text/javascript" src="js/offline.min.js"></script> -->
-  <!--<script type="text/javascript" src="js/offline-simulate-ui.js"></script>-->
+   <script type="text/javascript" src="js/offline.min.js"></script> 
+ <!-- <script type="text/javascript" src="js/offline-simulate-ui.js"></script> -->
   
 
    <script>
@@ -1629,7 +1629,7 @@ experience
      <!-- custom scrollbar plugin -->
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 
     <script src="js/tabs.js"></script>
-    <script type="text/javascript" src="js/checkConnection.js"></script>
+    <!--<script type="text/javascript" src="js/checkConnection.js"></script>-->
 
      <!-- Added by abdul on 2/5/2017 -->
     <script src="js/socket.io.js"></script>
@@ -1692,7 +1692,7 @@ experience
 
 
 
-
+    var reconnectedUser;
 
     var direction;
     var _session;
@@ -1784,6 +1784,8 @@ experience
 
 
 
+    var dissconnectedUsers = [];
+
     </script>
 
     <script>
@@ -1806,36 +1808,90 @@ experience
         var roomName;
         //CONNECTION
         var socket;
-<<<<<<< HEAD
-        //morning-island-26413.herokuapp.com
-        socket = io('wss://134.119.221.139:3000');
-=======
+
+
+
+
+
+
+        var userid;
+
+
         socket = io('http://134.119.221.139:8080');
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;
+
+            //reconnect
+            if(!userid){ 
+               userid=socket.io.engine.id; 
+            }
+            
+            /*var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
+              socket.emit(eventName, JSON.stringify(msgToSend));  
+*/
+
+              var msgToSend = {room:roomName, type: 'code', msg: 're-connect',oldid:userid,newid:socket.io.engine.id};
+              socket.emit(socketEventName, JSON.stringify(msgToSend));
+                userid = currentUsersId;
+                count = 0;
+
+
+                //Update Discareded cards
+
+                $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
+                    var thisData = JSON.parse(thisData);
+                    console.log(thisData);
+
+                    $(thisData).each(function(e,j){
+
+                        var playerPlayed = j.user;  
+                        $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
+                        $(j.discarded_cards).each(function(i,k){
+
+                            var cardToBeShown = k;
+
+
+                            if(cardToBeShown != "Joker"){
+                            var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                            var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
+
+                            $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                             '<span class="rank">'+cardNumber1+'</span>'+
+                             '<span class="suit">&'+cardHouse1+';</span>'+
+                             '</span></li>');
+
+                          }else{
+                              $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
+
+                          } 
+                        });
+
+                    });
+
+                });
+
+
+
 /*
             
             thatUserId = socket.io.engine.id;
 
-            // if(!userid){ 
-            //   userid=socket.io.engine.id; 
-            // }
+            
             
 
 
               // console.log('my_user_id:',userid);
               //brodcast connection message
-<<<<<<< HEAD
+
               var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               socket.emit(eventName, JSON.stringify(msgToSend));  
             */
-=======
+
               // var msgToSend = {room:roomId,type:'code',msg:'re-connect',user:userid,oldid:userid,newid:socket.io.engine.id};
               // socket.emit(eventName, JSON.stringify(msgToSend));  
             
->>>>>>> 72af7178732afc33b0573533876838d419c9c1f8
+
         });
         function ConnectSocket(){            
             socket.emit('joinRoom', 'Connected.');
@@ -1851,6 +1907,301 @@ experience
              url: 'ajax/makeUserDissconnect.php?userId='+userId+'&sessionId='+$.trim($.cookie("sessionKey"))
            });
         });
+
+        function checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerId){
+          console.log('checkDissconnected : this function is called.');
+          console.log(dissconnectedUsers,nextPlayerId);
+          console.log(dissconnectedUsers.indexOf(nextPlayerId));
+            console.log('Check if any one reconneced but not detected in dissconnect array', reconnectedUser);
+            var index = dissconnectedUsers.indexOf(nextPlayerId);
+
+           
+
+            if(reconnectedUser){
+                 index = playersPlaying.indexOf(reconnectedUser);
+                 nextPlayerId = reconnectedUser;
+                 reconnectedUser = null;
+            }
+
+           
+
+            if(index>=0){
+                console.log('Found in dissconnected members.');
+                var nextPlrId = getNextUserId(playersPlaying,nextPlayerId, dissconnectedUsers);
+                console.log('Check is who is next : ',parseInt(userId),nextPlrId);
+                var crntUser = parseInt(userId.trim());
+                var nxtUsr = parseInt(nextPlrId);
+                console.log('Curuser',crntUser,'NextUsre',nxtUsr);
+
+                if(crntUser==nxtUsr){
+                 // alert('Last player is dissconnected, I will play now.');
+
+                  cardPulledClosedDeck(null);   
+
+                  //setTimeout(function(){
+
+
+                    var roomIdCookie = $.cookie("room");
+                    var gamePlayersCookie = $.cookie("game-players");
+                    var creatorCookie = $.cookie("creator");
+                    var gameTypeCookie = $.cookie("game-type");
+                    var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+
+                    var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+                    var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
+                    var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
+                    var betValueCookie = $.trim($.cookie("betValue"));
+                    var netSpeed = $.trim($.cookie("netSpeed"));
+
+
+
+
+
+                    var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+
+                              $.ajax({
+                                  type: 'POST',
+                                  data: ajxDataCheckDropType,
+                                  cache: false,
+                                  url: 'ajax/checkDropType.php',
+                                  success: function(dropCount){
+                                    console.log(' DROPCOUNT : ',dropCount); 
+                                    if(dropCount > 0){   
+                                    
+                                    /* Check how many times autoplayed  */
+
+
+                                      var ajxDataCheckAutoplayedCount = {'action': 'check-autoplayed-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+
+                                      $.ajax({
+                                          type: 'POST',
+                                          data: ajxDataCheckAutoplayedCount,
+                                          cache: false,
+                                          url: 'ajax/checkAutoPlayedCount.php',
+                                          success: function(count){
+
+                                             console.log("AUTOPLAYED COUNT ", count); 
+                                             
+                                             if(count >= 3){ 
+
+                                                   if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                                                      
+
+
+                                                      console.log("  Round Over........ ================ !!!!!!!!!!  ");
+
+
+                                                      /* Drop the player */
+                                                      intervalCounter = window.clearInterval(intervalCounter);
+                                                      playerCounterFlag = 0;
+                                                      dropFunction();
+                                                      
+
+                                                  }else{
+                                                    /* for deals game 80 points */
+
+                                                    intervalCounter = window.clearInterval(intervalCounter);
+                                                    playerCounterFlag = 0;
+                                                   
+                                                   $('.result_sec').css({'display': 'block'});   
+                                               
+                                                    wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+
+
+                                                  }  
+                                             
+                                             }else if(count < 3){ 
+                                                cardPull = 0;
+                                               //var elem = $('#cardDeckSelect'+userId);
+                                                console.log('Card pulled ', cardPull);  
+
+
+                                                /*if(playersPlayingTemp.length == 2){*/
+
+                                                     if(cardPull == 0){
+
+                                                        cardPulledClosedDeck_offline(null, nextPlayerId);
+                                               
+                                                     
+                                                       setTimeout(function(){ 
+
+                                                         var dataTosend = {
+                                                            room:roomName,
+                                                            player: nextPlayerId,
+                                                            field:"card_pull" 
+                                                          };
+                                                          $.post('ajax/get_card_if_pulled.php',dataTosend,function(cardPulledByUser){
+
+
+                                                                /*if(getItem(playersPlayingTemp, parseInt(nextPlayerId)) ){
+                                                                    nextPlayerId = getItem(playersPlayingTemp, parseInt(nextPlayerId));
+                                                                }else{
+                                                                    nextPlayerId = playersPlayingTemp[0];
+                                                                }
+
+                                                                if(getItem(playersPlayingTemp, parseInt(nextPlrId)) ){
+                                                                    nextPlrId = getItem(playersPlayingTemp, parseInt(nextPlrId));
+                                                                }else{
+                                                                    nextPlrId = playersPlayingTemp[0];
+                                                                }*/
+
+                                                                console.log('auto Discard',nextPlayerId, nextPlrId);
+                                                                cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId, cardPulledByUser); 
+                                                            
+                                                            cardPull = 0;
+                                                        });
+
+                                                            /*
+                                
+                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
+                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
+                                                           
+
+
+                                                            intervalCounter = window.clearInterval(intervalCounter);
+                                                            var PlayerCounterHandler = new playerCounterHandler(nextPlrId);
+                                                                
+                                                                
+                                                            PlayerCounterHandler.playerCounter = 30;
+                                                            PlayerCounterHandler.run();
+                                                            intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+                                                            */
+                                                        }, 10000);
+
+                                               /* Discard the last card from group or from hand  */
+
+                                                
+                                               }
+
+
+
+                                        /*}else if(playersPlayingTemp.length > 2){
+
+                                                if(cardPull == 0){
+
+                                                 
+                                               
+                                                  cardPulledClosedDeck(null);
+
+                                                   setTimeout(function(){ 
+
+                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                        cardPull = 0;
+
+                                                    }, 10000);
+
+                                            
+
+                                               
+                                               }else if(cardPull == 1){  
+
+                                                   setTimeout(function(){ 
+
+                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
+                                                
+                                                    }, 6000);
+
+
+                                               } 
+
+
+
+
+
+                                        }*/
+
+
+
+                                              
+                              
+                                             }
+                                             
+                                         } });  
+
+
+                                    }else if(parseInt(dropCount.trim()) == 0){
+
+                                      if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                                            console.log('Not deals2 or deals3');
+                                           intervalCounter = window.clearInterval(intervalCounter);
+                                           playerCounterFlag = 0;
+                                           dropFunction();
+
+
+                                      }else{
+                                            console.log('Else of deals2 or deals3');
+                                           intervalCounter = window.clearInterval(intervalCounter);
+                                           playerCounterFlag = 0;
+                                          
+                                          $('.result_sec').css({'display': 'block'});   
+                                          wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+
+
+                                      }
+
+                                    }    
+
+                                } });
+
+
+                        /*var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
+                        cardsSelected.length = 0;
+                           cardGotPulled = '';
+
+                        console.log(signal10);                    
+                        
+                        socket.emit('allmsg', JSON.stringify(signal10));   */
+
+
+                    //},10000); 
+
+
+
+                }else{
+                  //alert('Last player is dissconnected, User id '+parseInt(nextPlayerId)+' will play now.');
+                } 
+            }
+        }
+
+        function getNextUserId(playersPlaying, nextPlayerId, dissconnectedUsers){
+          console.log('Next player called.');
+          var temp_totalUserCount = (playersPlaying.length - 1);
+          var temp_curuserPos = playersPlaying.indexOf(nextPlayerId);      
+          var temp_nextUser = "";
+          //checkIfLastUser
+          if(temp_curuserPos >= temp_totalUserCount){
+            temp_nextUser = playersPlaying[0];
+
+          }else{
+            ++temp_curuserPos;
+            temp_nextUser = playersPlaying[temp_curuserPos];
+          }
+          console.log('Next player is : '+temp_nextUser)
+          return temp_nextUser;
+
+          // console.log('Next user called ',playersPlaying, nextPlayerId, dissconnectedUsers);
+
+          // var temp_nextUser;
+          // var temp_totalUserCount = (playersPlaying.length - 1);
+          // console.log('temp_totalUserCount', temp_totalUserCount);
+          // $(dissconnectedUsers).each(function(e,j){
+          //       console.log('loop',e,j);
+          //       var temp_curuserPos = playersPlaying.indexOf(j); 
+          //       console.log('temp_curuserPos', temp_curuserPos);
+          //       if(temp_curuserPos>=0){
+          //               console.log(temp_curuserPos, temp_totalUserCount, )
+          //               if(temp_curuserPos >= temp_totalUserCount){
+          //                   temp_nextUser = playersPlaying[0];
+          //               }else{
+          //                   ++temp_curuserPos;
+          //                   temp_nextUser = playersPlaying[temp_curuserPos];
+          //               }
+          //               console.log('temp_nextUser',temp_nextUser);
+          //       }
+          // });
+          // return temp_nextUser;
+        }
 
     </script>
 
@@ -3006,7 +3357,106 @@ experience
             });
 
             
+            /********** Update Crad in  **********/ 
             
+            var updateMYCardInHand = function(){
+
+                var dataTosend = {
+                    room:roomName,
+                    player: userId
+                  };
+
+                $.post('ajax/getCardsInMyHand.php',dataTosend,function(data){
+
+                    data = JSON.parse(data);
+                    console.log('Cards fetched : ',data);
+                    $('.me .playingCards .hand').html('');
+                    if(data.hand_type=="in_hand"){
+
+                            //if(playersPlayingTemp[j] == userId){
+                                cardsInHand = [];
+                                myCards = data.cards_in_hand;
+                                for(var i = 0; i < myCards.length; i++){
+                                    cardsInHand.push(myCards[i]);
+                                    if(myCards[i] != "Joker"){
+                                        var cardNumber = myCards[i].substr(0, myCards[i].indexOf('OF'));
+                                        var cardHouse =  myCards[i].substr(myCards[i].indexOf("OF") + 2);
+
+                                        $('.me .playingCards .hand').append(
+                                            '<li><a class="card handCard card_2 rank-'+cardNumber.toUpperCase()+' '+cardHouse+'" href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+'>'+
+                                                '<span class="rank">'+cardNumber.toUpperCase()+'</span>'+
+                                                '<span class="suit">&'+cardHouse+';</span>'+
+                                                '</a></li>');
+
+                                    }else{
+                                         $('.me .playingCards .hand').append('<li class="ui-sortable-handle"><a href="javascript:;" class=" card joker card_2 handCard " data-rank="joker"></a></li>');
+                                    } 
+                                }                         
+
+                    }else if(data.hand_type=="group"){
+
+                        $('.group_blog5').remove();
+                        var $groupParent = $('.group');
+
+                        console.log(data);
+
+
+                        for(var i = 1; i < 7; i++){                           
+
+                            if( eval(data.groups[(i-1)]).length > 0){
+
+                                var $each_group = $('<div class="group_blog5" data-group="'+i+'"></div>');
+                                var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="'+i+'">Meld</button></div>');
+                                var $playingCards = $('<div class="playingCards"></div>');
+                                var $hand = $('<ul class="hand"></ul>');
+
+                                $hand.append('<li></li>');
+
+                                console.log("Group ", eval(data.groups[(i-1)]));
+                                
+                                if(eval(data.groups[(i-1)])[j]!=""){
+
+                                for(var j = 0; j < eval(data.groups[(i-1)]).length; j++){
+
+                                    
+
+                                        if(eval(data.groups[(i-1)])[j] != "Joker"){
+
+                                             var cardNumber = eval(data.groups[(i-1)])[j].substr(0, eval(data.groups[(i-1)])[j].indexOf('OF'));
+                                             var cardHouse =  eval(data.groups[(i-1)])[j].substr(eval(data.groups[(i-1)])[j].indexOf("OF") + 2);
+
+                                              var li = '<li>'+
+                                                '<a class="card card_2 rank-'+cardNumber+' '+cardHouse+' ui-widget-content handCard" href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+'>'+
+                                                '<span class="rank">'+cardNumber+'</span>'+
+                                                '<span class="suit">&'+cardHouse+';</span></a></li>';
+
+                                        }else{
+
+                                             var li = '<li><a href="javascript:;" class="card joker card_2 handCard ui-widget-content" data-rank="joker"></a></li>';
+                                        } 
+                                        $hand.append(li);
+
+                                    }
+                                }
+
+                                $hand.append('<li></li>');
+                                $playingCards.append($hand);
+                                $each_group.append($meld_group_btn);
+                                $each_group.append($playingCards);
+                                $groupParent.append($each_group);
+                            }                           
+                        }
+
+                    }
+
+                });
+
+
+
+
+
+            }
+
 
             /**** =========== VALIDATE ******* ============== */
 
@@ -3140,6 +3590,73 @@ if($_REQUEST['id']=='') {
     }
 } 
  ?>
+<style type="text/css">
+.offlineOverlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 9999999
+}
+</style>
+<div class="offlineOverlay">
+</div>
+
+
+<script>
+
+var checkOffline = false;
+var calSingleTimeOnOnline = false;
+Offline.on('confirmed-down',function(){
+  $('.offlineOverlay').fadeIn();
+  checkOffline = true;
+  calSingleTimeOnOnline = false;
+});
+Offline.on('confirmed-up',function(){
+  $('.offlineOverlay').fadeOut();   
+  if(checkOffline && tossFlag==1){
+    console.log('flag called');    
+    $('.tempBackdrop').fadeIn();
+    tossFlag = 0;
+  } 
+
+  if(!calSingleTimeOnOnline){
+    updateMYCardInHand();
+    calSingleTimeOnOnline = true;
+  }
+
+});
+</script>  
+
+<style>
+    .tempBackdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.72);
+        z-index: 999;
+        display: none;
+    }
+    .tempBackdrop .backdropMsg {
+        position: fixed;
+        color: #fff;
+        top: 50%;
+        bottom: 50%;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+<div class="tempBackdrop">
+    <div class="backdropMsg">
+        You are connected to again. Please wait while we sync you with current game.
+    </div>
+</div>
 
 </body>
 </html>

@@ -1,7 +1,9 @@
 socket.on('joinRoom', function(e){
   console.log('Message Recieved: ',e);
   if(e=="Connected."){
-    onOpen();
+    setTimeout(function(){
+      onOpen();
+    },3000)
   }
 });
 socket.on(socketEventName, function(e){
@@ -23,30 +25,49 @@ socket.on(socketEventName, function(e){
             /*
               Check whether user closed tab/window or internet dissconnects
             */
+
             setTimeout(function(){
-              $.post('ajax/check_dissconnect_status.php',{room:roomName,user:dataReceived.userid},function(data){
-                data = data.trim()
-                console.log('Data recieve after dissconnect signal ',data);   
-                console.log();   
-                if(data=="1"){
-                  alert('User colsed the game.');
-                  disconnected(dataReceived.userid);
-                  return;
-                }else if(data=="2"){
-                  alert('Internet connection gone of that user. Starting autoplay mode');
+              dataToSend = {room:roomName,user:dataReceived.userid};
+
+              $.post('ajax/check_dissconnect_status.php',dataToSend,function(data){
+
+               // data = data.trim()
+               // console.log('Data recieve after dissconnect signal ',data);   
+                
+               console.log(JSON.parse(data));
+               data = JSON.parse(data);
+                if(data.user_id!=""){
+                    if($.inArray(data.user_id,playersPlaying)){
+                      console.log('User is playing in this room.',dissconnectedUsers,data.user_id,dissconnectedUsers.indexOf(data.user_id));
+                        if(dissconnectedUsers.indexOf(data.user_id)<0){
+                          console.log('Not dissconnected before',data);
+                          if(data.self_dis == 1){
+                              console.log('Other user closed the game.');  
+                              leaveTable();
+                          }else{
+                              console.log('Other user internet gone');
+
+                              var curUserId = parseInt(data.user_id);
+                              if(curUserId!="NaN"){
+                                dissconnectedUsers.push(curUserId); 
+                                console.log('pushed ', curUserId);
+                              }else{
+                                  console.log('Not pushed ',curUserId);
+                              } 
+                          }
+                        }else{
+                          console.log('User dissconnected before.');
+                        }
+                    }else{
+                        console.log('dissconnected user not found in db. ');
+                    }
+                }else{
+                    console.log('dissconnected user not found in db. ');
                 }
-                /*else{                  
-                  alert('Unable to detect how user disconnected. ');
-                }*/
-                //disconnected(dataReceived.userid);
-                //return;
-              
-               // disconnected();
-               
+
+
               });
-            },5000);
-
-
+            },2000);
 
             /*
             $.post('ajax/getUserIdFromSocketId.php',{room:roomName,user:dataReceived.userid},function(data){
@@ -69,6 +90,114 @@ socket.on(socketEventName, function(e){
           if(dataReceived.room==roomName){ 
             console.log('Message from room: '+dataReceived.room+' my room '+roomName);
            // return; 
+
+
+           if(dataReceived.type=="code" && dataReceived.msg=="deck-show-card-refresh"){
+              if(parseInt(userId)==dataReceived.updateTouser){
+
+                $('.card-throw .playingCards').html(dataReceived.showcards);
+
+                $('.card-throw .playingCards .cardDeckSelect').prop('id','cardDeckSelectShow'+parseInt(userId));
+                $('.card-throw .playingCards .cardDeckSelect').removeClass('clickable').addClass('noSelect');
+
+
+              }
+           }
+
+
+           if(dataReceived.type=="code" && dataReceived.msg=="re-connect"){
+
+
+              $.post('ajax/update_old_connectionid_with_new.php',{old:dataReceived.oldid,new:dataReceived.newid},function(data){
+                  var thisUserId = data.trim();
+                  console.log('thisUserId',thisUserId);
+
+                  console.log(dissconnectedUsers);
+
+                  var reOrderArray = [];
+
+                  $(dissconnectedUsers).each(function(e,j){
+                    console.log(e,j);
+                    if(parseInt(j)==parseInt(thisUserId)){
+                        delete dissconnectedUsers[e];
+                        console.log('User Detected....!!');
+
+
+                        //update show card from deck
+                        var msgToSend = {room:roomName, type: 'code', msg: 'deck-show-card-refresh',showcards:$('.card-throw .playingCards').clone().html().trim(),updateTouser:parseInt(thisUserId)};
+                        socket.emit(socketEventName, JSON.stringify(msgToSend));
+
+
+                        $.post('ajax/checkWhoIsCurrentPlayer.php',{room:roomName},function(data){
+
+                            var NewData = parseInt(data.trim());
+                            if(NewData!=0){
+
+
+                                // Resetting Auto Play to Zero
+                                  $.cookie("connectionIssue", 0);
+                                  var roomIdCookie = $.cookie("room");
+                                  var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+                                  var ajxDataUpdateHandCount = {'action': 'update-hand-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: thisUserId};
+
+                                  $.ajax({
+                                      type: 'POST',
+                                      data: ajxDataUpdateHandCount,
+                                      cache: false,
+                                      url: 'ajax/updateHandCount.php',
+                                      success: function(result){
+                                         // console.log("hand count updated to 0");
+
+                                  } })  ;
+
+
+
+                                  if(thisUserId==NewData){
+
+                                    reconnectedUser = parseInt(thisUserId);
+
+                                  }
+
+
+                                // if(thisUserId==NewData){
+                                //   // restart counter
+
+                                //   intervalCounter = window.clearInterval(intervalCounter);
+                                //   var PlayerCounterHandler = new playerCounterHandler(thisUserId);
+                                //   PlayerCounterHandler.playerCounter = 30;
+                                //   PlayerCounterHandler.run();
+                                //   intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
+
+                                  
+
+                                // }
+                            }
+
+
+                        })
+
+                        
+
+
+                    }else{
+                        reOrderArray.push(j);
+                    }
+                  });
+                  dissconnectedUsers = reOrderArray;
+                  // if($.inArray(thisUserId,dissconnectedUsers)){       
+                  // console.log(dissconnectedUsers);                                       
+                  //     var thisIndex = dissconnectedUsers.indexOf(parseString(thisUserId));
+                  //     console.log('Removing ',dissconnectedUsers,thisUserId);
+                  //     delete dissconnectedUsers[parseString(thisIndex)];                      
+                  //   }
+              });
+           
+
+
+             console.log(dataReceived);
+           }
+
+
           }else{
             console.log('Other room data recieved ',dataReceived.room, 'my room '+roomName);
             return; 
@@ -116,6 +245,16 @@ socket.on(socketEventName, function(e){
                     $('.cardDeckSelect').removeClass("noSelect");
                      cardPull = 0;
                      cardDiscard = 0;
+                     
+                     var dataTosend = {
+                        room:roomName,
+                        player: userId,
+                        field:"card_discard = 0 , card_pull",
+                        value:0
+                      };
+                      $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                        console.log(data);
+                      });
 
                      $('#cardDeckSelect'+userDropped).attr('id', 'cardDeckSelect'+userId);
                      $('#cardDeckSelectShow'+userDropped).attr('id', 'cardDeckSelectShow'+userId);
@@ -1369,7 +1508,15 @@ socket.on(socketEventName, function(e){
                                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                                 cardPull = 0;
                                                                 cardDiscard = 0;
-
+                                                                var dataTosend = {
+                                                                  room:roomName,
+                                                                  player: userId,
+                                                                  field:"card_discard = 0 , card_pull",
+                                                                  value:0
+                                                                };
+                                                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                  console.log(data);
+                                                                });
                                                                 $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                 $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -1594,7 +1741,15 @@ socket.on(socketEventName, function(e){
                                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                                 cardPull = 0;
                                                                 cardDiscard = 0;
-
+                                                                var dataTosend = {
+                                                                  room:roomName,
+                                                                  player: userId,
+                                                                  field:"card_discard = 0 , card_pull",
+                                                                  value:0
+                                                                };
+                                                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                  console.log(data);
+                                                                });
                                                                 $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                 $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -1665,7 +1820,15 @@ socket.on(socketEventName, function(e){
                                                 $('.cardDeckSelect').removeClass("noSelect");
                                                  cardPull = 0;
                                                  cardDiscard = 0;
-
+                                                 var dataTosend = {
+                                                    room:roomName,
+                                                    player: userId,
+                                                    field:"card_discard = 0 , card_pull",
+                                                    value:0
+                                                  };
+                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                    console.log(data);
+                                                  });
                                                  $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                  $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
                                             }
@@ -2835,7 +2998,15 @@ socket.on(socketEventName, function(e){
                      $('.cardDeckSelect').removeClass("noSelect");
                      cardPull = 0;
                      cardDiscard = 0;
-
+                     var dataTosend = {
+                        room:roomName,
+                        player: userId,
+                        field:"card_discard = 0 , card_pull",
+                        value:0
+                      };
+                      $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                        console.log(data);
+                      });
                      $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                      $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -3190,9 +3361,9 @@ socket.on(socketEventName, function(e){
                    }else{
                     
                         if(dataReceived.tossWinner == userId){
-                         $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect clickable"><div class="card joker card_2"></div></a>');
+                            $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect clickable"><div class="card joker card_2"></div></a>');
                         }else{
-                             $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect"><div class="card joker card_2"></div></a>');
+                            $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect"><div class="card joker card_2"></div></a>');
                         }
 
                     } 
@@ -3228,6 +3399,10 @@ socket.on(socketEventName, function(e){
                 }     
 
               }else if(dataReceived.type == "card-discarded"){
+
+                $('.tempBackdrop').fadeOut();
+                checkOffline = false;
+                //alert('Discarded message recieved.');
 
                  intervalCounter = window.clearInterval(intervalCounter);
                  playerCounterFlag = 0;
@@ -3265,32 +3440,26 @@ socket.on(socketEventName, function(e){
 
 
 
+                                if(cardToBeShown!=""){
+                                  if(cardToBeShown != "Joker"){
+                                    var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                                    var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
 
+                                    $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                                     '<span class="rank">'+cardNumber1+'</span>'+
+                                     '<span class="suit">&'+cardHouse1+';</span>'+
+                                     '</span></li>');
 
-                                if(cardToBeShown != "Joker"){
+                                  }else{
+                                      $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
 
-                                var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
-                                var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
-
-                                $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
-                                 '<span class="rank">'+cardNumber1+'</span>'+
-                                 '<span class="suit">&'+cardHouse1+';</span>'+
-                                 '</span></li>');
-
-                                }else{
-
-                                     $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
-
-
-                                }            
-
-
-                              
+                                  } 
+                                }
 
                                 $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand li:empty').remove();
 
 
-
+                                  if(cardToBeShown!=""){
 
                                      if(cardToBeShown != "Joker"){
 
@@ -3316,7 +3485,7 @@ socket.on(socketEventName, function(e){
                                              
                                         }
 
-                                       
+                                      } 
                                          
 
                                         console.log("PLAYERRRRRRRRRRRRRR YOOOOOOOOOOOO ", nextPlayer);
@@ -3358,6 +3527,16 @@ socket.on(socketEventName, function(e){
 
                                                         cardPull = 0;
                                                         cardDiscard = 0;
+
+                                                        var dataTosend = {
+                                                          room:roomName,
+                                                          player: userId,
+                                                          field:"card_discard = 0 , card_pull",
+                                                          value:0
+                                                        };
+                                                        $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                          console.log(data);
+                                                        });
 
                                                         $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
                                                         $('.drop button').attr('disabled', false);
@@ -3674,6 +3853,16 @@ socket.on(socketEventName, function(e){
 
                                     cardPull = 0;
                                     cardDiscard = 0;
+
+                                    var dataTosend = {
+                                      room:roomName,
+                                      player: userId,
+                                      field:"card_discard = 0 , card_pull",
+                                      value:0
+                                    };
+                                    $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                      console.log(data);
+                                    });
 
 
 
@@ -4545,6 +4734,17 @@ socket.on(socketEventName, function(e){
                                                         cardPull = 1;
                                                         cardDiscard = 1;
                                                         cardMelded = 1;
+
+                                                        var dataTosend = {
+                                                          room:roomName,
+                                                          player: userId,
+                                                          field:"card_discard = 1 , card_pull",
+                                                          value:1
+                                                        };
+                                                        $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                          console.log(data);
+                                                        });
+
 
                                                         $('.discard button').attr('disabled', true);
 
@@ -7867,7 +8067,15 @@ socket.on(socketEventName, function(e){
                                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                                   cardPull = 0;
                                                                                   cardDiscard = 0;
-
+                                                                                  var dataTosend = {
+                                                                                    room:roomName,
+                                                                                    player: userId,
+                                                                                    field:"card_discard = 0 , card_pull",
+                                                                                    value:0
+                                                                                  };
+                                                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                                    console.log(data);
+                                                                                  });
                                                                                   $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                                   $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -8092,7 +8300,15 @@ socket.on(socketEventName, function(e){
                                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                                   cardPull = 0;
                                                                                   cardDiscard = 0;
-
+                                                                                  var dataTosend = {
+                                                                                    room:roomName,
+                                                                                    player: userId,
+                                                                                    field:"card_discard = 0 , card_pull",
+                                                                                    value:0
+                                                                                  };
+                                                                                  $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                                    console.log(data);
+                                                                                  });
                                                                                   $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                                   $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
 
@@ -8163,7 +8379,15 @@ socket.on(socketEventName, function(e){
                                                                   $('.cardDeckSelect').removeClass("noSelect");
                                                                    cardPull = 0;
                                                                    cardDiscard = 0;
-
+                                                                   var dataTosend = {
+                                                                      room:roomName,
+                                                                      player: userId,
+                                                                      field:"card_discard = 0 , card_pull",
+                                                                      value:0
+                                                                    };
+                                                                    $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                                                      console.log(data);
+                                                                    });
                                                                    $('#cardDeckSelect'+userLeft).attr('id', 'cardDeckSelect'+userId);
                                                                    $('#cardDeckSelectShow'+userLeft).attr('id', 'cardDeckSelectShow'+userId);
                                                               }

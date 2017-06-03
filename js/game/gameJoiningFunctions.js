@@ -245,8 +245,11 @@ function createGame(roomId, gameType, gamePlayers, betValue, chipsToTable, curre
 
                     
 
-
+                ConnectSocket();
+                
                 console.log("don't have to create room");
+
+
             }else if($.trim(sessionKey) == "no"){
                 /* room not available, create new table */
 
@@ -261,7 +264,7 @@ function createGame(roomId, gameType, gamePlayers, betValue, chipsToTable, curre
 
         } });
 
-          ConnectSocket();
+        
 
  });
 

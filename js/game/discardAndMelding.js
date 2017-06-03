@@ -1672,7 +1672,19 @@
                             if( $.trim(result == "ok") ){
                                 console.log("card discard done");
                                 cardDiscard = 1;
+                                
 
+                                var dataTosend = {
+                                  room:roomName,
+                                  player: userId,
+                                  field:"card_discard",
+                                  value:1
+                                };
+                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                  console.log(data);
+                                });
+                               
+                               
                                 if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
@@ -1680,8 +1692,6 @@
                                 }
 
 
-                               
-                                
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').hide(); 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').text(""); 
                                
@@ -1695,10 +1705,30 @@
                                     PlayerCounterHandler.run();
                                     intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
+                                    /*  update db current player */
+
+                                    var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                                        player: nextPlayerToSend, sessionKey: sessionKeyCookie};
+
+                                         $.ajax({
+
+                                            type: 'POST',
+                                            url: 'ajax/updateCurrentPlayer.php',
+                                            cache: false,
+                                            data: ajxData270,
+                                            success: function(result){ 
+                                                if($.trim(result) == "ok"){
+                                                    console.log("current player updated");
+
+                                                }
+                                                
+                                            }
+                                         });  
+
 
                                 /* send discard signal to other players  */
 
-                                var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: userId, cardDiscarded: cardsSelected[0], nextPlayer: nextPlayerToSend};
+                                var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: userId, cardDiscarded: cardsSelected[0], nextPlayer: nextPlayerToSend, playerTmp:playersPlayingTemp};
 
                                 cardsSelected.length = 0;
                                 cardGotPulled = '';
@@ -1789,6 +1819,17 @@
                                 console.log("card discard done");
                                 cardDiscard = 1;
 
+                                var dataTosend = {
+                                  room:roomName,
+                                  player: userId,
+                                  field:"card_discard",
+                                  value:1
+                                };
+                                $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                                  console.log(data);
+                                });
+
+
 
                                 if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
@@ -1804,6 +1845,33 @@
                                 PlayerCounterHandler.run();
                                 intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
 
+                                 /*  update db current player */
+
+                                var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                                    player: nextPlayerToSend, sessionKey: sessionKeyCookie};
+
+                                     $.ajax({
+
+                                        type: 'POST',
+                                        url: 'ajax/updateCurrentPlayer.php',
+                                        cache: false,
+                                        data: ajxData270,
+                                        success: function(result){ 
+                                            if($.trim(result) == "ok"){
+                                                console.log("current player updated");
+
+                                                if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                                                    nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
+                                                }else{
+                                                    nextPlayerToSend = playersPlayingTemp[0];
+                                                }
+                                                checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
+
+                                            }
+                                            
+                                        }
+                                     });
+
 
                           
 
@@ -1811,7 +1879,7 @@
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').hide(); 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').text(""); 
                               
-                            var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: userId, cardDiscarded: cardsSelected[0], nextPlayer: nextPlayerToSend};
+                            var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: userId, cardDiscarded: cardsSelected[0], nextPlayer: nextPlayerToSend, playerTmp:playersPlayingTemp};
 
                              cardsSelected.length = 0;
                              cardGotPulled = '';

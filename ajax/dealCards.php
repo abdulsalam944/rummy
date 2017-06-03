@@ -67,7 +67,7 @@ if(isset($_POST['action']) && $_POST['action'] == "deal-cards"){
 			
 		}else if(mysql_num_rows($sqlCheckPlayerExist) == 0){
 
-			$sqlInsert = mysql_query("INSERT INTO player_gamedata VALUES (null, '".$playerId."', '".$roomId."', '".$sessionKey."', '".$shuffled_cards."', '', '', '', '', '', '', '', '', '', '', '', '', '', '".$point."', '".$point."', '".$chipsTaken."', 0, '', '', '', 'N', 0, 0, 0, 0)");
+			$sqlInsert = mysql_query("INSERT INTO player_gamedata VALUES (null, '".$playerId."', '".$roomId."', '".$sessionKey."', '".$shuffled_cards."', '', '', '', '', '', '', '', '', '', '', '', '', '', '".$point."', '".$point."', '".$chipsTaken."', 0, '', '', '', 'N', 0, 0, 0, 0, 0, 0)");
 
 			if($sqlInsert){
 				echo "ok";

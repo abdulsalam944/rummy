@@ -261,3 +261,15 @@
                     return a > search && (!r || r > a) ? a : r;
                 }, undefined);
             }
+
+            function getItem_prev(array, search) {
+                var length = array.length;
+                var index = array.indexOf(search);
+                var prevUser;
+                if(index==0){
+                  prevUser = array[length-1];
+                }else{
+                  prevUser = array[--index];
+                }
+                return prevUser;
+            }

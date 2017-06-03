@@ -205,6 +205,8 @@ var gameStartHandler = function(callback){
 
                             if(connectionIssueCount < 3){
 
+                              //checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
+
                                 /*  Check if before 1st round */
                               var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: userId};
 
@@ -346,6 +348,7 @@ var gameStartHandler = function(callback){
 
                                     }else if(cardPull == 1 && cardDiscard == 0){
 
+
                                        cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed);
                                         
                                     }
@@ -358,6 +361,16 @@ var gameStartHandler = function(callback){
 
 
 
+                  }else{
+                    //alert();
+                    console.log(playersPlayingTemp, userId);
+                    if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                        nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
+                    }else{
+                        nextPlayerToSend = playersPlayingTemp[0];
+                    }
+                    console.log(nextPlayerToSend);
+                    checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
                   }
 
                    $('.current-player[data-user="'+playerId+'"] .card_submit_time').hide();   
