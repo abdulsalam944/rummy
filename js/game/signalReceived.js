@@ -19,6 +19,10 @@ socket.on(socketEventName, function(e){
 
           //checking whether recieve dissconnet signal and dissconnected user is in this room
           if(dataReceived.type=="code" && dataReceived.msg=="dissconnected"){
+
+            //update current players, needed during auto bot play
+            $.post('ajax/update_temp_player.php',{room:sessionKeyCookie, players:playersPlayingTemp});
+
             console.log('Players playing '+playersPlaying);
             console.log("Recieve dissconnect signal, dissconnect user is : "+dataReceived.userid);
             
@@ -3399,6 +3403,9 @@ socket.on(socketEventName, function(e){
                 }     
 
               }else if(dataReceived.type == "card-discarded"){
+
+                //update current players, needed during auto bot play
+                $.post('ajax/update_temp_player.php',{room:sessionKeyCookie, players:playersPlayingTemp});
 
                 $('.tempBackdrop').fadeOut();
                 checkOffline = false;
