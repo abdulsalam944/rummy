@@ -97,6 +97,9 @@ socket.on(socketEventName, function(e){
 
 
            if(dataReceived.type=="code" && dataReceived.msg=="deck-show-card-refresh"){
+
+            console.log('Deck card refrech code recieved....', dataReceived);
+
               if(parseInt(userId)==dataReceived.updateTouser){
 
                 $('.card-throw .playingCards').html(dataReceived.showcards);
@@ -129,6 +132,7 @@ socket.on(socketEventName, function(e){
 
                         //update show card from deck
                         var msgToSend = {room:roomName, type: 'code', msg: 'deck-show-card-refresh',showcards:$('.card-throw .playingCards').clone().html().trim(),updateTouser:parseInt(thisUserId)};
+                        console.log('Sending Deck shown card message',msgToSend);
                         socket.emit(socketEventName, JSON.stringify(msgToSend));
 
 
@@ -2191,7 +2195,7 @@ socket.on(socketEventName, function(e){
                         var ajxData101 = {'action': 'get-shuffled-deck', roomId: roomIdCookie, sessionKey: sessionKeyCookie};
                              
                             var tossWinner;
-
+                            var tossArray = [];
                          $.ajax({
                               type: 'POST',
                               url: 'ajax/getShuffledDeck.php',
@@ -2241,19 +2245,46 @@ socket.on(socketEventName, function(e){
                                         }
 
                                   
-
+                                        console.log('Pushing data in toss array ',{ player: playersPlayingTemp[j], value: cardValue });
                                         tossArray.push({ player: playersPlayingTemp[j], value: cardValue });
 
 
 
                                 }
 
+                                console.log('Checking data in toss array');
+                                // console.log(tossArray);
+                                // console.log(playersPlaying);
+                                 var tempPlayerSortValue = [];
 
+                                  
+
+                                 $(tossArray).each(function(){                                  
+                                   tempPlayerSortValue.push({key:this.player,value:this.value});                                  
+                                });
+
+                                 console.log('Before player sorted',tempPlayerSortValue,playersPlaying);
+                                 playersPlaying = [];
+                                 console.log('Re init players', playersPlaying);
+                                 $(tempPlayerSortValue).each(function(k,v){
+                                  console.log(k,v);
+                                    playersPlaying.push(v.key);
+                                 });
+                                 console.log('After re sort players. ', playersPlaying);
+
+                                // console.log("Before sort");
+                                // console.log(tempPlayerSortKey);
+                                // console.log('after sort');
+                                tempPlayerSortKey = tempPlayerSortValue.sort(function(a, b){return b.value-a.value});
+                                console.log(tempPlayerSortKey);
+                                //console.log(sortByKey(tempPlayerSort,'value'));
 
                                  var largestCardValueToss = Math.max.apply(Math, tossArray.map(function(fn){
-                                return fn.value;} ))
+                                return fn.value;} ));
                                 
-                                      tossWinner = tossArray.find(function(fn){ return fn.value == largestCardValueToss; })
+                                  console.log('Largest value = ',largestCardValueToss);
+
+                                      tossWinner = tossArray.find(function(fn){ return fn.value == largestCardValueToss; });
 
                                         console.log("tosswinner ", tossWinner.player);
 

@@ -313,34 +313,7 @@ function cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextP
       }
 
     }
-            /*
-
-            if(cardGotPulled != "Joker"){
-
-                var cardNumber = cardGotPulled.substr(0, cardGotPulled.indexOf('OF'));
-                var cardHouse =  cardGotPulled.substr(cardGotPulled.indexOf("OF") + 2);
-
-
-
-
-              $('.card-throw .playingCards').append('<a href="javascript:;" data-rank='+cardNumber+' data-suit='+cardHouse+' id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect">'+
-             '<div class="card card_2 rank-'+cardNumber+' '+cardHouse+'">'+
-             '<span class="rank">'+cardNumber+'</span>'+
-             '<span class="suit">&'+cardHouse+';</span>'+
-                    '</div></a>');
-
-
-
-            }else{
-
-
-               
-                  $('.card-throw .playingCards').append(' <a href="javascript:;" data-rank="joker" id="cardDeckSelectShow'+userId+'" class="cardDeckSelect noSelect"><div class="card joker card_2"></div></a>');
-                 
-                    
-
-            }
-*/
+          
             console.log('Card pull ---- ---- --- Done -- || ');
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
             $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
