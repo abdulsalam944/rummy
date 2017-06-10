@@ -1909,259 +1909,161 @@ experience
         });
 
         function checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerId){
-          console.log('checkDissconnected : this function is called.');
-          console.log(dissconnectedUsers,nextPlayerId);
-          console.log(dissconnectedUsers.indexOf(nextPlayerId));
-            console.log('Check if any one reconneced but not detected in dissconnect array', reconnectedUser);
-            var index = dissconnectedUsers.indexOf(nextPlayerId);
+          // console.log('checkDissconnected : this function is called.');
+          // console.log(dissconnectedUsers,nextPlayerId);
+          // console.log(dissconnectedUsers.indexOf(nextPlayerId));
+          //   console.log('Check if any one reconneced but not detected in dissconnect array', reconnectedUser);
+          //   var index = dissconnectedUsers.indexOf(nextPlayerId);
 
            
 
-            if(reconnectedUser){
-                 index = playersPlaying.indexOf(reconnectedUser);
-                 nextPlayerId = reconnectedUser;
-                 reconnectedUser = null;
-            }
+          //   if(reconnectedUser){
+          //        index = playersPlaying.indexOf(reconnectedUser);
+          //        nextPlayerId = reconnectedUser;
+          //        reconnectedUser = null;
+          //   }
 
            
 
-            if(index>=0){
-                console.log('Found in dissconnected members.');
-                var nextPlrId = getNextUserId(playersPlaying,nextPlayerId, dissconnectedUsers);
-                console.log('Check is who is next : ',parseInt(userId),nextPlrId);
-                var crntUser = parseInt(userId.trim());
-                var nxtUsr = parseInt(nextPlrId);
-                console.log('Curuser',crntUser,'NextUsre',nxtUsr);
+          //   if(index>=0){
+          //       console.log('Found in dissconnected members.');
+          //       var nextPlrId = getNextUserId(playersPlaying,nextPlayerId, dissconnectedUsers);
+          //       console.log('Check is who is next : ',parseInt(userId),nextPlrId);
+          //       var crntUser = parseInt(userId.trim());
+          //       var nxtUsr = parseInt(nextPlrId);
+          //       console.log('Curuser',crntUser,'NextUsre',nxtUsr);
 
-                if(crntUser==nxtUsr){
-                 // alert('Last player is dissconnected, I will play now.');
+          //       if(crntUser==nxtUsr){
+          //        // alert('Last player is dissconnected, I will play now.');
 
-                  cardPulledClosedDeck(null);   
+          //         cardPulledClosedDeck(null);   
 
-                  //setTimeout(function(){
-
-
-                    var roomIdCookie = $.cookie("room");
-                    var gamePlayersCookie = $.cookie("game-players");
-                    var creatorCookie = $.cookie("creator");
-                    var gameTypeCookie = $.cookie("game-type");
-                    var sessionKeyCookie = $.trim($.cookie("sessionKey"));
-
-                    var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
-                    var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
-                    var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
-                    var betValueCookie = $.trim($.cookie("betValue"));
-                    var netSpeed = $.trim($.cookie("netSpeed"));
+          //         //setTimeout(function(){
 
 
+          //           var roomIdCookie = $.cookie("room");
+          //           var gamePlayersCookie = $.cookie("game-players");
+          //           var creatorCookie = $.cookie("creator");
+          //           var gameTypeCookie = $.cookie("game-type");
+          //           var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+
+          //           var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+          //           var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
+          //           var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
+          //           var betValueCookie = $.trim($.cookie("betValue"));
+          //           var netSpeed = $.trim($.cookie("netSpeed"));
 
 
 
-                    var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
 
-                              $.ajax({
-                                  type: 'POST',
-                                  data: ajxDataCheckDropType,
-                                  cache: false,
-                                  url: 'ajax/checkDropType.php',
-                                  success: function(dropCount){
-                                    console.log(' DROPCOUNT : ',dropCount); 
-                                    if(dropCount > 0){   
+
+          //           var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+
+          //                     $.ajax({
+          //                         type: 'POST',
+          //                         data: ajxDataCheckDropType,
+          //                         cache: false,
+          //                         url: 'ajax/checkDropType.php',
+          //                         success: function(dropCount){
+          //                           console.log(' DROPCOUNT : ',dropCount); 
+          //                           if(dropCount > 0){   
                                     
-                                    /* Check how many times autoplayed  */
+          //                           /* Check how many times autoplayed  */
 
 
-                                      var ajxDataCheckAutoplayedCount = {'action': 'check-autoplayed-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
+          //                             var ajxDataCheckAutoplayedCount = {'action': 'check-autoplayed-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: nextPlayerId};
 
-                                      $.ajax({
-                                          type: 'POST',
-                                          data: ajxDataCheckAutoplayedCount,
-                                          cache: false,
-                                          url: 'ajax/checkAutoPlayedCount.php',
-                                          success: function(count){
+          //                             $.ajax({
+          //                                 type: 'POST',
+          //                                 data: ajxDataCheckAutoplayedCount,
+          //                                 cache: false,
+          //                                 url: 'ajax/checkAutoPlayedCount.php',
+          //                                 success: function(count){
 
-                                             console.log("AUTOPLAYED COUNT ", count); 
+          //                                    console.log("AUTOPLAYED COUNT ", count); 
                                              
-                                             if(count >= 3){ 
+          //                                    if(count >= 3){ 
 
-                                                   if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+          //                                       if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
                                                       
 
 
-                                                      console.log("  Round Over........ ================ !!!!!!!!!!  ");
+          //                                             console.log("  Round Over........ ================ !!!!!!!!!!  ");
 
 
-                                                      /* Drop the player */
-                                                      intervalCounter = window.clearInterval(intervalCounter);
-                                                      playerCounterFlag = 0;
-                                                      dropFunction();
+          //                                             /* Drop the player */
+          //                                             intervalCounter = window.clearInterval(intervalCounter);
+          //                                             playerCounterFlag = 0;
+
+          //                                             console.log('DropFUnction Autoplay, ',nextPlayerId,userId);
+          //                                             dropFunction(nextPlayerId);
                                                       
 
-                                                  }else{
-                                                    /* for deals game 80 points */
+          //                                         }else{
+          //                                           /* for deals game 80 points */
 
-                                                    intervalCounter = window.clearInterval(intervalCounter);
-                                                    playerCounterFlag = 0;
+          //                                           intervalCounter = window.clearInterval(intervalCounter);
+          //                                           playerCounterFlag = 0;
                                                    
-                                                   $('.result_sec').css({'display': 'block'});   
+          //                                          $('.result_sec').css({'display': 'block'});   
                                                
-                                                    wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+          //                                           wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
 
 
-                                                  }  
+          //                                         }  
                                              
-                                             }else if(count < 3){ 
-                                                cardPull = 0;
-                                               //var elem = $('#cardDeckSelect'+userId);
-                                                console.log('Card pulled ', cardPull);  
-
-
-                                                /*if(playersPlayingTemp.length == 2){*/
-
-                                                     if(cardPull == 0){
-
-                                                        cardPulledClosedDeck_offline(null, nextPlayerId);
-                                               
-                                                     
-                                                       setTimeout(function(){ 
-
-                                                         var dataTosend = {
-                                                            room:roomName,
-                                                            player: nextPlayerId,
-                                                            field:"card_pull" 
-                                                          };
-                                                          $.post('ajax/get_card_if_pulled.php',dataTosend,function(cardPulledByUser){
-
-
-                                                                /*if(getItem(playersPlayingTemp, parseInt(nextPlayerId)) ){
-                                                                    nextPlayerId = getItem(playersPlayingTemp, parseInt(nextPlayerId));
-                                                                }else{
-                                                                    nextPlayerId = playersPlayingTemp[0];
-                                                                }
-
-                                                                if(getItem(playersPlayingTemp, parseInt(nextPlrId)) ){
-                                                                    nextPlrId = getItem(playersPlayingTemp, parseInt(nextPlrId));
-                                                                }else{
-                                                                    nextPlrId = playersPlayingTemp[0];
-                                                                }*/
-
-                                                                console.log('auto Discard',nextPlayerId, nextPlrId);
-                                                                cardDiscardAuto_offline(roomIdCookie, sessionKeyCookie, netSpeed, nextPlayerId, nextPlrId, cardPulledByUser); 
-                                                            
-                                                            cardPull = 0;
-                                                        });
-
-                                                            /*
-                                
-                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').hide(); 
-                                                            $('.current-player[data-user="'+nextPlayerId+'"] .card_submit_time').text(""); 
-                                                           
-
-
-                                                            intervalCounter = window.clearInterval(intervalCounter);
-                                                            var PlayerCounterHandler = new playerCounterHandler(nextPlrId);
-                                                                
-                                                                
-                                                            PlayerCounterHandler.playerCounter = 30;
-                                                            PlayerCounterHandler.run();
-                                                            intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000); 
-
-                                                            */
-                                                        }, 10000);
-
-                                               /* Discard the last card from group or from hand  */
-
-                                                
-                                               }
-
-
-
-                                        /*}else if(playersPlayingTemp.length > 2){
-
-                                                if(cardPull == 0){
-
-                                                 
-                                               
-                                                  cardPulledClosedDeck(null);
-
-                                                   setTimeout(function(){ 
-
-                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
-                                                        cardPull = 0;
-
-                                                    }, 10000);
-
-                                            
-
-                                               
-                                               }else if(cardPull == 1){  
-
-                                                   setTimeout(function(){ 
-
-                                                      cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed); 
-                                                
-                                                    }, 6000);
-
-
-                                               } 
-
-
-
-
-
-                                        }*/
-
-
-
-                                              
+          //                                    }else if(count < 3){ 
+          //                                       cardPull = 0;
+          //                                      //var elem = $('#cardDeckSelect'+userId);
+          //                                       console.log('Card pulled ', cardPull);
                               
-                                             }
+          //                                    }
                                              
-                                         } });  
+          //                                } });  
 
 
-                                    }else if(parseInt(dropCount.trim()) == 0){
+          //                           }else if(parseInt(dropCount.trim()) == 0){
 
-                                      if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
-                                            console.log('Not deals2 or deals3');
-                                           intervalCounter = window.clearInterval(intervalCounter);
-                                           playerCounterFlag = 0;
-                                           dropFunction();
+          //                             if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+          //                                   console.log('Not deals2 or deals3');
+          //                                  intervalCounter = window.clearInterval(intervalCounter);
+          //                                  playerCounterFlag = 0;
+          //                                  dropFunction();
 
 
-                                      }else{
-                                            console.log('Else of deals2 or deals3');
-                                           intervalCounter = window.clearInterval(intervalCounter);
-                                           playerCounterFlag = 0;
+          //                             }else{
+          //                                   console.log('Else of deals2 or deals3');
+          //                                  intervalCounter = window.clearInterval(intervalCounter);
+          //                                  playerCounterFlag = 0;
                                           
-                                          $('.result_sec').css({'display': 'block'});   
-                                          wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+          //                                 $('.result_sec').css({'display': 'block'});   
+          //                                 wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
 
 
-                                      }
+          //                             }
 
-                                    }    
+          //                           }    
 
-                                } });
+          //                       } });
 
 
-                        /*var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
-                        cardsSelected.length = 0;
-                           cardGotPulled = '';
+          //               /*var signal10 = {room:roomName, type: 'card-discarded', message: 'discard done', player: nextPlayerId, cardDiscarded: cardGotPulled, nextPlayer: nextPlrId};
+          //               cardsSelected.length = 0;
+          //                  cardGotPulled = '';
 
-                        console.log(signal10);                    
+          //               console.log(signal10);                    
                         
-                        socket.emit('allmsg', JSON.stringify(signal10));   */
+          //               socket.emit('allmsg', JSON.stringify(signal10));   */
 
 
-                    //},10000); 
+          //           //},10000); 
 
 
 
-                }else{
-                  //alert('Last player is dissconnected, User id '+parseInt(nextPlayerId)+' will play now.');
-                } 
-            }
+          //       }else{
+          //         //alert('Last player is dissconnected, User id '+parseInt(nextPlayerId)+' will play now.');
+          //       } 
+          //   }
         }
 
         function getNextUserId(playersPlaying, nextPlayerId, dissconnectedUsers){

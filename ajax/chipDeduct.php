@@ -51,7 +51,7 @@ if(isset($_POST['action']) && $_POST['action'] == "chip-deduct"){
 				if($rejoin == 0){
 
 
-					$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', '', '', '', '".$chip."', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user')");
+					$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', '', '', '', '".$chip."', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user','')");
 
 				}
 			
@@ -68,7 +68,7 @@ if(isset($_POST['action']) && $_POST['action'] == "chip-deduct"){
 
 					if($sqlUpdateMyDataRejoin){
 
-						$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', 'rejoin', '', '', '".$chip."', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user')");
+						$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', 'rejoin', '', '', '".$chip."', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user','')");
 
 						if($sqlInsert){
 							echo "DONE============================";

@@ -206,19 +206,19 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
     var this_ = this; 
 
-  var dataTosend = {
-    room:roomName,
-    player: userId,
-    field:"card_pull" 
-  };
-  $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
-    var resps = data.trim();
-    cardPull = resps
-    console.log('cardPulls',resps);
+  // var dataTosend = {
+  //   room:roomName,
+  //   player: userId,
+  //   field:"card_pull" 
+  // };
+  // $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
+  //   var resps = data.trim();
+  //   cardPull = resps
+  //   console.log('cardPulls',resps);
   
 
 
-      if(cardPull == 0){
+  //     if(cardPull == 0){
          
 
           var roomIdCookie = $.cookie("room");
@@ -395,12 +395,7 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
                      $('.drop button').attr('disabled', true);
                      $('.drop button').css({'cursor':'default'});         
 
-            }else{
-                return false;
-            }
-
-
-           });
+           
 
         }else{
             return false;
@@ -423,12 +418,12 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
       player: userId,
       field:"card_pull" 
     };
-    $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
-      var resps = data.trim();
-      cardPull = resps
-      console.log('cardPulls',resps);
+    // $.post('ajax/cardPullCardDiscard_get.php',dataTosend,function(data){
+    //   var resps = data.trim();
+    //   cardPull = resps
+    //   console.log('cardPulls',resps);
 
-       if(cardPull == 0){
+    //    if(cardPull == 0){
 
                var roomIdCookie = $.cookie("room");
                var sessionKeyCookie = $.trim($.cookie("sessionKey"));
@@ -646,13 +641,13 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
               $('.drop button').attr('disabled', true);
               $('.drop button').css({'cursor':'default'});
 
-          }else{
+          // }else{
               
-              return false;
+          //     return false;
           
-          }
+          // }
 
-        });
+       // });
    }
 
 

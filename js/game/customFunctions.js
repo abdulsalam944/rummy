@@ -588,10 +588,273 @@ function showCardsInScoreboard(player, roomIdCookie, sessionKeyCookie){
 
 }
 
+function dropFunction_offline(_userId){
 
+      
+
+       var roomIdCookie = $.cookie("room");
+       var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+       var gameTypeCookie = $.cookie("game-type");
+       var gamePlayersCookie = $.cookie("game-players");
+       var betValueCookie = $.trim($.cookie("betValue"));
+
+       var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+       var currentBalanceCookie = $.trim($.cookie("currentBalance"));
+       var minBuyingPRCookie = $.trim($.cookie("minBuying"));
+
+      $('.popup_bg').hide();
+      $('.popup_bg .popup_with_button_cont p').text("");
+
+
+
+      // $('.cardDeckSelect').addClass("noSelect");
+      // $('.cardDeckSelect').removeClass("clickable");
+
+
+
+
+      /* Meld my cards */
+
+      checkIfAllMelded(function(){
+
+              // $('.player_card_me .hand li a').removeClass('handCard');
+              // $('.group_blog5 .playingCards .hand li a').removeClass('handCard');
+
+              // $('.player_card_me .hand li a').addClass('showFoldedCard');
+              // $('.group_blog .playingCards .hand li a').addClass('showFoldedCard');
+
+              // $('.player_card_me').hide();
+              // $('.group_blog5').hide();
+              // $('.drop').hide();
+            
+              // $('.current-player[data-user="'+_userId+'"] .toss .playingCards').html('<div class="card card_2 back board_center_back showMyHand"></div>');
+
+              /* Update all the melded groups in db */
+
+              var ajxData81200 = { 'action': 'update-all-groups', roomId: roomIdCookie, player: _userId, meldedGroup1: meldedGroup1, meldedGroup2: meldedGroup2, meldedGroup3: meldedGroup3, meldedGroup4: meldedGroup4, sessionKey: sessionKeyCookie};
+
+
+              $.ajax({
+                  type: 'POST',
+                  data: ajxData81200,
+                  cache: false,
+                  url: 'ajax/updateMeldedGroups.php',
+                  success: function(result){
+                     if($.trim(result) == "ok"){
+                          console.log("all groups updated");
+                     }
+                  }
+              }); 
+
+
+              /* drop clicked */
+
+              var ajxDataDropClicked = { 'action': 'drop-clicked', roomId: roomIdCookie, player: _userId, sessionKey: sessionKeyCookie};
+
+
+              $.ajax({
+                  type: 'POST',
+                  data: ajxDataDropClicked,
+                  cache: false,
+                  url: 'ajax/dropClicked.php',
+                  success: function(result){
+                     console.log("DROP CLICKED ======== " + result);
+                  }
+              });
+
+
+
+              /* Check if it will be drop or middle drop */
+              var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: _userId};
+
+                  $.ajax({
+                      type: 'POST',
+                      data: ajxDataCheckDropType,
+                      cache: false,
+                      url: 'ajax/checkDropType.php',
+                      success: function(count){
+                         
+                         if(count == 0 && gameTypeCookie == "score"){ // Score game drop
+
+                              if(gamePlayersCookie == "2"){
+
+                                  $('.result_sec').css({'display': 'block'});
+
+                                  wrongValidationDisplayProcess(10, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop');
+                              
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(10, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+
+                              }
+                         
+                         }else if(count == 1 && gameTypeCookie == "score"){ // Score game middle drop
+                            
+
+                              $('.result_sec').css({'display': 'block'});
+
+                              if(gamePlayersCookie == "2"){
+                                  wrongValidationDisplayProcess(30, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop');
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(30, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                                  
+                              }
+                         }else if(count == 0 && gameTypeCookie == "101"){ // Pool game drop
+
+                              if(gamePlayersCookie == "2"){
+
+                                  $('.result_sec').css({'display': 'block'});
+
+                                  wrongValidationDisplayProcess(20, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+                              
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(20, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+
+                              }
+                         
+                         }else if(count == 1 && gameTypeCookie == "101"){ // Score game middle drop
+                            
+
+                              $('.result_sec').css({'display': 'block'});
+
+                              if(gamePlayersCookie == "2"){
+                                  wrongValidationDisplayProcess(40, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(40, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                                  
+                              }
+                         }else if(count == 0 && gameTypeCookie == "201"){ // Pool game drop
+
+                              if(gamePlayersCookie == "2"){
+
+                                  $('.result_sec').css({'display': 'block'});
+
+                                  wrongValidationDisplayProcess(25, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+                              
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(25, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+
+                              }
+                         
+                         }else if(count == 1 && gameTypeCookie == "201"){ // Pool game drop
+
+                              if(gamePlayersCookie == "2"){
+
+                                  $('.result_sec').css({'display': 'block'});
+
+                                  wrongValidationDisplayProcess(50, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                              
+                              }else if(gamePlayersCookie == "6"){
+                                  $('.result_sec').css({'display': 'block'});
+                                   wrongValidationDisplayProcessSixPlayers_offline(50, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+
+                              }
+                         
+                         }
+
+
+
+                         /* check if drop and go */
+
+                         if(gameTypeCookie == "score"){
+
+                                var ajxDataCheckDropAndGo = {'action': 'check-dropandgo', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: _userId};
+
+                                $.ajax({
+                                  type: 'POST',
+                                  data: ajxDataCheckDropAndGo,
+                                  cache: false,
+                                  url: 'ajax/checkDropAndGo.php',
+                                  success: function(count){
+                                      if(count == 1){
+                                          /* drop and go selected */
+
+                                          
+
+                                          var nextPlayer;
+
+                                           if(getItem(playersPlayingTemp, parseInt(_userId)) ){
+
+                                              nextPlayer = getItem(playersPlayingTemp, parseInt(_userId));
+                                 
+                                            }else{
+                                              nextPlayer = playersPlayingTemp[0];
+                                                 
+                                            }
+
+                                          console.log("nextplayer ", nextPlayer);
+
+                                          var ajxData260 = {'action': 'current-player', roomId: roomIdCookie, player: parseInt(nextPlayer), sessionKey: sessionKeyCookie };
+
+                                           $.ajax({
+
+                                              type: 'POST',
+                                              url: 'ajax/updateCurrentPlayer.php',
+                                              cache: false,
+                                              data: ajxData260,
+                                              success: function(result){ 
+                                                  if($.trim(result) == "ok"){
+                                                      console.log("current player updated");
+                                                  }
+                                                  
+                                              }
+                                           }); 
+
+
+                                          var signalDropAndGo = {room:roomName, type: 'drop-and-go', userDropped: _userId, nextPlayer: nextPlayer};
+
+                                          //connection.send(JSON.stringify(signalDropAndGo));
+                                          socket.emit(socketEventName, JSON.stringify(signalDropAndGo));
+
+                                        
+                                  
+
+                                          $('.loading_container').css({'display':'block'});
+                                          $('.loading_container .popup .popup_cont').text("Please wait... You will be taken to another table!");
+
+                                            setTimeout(function(){
+                                              connection.close();
+                                              $.cookie("rejoinPR", "1");
+                                              $.cookie("rejoin", "0");
+                                              $.cookie("onOpenHit", null);
+                                              $.removeCookie("onOpenHit");
+                                              location.reload();
+
+                                           }, 8000);   
+
+
+
+
+
+                                      }
+
+
+                                  } });    
+
+
+                         }
+
+
+
+                      
+                      
+                      } });
+
+
+         });     
+
+
+
+
+   }
 
 
    function dropFunction(){
+
 
        var roomIdCookie = $.cookie("room");
        var sessionKeyCookie = $.trim($.cookie("sessionKey"));

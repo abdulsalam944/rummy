@@ -95,6 +95,70 @@ socket.on(socketEventName, function(e){
             console.log('Message from room: '+dataReceived.room+' my room '+roomName);
            // return; 
 
+           // drop function first
+
+           if(dataReceived.type=="code" && dataReceived.msg=="card-drop-middle"){
+
+              var roomIdCookie = $.cookie("room");
+              var gamePlayersCookie = $.cookie("game-players");
+              var creatorCookie = $.cookie("creator");
+              var gameTypeCookie = $.cookie("game-type");
+              var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+
+              var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+              var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
+              var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
+              var betValueCookie = $.trim($.cookie("betValue"));
+              var netSpeed = $.trim($.cookie("netSpeed"));
+
+              if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                console.log("  Round Over........ ================ !!!!!!!!!!  ");
+                /* Drop the player */
+                intervalCounter = window.clearInterval(intervalCounter);
+                playerCounterFlag = 0;                  
+                dropFunction_offline(dataReceived.player);
+              }else{
+                /* for deals game 80 points */
+                intervalCounter = window.clearInterval(intervalCounter);
+                playerCounterFlag = 0;
+                $('.result_sec').css({'display': 'block'});
+                wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+              } 
+
+           }
+
+           if(dataReceived.type=="code" && dataReceived.msg=="card-drop-first"){
+
+              var roomIdCookie = $.cookie("room");
+              var gamePlayersCookie = $.cookie("game-players");
+              var creatorCookie = $.cookie("creator");
+              var gameTypeCookie = $.cookie("game-type");
+              var sessionKeyCookie = $.trim($.cookie("sessionKey"));
+
+              var chipsToTablePRCookie = $.trim($.cookie("chipsToTablePR"));
+              var currentBalanceCookie = $.trim($.cookie("currentBalancePR"));
+              var minBuyingPRCookie = $.trim($.cookie("minBuyingPR"));
+              var betValueCookie = $.trim($.cookie("betValue"));
+              var netSpeed = $.trim($.cookie("netSpeed"));
+
+              if(gameTypeCookie != "deals2" && gameTypeCookie != "deals3"){
+                  console.log('Not deals2 or deals3');
+                  intervalCounter = window.clearInterval(intervalCounter);
+                  playerCounterFlag = 0;
+                  dropFunction_offline(dataReceived.player);
+              }else{
+                console.log('Else of deals2 or deals3');
+                intervalCounter = window.clearInterval(intervalCounter);
+                playerCounterFlag = 0;
+
+                $('.result_sec').css({'display': 'block'});   
+                wrongValidationDisplayProcess(80, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'lost');
+              }
+
+           }
+
+           //drop function middle
+
 
            if(dataReceived.type=="code" && dataReceived.msg=="deck-show-card-refresh"){
 
@@ -3898,6 +3962,8 @@ socket.on(socketEventName, function(e){
                                       field:"card_discard = 0 , card_pull",
                                       value:0
                                     };
+
+                                    
                                     $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
                                       console.log(data);
                                     });
@@ -3931,6 +3997,203 @@ socket.on(socketEventName, function(e){
 
 
                      }, 1000);
+
+
+              }else if(dataReceived.type == "wrong-meld-six-players_offline"){
+
+                  
+                    intervalCounter = window.clearInterval(intervalCounter);
+                    playerCounterFlag = 0;
+                    $('.current-player .card_submit_time').hide(); 
+                    $('.current-player .card_submit_time').text("");
+
+                   
+                    var melder = dataReceived.firstMelder;
+                    var totalPts = dataReceived.totalPoints;
+                    var event = dataReceived.event;
+                    var nextPlayer = dataReceived.nextPlayer;
+
+
+                    $('.current-player[data-user="'+melder+'"] .playingCards .deck').html("");
+                    $('.current-player[data-user="'+melder+'"] .toss .playingCards').html('<div class="card card_2 back"></div>');
+
+                    var roomIdCookie = $.cookie("room");
+                    var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                    player: nextPlayer, sessionKey: sessionKeyCookie };
+
+                     $.ajax({
+
+                        type: 'POST',
+                        url: 'ajax/updateCurrentPlayer.php',
+                        cache: false,
+                        data: ajxData270,
+                        success: function(result){ 
+                            if($.trim(result) == "ok"){
+                                console.log("current player updated");
+                            }
+                           
+                        }
+                     });   
+
+
+                    if(parseInt(nextPlayer) == parseInt(userId)){
+
+                      var signalStartCounter = {room:roomName, type: 'start-counter-discard', message: 'starting counter....', player: parseInt(nextPlayer), counterTime: 30};
+
+                      socket.emit(socketEventName, JSON.stringify(signalStartCounter));
+                      var PlayerCounterHandler = new playerCounterHandler(nextPlayer);
+                      PlayerCounterHandler.playerCounter = 30;
+                      PlayerCounterHandler.run();
+                      intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000);
+
+
+                      $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
+                      $('.drop button').attr('disabled', false);
+                      $('.drop button').css({'cursor':'pointer'});
+
+
+                    }
+                    $('.card-throw .playingCards a.cardDeckSelect').prop('id','cardDeckSelectShow'+userId);
+                    //alert("get");
+                    // console.log("received netxplayer ==== ", nextPlayer);
+
+                    // var counterT = 3;
+
+
+                    //  var intervalT = setInterval(function(){
+
+                    //     if(counterT <= 0){
+
+                    //         clearInterval(intervalT);
+
+                    //     if(gameTypeCookie != "score"){    
+                    //         $('.current-player[data-user="'+melder+'"] .player_name #score').text(parseInt(totalPts));
+                    //     }    
+
+                    //      $('.loading_container').css({'display':'none'});
+                    //      $('.loading_container .popup .popup_cont').text("");
+
+                    //     /* Check status of wrongmelder */
+                    //      var ajxData04 = {'action': 'get-status-wrongmelder', roomId: roomIdCookie, player: melder, sessionKey: sessionKeyCookie};
+
+                    //      $.ajax({
+                    //       type: 'POST',
+                    //       url: 'ajax/getStatusWrongMelder.php',
+                    //       cache: false,
+                    //       data: ajxData04,
+                    //       success: function(status){
+
+                    //         if(status != "over"){
+
+                    //           /* The player will play in the next round as well */
+                    //           for(var i = 0; i < playersPlayingTemp.length; i++){
+                    //             playersPlayingNextRound.push(playersPlayingTemp[i]);
+                    //           }
+
+
+                    //           console.log("players playing next round ...... ", playersPlayingNextRound);
+                    //           // if(removeCardFromGroups(parseInt(melder), playersPlayingTemp)){
+                    //                  console.log("players playing ....... ", playersPlayingTemp);
+
+
+                    //                  /*  get last toss winner from  db */
+
+                    //                  setTimeout(function(){
+
+                    //                   // $('#cardDeckSelect'+melder).attr('id', 'cardDeckSelect'+nextPlayer);
+                    //                   // $('#cardDeckSelectShow'+melder).attr('id', 'cardDeckSelectShow'+nextPlayer);
+
+
+
+                    //                   if(parseInt(userId) == parseInt(nextPlayer)){
+                    //                    $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
+
+
+
+                    //                                      // $('.game_message').html('<p>Your turn</p>').show();
+
+                    //                                      $('.drop button').attr('disabled', false);
+                    //                                      $('.drop button').css({'cursor':'pointer'});
+
+
+                    //                                      // kriti
+
+                    //                                    }else{
+                    //                                     $('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
+
+                    //                                     $('.drop button').attr('disabled', true);
+                    //                                     $('.drop button').css({'cursor':'default'});
+
+
+                                                        
+
+                    //                                   }
+                    //                                   var drop;
+                    //                                   if(event == "drop" || event == "middledrop"){
+                    //                                     drop = true;
+                    //                                   }else{
+                    //                                     drop = false;
+                    //                                   }
+
+
+                    //                                   var signal13 = {room:roomName, type: 'get-scoreboard-wrongshow-gamegoing_offline', message: 'continue game', playersPlayingTemp: playersPlayingTemp, playersPlayingNextRound: playersPlayingNextRound, nextPlayer: nextPlayer, melder: melder, drop: drop};
+
+                    //                                 //connection.send(JSON.stringify(signal13)); 
+                    //                                 //socket.emit("allmsg", JSON.stringify(signal13));
+                    //                                 socket.emit(socketEventName, JSON.stringify(signal13));
+
+
+
+
+
+                    //                               }, 3000);
+
+                    //               //  }  
+
+                    //               cardPull = 0;
+                    //               cardDiscard = 0;
+
+                    //               var dataTosend = {
+                    //                 room:roomName,
+                    //                 player: userId,
+                    //                 field:"card_discard = 0 , card_pull",
+                    //                 value:0
+                    //               };
+
+
+                    //               $.post('ajax/cardPullCardDiscard.php',dataTosend,function(data){
+                    //                 console.log(data);
+                    //               });
+
+
+
+                    //               $('.current-player[data-user="'+melder+'"] .playingCards .deck').html("");
+
+
+
+                    //               /* show toss card of melder */
+                    //               $('.current-player[data-user="'+melder+'"] .toss .playingCards').html('<div class="card card_2 back"></div>');
+                                  
+
+                    //             }
+
+                    //           }
+                          
+                    //     });    
+
+
+                      
+
+
+
+
+                    //     }
+
+                    //     counterT--;
+
+
+
+                    //  }, 1000);
 
 
               }else if(dataReceived.type == "get-scoreboard-six-players"){
@@ -5235,11 +5498,181 @@ socket.on(socketEventName, function(e){
 
                 }
 
+              }else if (dataReceived.type == "get-scoreboard-wrongshow-gamegoing_offline"){
+
+              
+                intervalCounter = window.clearInterval(intervalCounter);
+                playerCounterFlag = 0;
+                //  $('.current-player .card_submit_time').hide(); 
+                //  $('.current-player .card_submit_time').text("");
+
+                testingFlag++;
+                var wrongMelder = dataReceived.melder;
+                var nextPlayer = dataReceived.nextPlayer;
+
+                if(nextPlayer == userId){
+
+
+                   // $('.drop').hide();
+
+                   
+
+                    /* Signal for wrongmelder 6 players game */
+
+                        playersPlayingNextRound = dataReceived.playersPlayingNextRound;
+                        playersPlayingTemp = dataReceived.playersPlayingTemp;  
+                    
+                        var drop = true;
+
+
+                         /*  update db current player */
+
+                        var ajxData270 = {'action': 'current-player', roomId: roomIdCookie, 
+                            player: nextPlayer, sessionKey: sessionKeyCookie };
+
+                             $.ajax({
+
+                                type: 'POST',
+                                url: 'ajax/updateCurrentPlayer.php',
+                                cache: false,
+                                data: ajxData270,
+                                success: function(result){ 
+                                    if($.trim(result) == "ok"){
+                                        console.log("current player updated");                                                    
+                                    
+
+                                    }
+                                   
+                                }
+                             });    
+
+                        /* update melded count and player melded */
+
+                           var ajxData703 = {'action': 'update-melded-count-player-melded', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                          $.ajax({
+                            type: 'POST',
+                            data: ajxData703,
+                            cache: false,
+                            url: 'ajax/updateMeldedCountAndPlayerMelded.php',
+                            success: function(result){
+
+
+
+                            } });    
+
+
+                        console.log("playersPlayingTemp now 4545454545 ", playersPlayingTemp);
+                        console.log("playersPlayingTemp next round 445454545454 ", playersPlayingNextRound);
+
+
+                        /* update player turn */
+
+                         var ajxData703 = {'action': 'update-player-turn', roomId: roomIdCookie, nextPlayer: nextPlayer, sessionKey: sessionKeyCookie};
+
+                          $.ajax({
+                            type: 'POST',
+                            data: ajxData703,
+                            cache: false,
+                            url: 'ajax/updatePlayerTurn.php',
+                            success: function(result){
+
+
+                                if($.trim(result) == "ok"){
+
+                                    console.log("Player Turn Updated!");
+
+                                     // alert("incoming");
+                                       // console.log("PPPPPPPPPPPPPP ", nextPlayer);
+                                       // console.log("QQQQQQQQ ", playersPlayingTemp);
+
+
+
+                                    var signalStartCounter = {room:roomName, type: 'start-counter-discard', message: 'starting counter....', player: parseInt(nextPlayer), counterTime: 30};
+                                                        
+                                    // connection.send(JSON.stringify(signalStartCounter));
+                                       // socket.emit("allmsg", JSON.stringify(signalStartCounter));
+                                        socket.emit(socketEventName, JSON.stringify(signalStartCounter));
+
+
+                                        var PlayerCounterHandler = new playerCounterHandler(nextPlayer);
+                                     
+                                        PlayerCounterHandler.playerCounter = 30;
+                                        PlayerCounterHandler.run();
+                                        intervalCounter = setInterval(PlayerCounterHandler.updateCounter, 1000);
+
+                                    
+                                    setTimeout(function(){
+
+                                        $('.result_sec .result_bottom').text("");
+
+                                        $('.result_sec').css({'display': 'none'});
+                                        $('.result_sec tbody[id="score_reports"] tr').remove();
+
+
+                                        /*  Hide show section */
+
+                                        $('.show_your_card_sec').css({'display': 'none'});
+                                      
+                                      
+
+                                            $('.player_card_me .hand li a').removeClass('handCard');
+                                            $('.group_blog5 .playingCards .hand li a').removeClass('handCard');
+
+                                             $('.player_card_me .hand li a').addClass('showFoldedCard');
+                                            $('.group_blog5 .playingCards .hand li a').addClass('showFoldedCard');
+
+                                            $('.player_card_me').hide();
+                                            $('.group_blog5').hide();
+                                          
+                                            $('.current-player[data-user="'+wrongMelder+'"] .toss .playingCards').html('<div class="card card_3 back board_center_back showMyHand"></div>');
+
+
+
+                                          
+
+
+                                         
+
+                                        /* show folded card */
+
+                                        
+
+                                        // $('#meldAll'+userId+' button').hide();
+
+                                        $('#sort'+wrongMelder).hide();
+                                        // $('.discard button').hide();
+
+                                       
+
+                                        testingFlag = 0;
+
+                                        /* send signal to update testing flag */
+
+                                        var signalTestingFlagUpdate = {room:roomName, "type":"testing-flag-update"};
+                                       // connection.send(JSON.stringify(signalTestingFlagUpdate));
+                                        socket.emit(socketEventName, JSON.stringify(signalTestingFlagUpdate));
+                                        //$('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
+
+
+                                    }, 2000);
+
+                                }
+
+
+                            }
+                        });           
+                            
+                         
+
+                }
+
               }else if (dataReceived.type == "testing-flag-update"){
                     testingFlag = 0;
 
               }else if(dataReceived.type == "get-scoreboard-melder"){
 
+                    console.log("get-scoreboard-melder called");
                  
                     intervalCounter = window.clearInterval(intervalCounter);
                     playerCounterFlag = 0;
@@ -5255,7 +5688,14 @@ socket.on(socketEventName, function(e){
 
                     console.log(dataReceived.message);
 
-                            
+                            var dissUser = dissconnectedUsers.length;
+
+                            if(dissUser>0){
+
+                              console.log('Call if user is dissconnected... Card meld.. ');
+
+
+                            }else{                           
 
                             /*  Check if only the first melder gets the call */
 
@@ -5294,44 +5734,28 @@ socket.on(socketEventName, function(e){
                                     cache: false,
                                     url: 'ajax/getMeldedCount.php',
                                     success: function(count){
-
-                                        console.log("playersPlayingTemp checking ", playersPlaying);
-
-                                        console.log("count ", count);
-
-                                       if(count >= playersPlaying.length){
-
+                                      console.log("playersPlayingTemp checking ", playersPlaying);
+                                      console.log("count ", count);
+                                      if(count >= playersPlaying.length){
                                         // alert("count matched!");
+                                        // alert("hitting 1");
+                                        console.log("count match proceed");
+                                        // if(gamePlayersCookie == "2"){
 
-                                             // alert("hitting 1");
+                                          for(var i = 0; i < playersPlayingWholeGame.length; i++){
+                                            console.log('doing for ', playersPlayingWholeGame[i]);
+                                            var ajxData703 = {'action': 'get-players', player: playersPlayingWholeGame[i]};
+                                            $.ajax({
+                                              type: 'POST',
+                                              data: ajxData703,
+                                              dataType: 'json',
+                                              cache: false,
+                                              url: 'ajax/getAllPlayers.php',
+                                              success: function(player){
 
-                                            console.log("count match proceed");
-
-
-                                 // if(gamePlayersCookie == "2"){
-
-                                     for(var i = 0; i < playersPlayingWholeGame.length; i++){
-
-                                        console.log('doing for ', playersPlayingWholeGame[i]);
-
-                                         var ajxData703 = {'action': 'get-players', player: playersPlayingWholeGame[i]};
-
-                                          $.ajax({
-                                            type: 'POST',
-                                            data: ajxData703,
-                                            dataType: 'json',
-                                            cache: false,
-                                            url: 'ajax/getAllPlayers.php',
-                                            success: function(player){
-
-
-                                              if(gameTypeCookie != "score"){  
-
-
-
-                                            if(player.id != userId){
-                                        
-                                                console.log(player.id + ' ' +player.name);
+                                                if(gameTypeCookie != "score"){
+                                                  if(player.id != userId){
+                                                    console.log(player.id + ' ' +player.name);
 
 
                                                 var ajxData704 = {'action': 'get-scoreboard', roomId: roomIdCookie, player: player.id, sessionKey: sessionKeyCookie};
@@ -5630,11 +6054,10 @@ socket.on(socketEventName, function(e){
                                         }
 
                                     }  /* first ajax success */
-                             }); /* first ajax */          
-
-                         
-                   
-
+                             }); /* first ajax */    
+                          
+                          }
+    
 
                         }else if(dataReceived.type == "get-scoreboard-melder-six-player"){
 
@@ -5711,7 +6134,10 @@ socket.on(socketEventName, function(e){
                                         console.log("playersPlayingTemp checking", playersPlaying);
 
                                         console.log("Count of melding ", count);
-                                       if(count >= playersPlaying.length){
+
+                                        console.log("Increasing melding count by user currently dissconnected...");
+                                        var dissUser = dissconnectedUsers.length;                                      
+                                       if((dissUser+count) >= playersPlaying.length){
 
                                             
 
