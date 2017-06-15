@@ -28,8 +28,12 @@ if(isset($_POST['action']) && $_POST['action'] == "meld-card-validation-no-group
 
 
 			/* update points */
-
-			$sqlUpdate = mysql_query("UPDATE player_gamedata SET points = ".$points.", total_points = total_points + ".$pointsAdd." WHERE game_id = '".$roomId."' AND session_key = '".$sessionKey."' AND user_id = ".$player." LIMIT 1 ");
+			if(isset($_POST['offline']) && $_POST['offline']=="offline"){
+				$sqlUpdate = 1;
+			}else{
+				$sqlUpdate = mysql_query("UPDATE player_gamedata SET points = ".$points.", total_points = total_points + ".$pointsAdd." WHERE game_id = '".$roomId."' AND session_key = '".$sessionKey."' AND user_id = ".$player." LIMIT 1 ");
+			}
+				//$sqlUpdate = mysql_query("UPDATE player_gamedata SET points = ".$points.", total_points = total_points + ".$pointsAdd." WHERE game_id = '".$roomId."' AND session_key = '".$sessionKey."' AND user_id = ".$player." LIMIT 1 ");
 
 			if($sqlUpdate){
 				

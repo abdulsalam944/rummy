@@ -197,7 +197,7 @@ var gameStartHandler = function(callback){
 
                    if(userId == playerId){
                      
-
+                        console.log(' Check connection autoplay variables, NetSpeed: ',netSpeed, ' Connection Issue Count : ' ,connectionIssueCount);
 
                          /* Pull card from closed deck if netspeed is slow */
 
@@ -364,11 +364,12 @@ var gameStartHandler = function(callback){
                   }else{
                     //alert();
                     console.log(playersPlayingTemp, userId);
-                    if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                    /*if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
                         nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
                     }else{
                         nextPlayerToSend = playersPlayingTemp[0];
-                    }
+                    }*/
+                    nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
                     console.log(nextPlayerToSend);
                     checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
                   }

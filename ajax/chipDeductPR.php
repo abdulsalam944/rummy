@@ -27,7 +27,7 @@ if(isset($_POST['action']) && $_POST['action'] == "chip-deduct"){
 
 			if($numrows == 0){
 
-				$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', '', '', '', '', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user')");
+				$sqlInsert = mysql_query("INSERT INTO real_wallet VALUES (null, '".$user."', '', '', '', '', '', '', '', '".$balance_chips."', '', 1, '', '".$date."', '".$roomId."', '".$sessionKey."', '', '', '".$refer_amount."', '".$redeemable_amount."', 'user', '')");
 		
 				if($sqlInsert){
 					echo "DONE============================";

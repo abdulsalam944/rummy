@@ -131,14 +131,16 @@
                     if(parseInt(player) == parseInt(userId)){
 
 
-                          if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                          /*if(getItem(playersPlayingTemp, parseInt(userId)) ){
 
                             nextPlayer = getItem(playersPlayingTemp, parseInt(userId));
                                
                           }else{
                             nextPlayer = playersPlayingTemp[0];
                                
-                          }
+                          }*/
+                          nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
+                          
 
                           console.log("nextplayer ", nextPlayer);
 

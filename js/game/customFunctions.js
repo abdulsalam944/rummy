@@ -118,13 +118,13 @@ function cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed){
                                 console.log("card discard done");
                                 cardDiscard = 1;
 
-                                if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                                /*if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
                                     nextPlayerToSend = playersPlayingTemp[0];
-                                }
+                                }*/
 
-
+                                nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
                                
                                 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').hide(); 
@@ -228,12 +228,12 @@ function cardDiscardAuto(roomIdCookie, sessionKeyCookie, netSpeed){
                                 cardDiscard = 1;
 
 
-                                if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                                /*if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
                                     nextPlayerToSend = playersPlayingTemp[0];
-                                }
-
+                                }*/
+                                nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
 
                           
 
@@ -590,7 +590,7 @@ function showCardsInScoreboard(player, roomIdCookie, sessionKeyCookie){
 
 function dropFunction_offline(_userId){
 
-      
+      console.log('Cards in hand ',cardsInHand);
 
        var roomIdCookie = $.cookie("room");
        var sessionKeyCookie = $.trim($.cookie("sessionKey"));
@@ -615,7 +615,9 @@ function dropFunction_offline(_userId){
 
       /* Meld my cards */
 
-      checkIfAllMelded(function(){
+      //checkIfAllMelded(function(){
+
+        console.log('Cards in hand ',cardsInHand);
 
               // $('.player_card_me .hand li a').removeClass('handCard');
               // $('.group_blog5 .playingCards .hand li a').removeClass('handCard');
@@ -663,9 +665,12 @@ function dropFunction_offline(_userId){
               });
 
 
-
+              console.log('Cards in hand ',cardsInHand);
               /* Check if it will be drop or middle drop */
               var ajxDataCheckDropType = {'action': 'check-drop-type', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: _userId};
+
+
+              console.log('Cards in hand ',cardsInHand);
 
                   $.ajax({
                       type: 'POST',
@@ -680,7 +685,7 @@ function dropFunction_offline(_userId){
 
                                   $('.result_sec').css({'display': 'block'});
 
-                                  wrongValidationDisplayProcess(10, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop');
+                                  wrongValidationDisplayProcess_offline(10, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
                               
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
@@ -694,7 +699,7 @@ function dropFunction_offline(_userId){
                               $('.result_sec').css({'display': 'block'});
 
                               if(gamePlayersCookie == "2"){
-                                  wrongValidationDisplayProcess(30, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop');
+                                  wrongValidationDisplayProcess_offline(30, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
                                    wrongValidationDisplayProcessSixPlayers_offline(30, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
@@ -702,11 +707,13 @@ function dropFunction_offline(_userId){
                               }
                          }else if(count == 0 && gameTypeCookie == "101"){ // Pool game drop
 
+                            console.log('Cards in hand ',cardsInHand);
+
                               if(gamePlayersCookie == "2"){
 
                                   $('.result_sec').css({'display': 'block'});
 
-                                  wrongValidationDisplayProcess(20, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+                                  wrongValidationDisplayProcess_offline(20, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
                               
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
@@ -716,15 +723,19 @@ function dropFunction_offline(_userId){
                          
                          }else if(count == 1 && gameTypeCookie == "101"){ // Score game middle drop
                             
+                              console.log('Cards in hand ',cardsInHand);
 
                               $('.result_sec').css({'display': 'block'});
 
                               if(gamePlayersCookie == "2"){
-                                  wrongValidationDisplayProcess(40, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                                  wrongValidationDisplayProcess_offline(40, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                              
+
+
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
                                    wrongValidationDisplayProcessSixPlayers_offline(40, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
-                                  
+                                  console.log("wrongValidationDisplayProcessSixPlayers_offline function called..");
                               }
                          }else if(count == 0 && gameTypeCookie == "201"){ // Pool game drop
 
@@ -732,7 +743,7 @@ function dropFunction_offline(_userId){
 
                                   $('.result_sec').css({'display': 'block'});
 
-                                  wrongValidationDisplayProcess(25, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
+                                  wrongValidationDisplayProcess_offline(25, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'drop',_userId);
                               
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
@@ -746,7 +757,7 @@ function dropFunction_offline(_userId){
 
                                   $('.result_sec').css({'display': 'block'});
 
-                                  wrongValidationDisplayProcess(50, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
+                                  wrongValidationDisplayProcess_offline(50, roomIdCookie, gameTypeCookie, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, 'middledrop',_userId);
                               
                               }else if(gamePlayersCookie == "6"){
                                   $('.result_sec').css({'display': 'block'});
@@ -761,6 +772,9 @@ function dropFunction_offline(_userId){
                          /* check if drop and go */
 
                          if(gameTypeCookie == "score"){
+
+
+                          console.log('Cards in hand ',cardsInHand);
 
                                 var ajxDataCheckDropAndGo = {'action': 'check-dropandgo', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player: _userId};
 
@@ -777,14 +791,16 @@ function dropFunction_offline(_userId){
 
                                           var nextPlayer;
 
-                                           if(getItem(playersPlayingTemp, parseInt(_userId)) ){
+                                           /*if(getItem(playersPlayingTemp, parseInt(_userId)) ){
 
                                               nextPlayer = getItem(playersPlayingTemp, parseInt(_userId));
                                  
                                             }else{
                                               nextPlayer = playersPlayingTemp[0];
                                                  
-                                            }
+                                            }*/
+
+                                            nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
 
                                           console.log("nextplayer ", nextPlayer);
 
@@ -804,7 +820,7 @@ function dropFunction_offline(_userId){
                                               }
                                            }); 
 
-
+                                            console.log('Cards in hand ',cardsInHand);
                                           var signalDropAndGo = {room:roomName, type: 'drop-and-go', userDropped: _userId, nextPlayer: nextPlayer};
 
                                           //connection.send(JSON.stringify(signalDropAndGo));
@@ -838,14 +854,14 @@ function dropFunction_offline(_userId){
 
                          }
 
-
+                         console.log('Cards in hand ',cardsInHand);
 
                       
                       
                       } });
 
 
-         });     
+         //});     
 
 
 
@@ -1041,14 +1057,16 @@ function dropFunction_offline(_userId){
 
                                           var nextPlayer;
 
-                                           if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                                           /*if(getItem(playersPlayingTemp, parseInt(userId)) ){
 
                                               nextPlayer = getItem(playersPlayingTemp, parseInt(userId));
                                  
                                             }else{
                                               nextPlayer = playersPlayingTemp[0];
                                                  
-                                            }
+                                            }*/
+
+                                            nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
 
                                           console.log("nextplayer ", nextPlayer);
 
@@ -1151,4 +1169,18 @@ function reShuffleDeck(roomIdCookie, sessionKeyCookie, callback){
                  callback(result);
               } }); 
 
+}
+
+function findNextPlayer(players, currentUser){
+  if(players){
+    var playersLength = (players.length - 1);
+    var curUserPos = players.indexOf(currentUser);
+
+    if(playersLength == curUserPos){
+      return players[0];
+    }else{
+      ++curUserPos;
+      return players[curUserPos];
+    }
+  }
 }

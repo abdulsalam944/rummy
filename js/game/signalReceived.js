@@ -116,7 +116,9 @@ socket.on(socketEventName, function(e){
                 /* Drop the player */
                 intervalCounter = window.clearInterval(intervalCounter);
                 playerCounterFlag = 0;                  
+                console.log('Cards in hand ',cardsInHand);
                 dropFunction_offline(dataReceived.player);
+                console.log('Cards in hand ',cardsInHand);
               }else{
                 /* for deals game 80 points */
                 intervalCounter = window.clearInterval(intervalCounter);
@@ -2272,7 +2274,7 @@ socket.on(socketEventName, function(e){
                                 console.log("players ", playersPlayingTemp);
 
                                 console.log("hit the right thing!");
-
+                                tossArray_ = [];
                                 for(var j = 0; j < playersPlayingTemp.length; j++){
 
                                    
@@ -2310,38 +2312,287 @@ socket.on(socketEventName, function(e){
 
                                   
                                         console.log('Pushing data in toss array ',{ player: playersPlayingTemp[j], value: cardValue });
-                                        tossArray.push({ player: playersPlayingTemp[j], value: cardValue });
-
+                                        tossArray_.push({ player: playersPlayingTemp[j], value: cardValue });
+                                        console.info('Players');
+                                        console.info({ player: playersPlayingTemp[j], value: cardValue });
 
 
                                 }
 
-                                console.log('Checking data in toss array');
-                                // console.log(tossArray);
-                                // console.log(playersPlaying);
-                                 var tempPlayerSortValue = [];
+                                //setTimeout(function(){
+                                  console.log('tt');
+                                  console.log(tossArray_);
+                                //},1000);
 
-                                  
 
-                                 $(tossArray).each(function(){                                  
-                                   tempPlayerSortValue.push({key:this.player,value:this.value});                                  
+                                // var tossArray_ = [];
+
+                                // $(tossArray).each(function(){
+                                //   tossArray_.push(this);
+                                // });
+
+
+                                // console.log('Before sorting..');
+                                // console.log(tossArray_);
+
+                                // //sort array
+                                 tossArray = tossArray_.sort(function(b,a){ return a.value - b.value;  });
+                                // console.log('After sorting');
+                                // console.log(tossArray_);
+                              
+                                // console.debug('Players Playing');
+                                // console.debug(playersPlaying);
+
+                                playersPlaying = [];
+                                console.log(tossArray);
+                                $(tossArray).each(function(e,j){
+                                  playersPlaying.push(j.player);
                                 });
+                                // console.debug('Players after');
+                                // console.debug(playersPlaying);
 
-                                 console.log('Before player sorted',tempPlayerSortValue,playersPlaying);
-                                 playersPlaying = [];
-                                 console.log('Re init players', playersPlaying);
-                                 $(tempPlayerSortValue).each(function(k,v){
-                                  console.log(k,v);
-                                    playersPlaying.push(v.key);
-                                 });
-                                 console.log('After re sort players. ', playersPlaying);
+                                console.log(playersPlaying);
 
-                                // console.log("Before sort");
-                                // console.log(tempPlayerSortKey);
-                                // console.log('after sort');
-                                tempPlayerSortKey = tempPlayerSortValue.sort(function(a, b){return b.value-a.value});
-                                console.log(tempPlayerSortKey);
-                                //console.log(sortByKey(tempPlayerSort,'value'));
+                                playersPlayingTemp = playersPlaying;
+                                console.log(playersPlayingTemp);
+                                /*
+                                    Re init player
+                                */
+
+
+                                // regenerate array
+
+                                var index = playersPlayingTemp.indexOf(parseInt(userId));
+                                var reOrderUser = [];
+                                for (var i = index; i < playersPlayingTemp.length; i++) {
+                                  if (playersPlayingTemp[i] != "undefined") {
+                                    reOrderUser.push(playersPlayingTemp[i]);
+                                  }
+                                }
+                                if(index==(playersPlayingTemp.length -1)){
+                                  for (var i = 0; i < index; i++) {
+                                    if (playersPlayingTemp[i] != "undefined") {
+                                      reOrderUser.push(playersPlayingTemp[i]);
+                                    }
+                                  }
+                                }else{
+                                  for (var i = (index - 1); i >= 0; i--) {
+                                    if (playersPlayingTemp[i] != "undefined") {
+                                      reOrderUser.push(playersPlayingTemp[i]);
+                                    }
+                                  }
+                                }
+                                console.log('Sitting Players');
+                                console.log(reOrderUser);
+
+                                // playersPlayingTemp = [];
+                                // playersPlaying = [];
+
+                                // playersPlayingTemp = reOrderUser;
+                                // playersPlaying = reOrderUser;
+
+
+                                console.log('Re init player');
+                                gamePlayersCookie = $.cookie("game-players");
+                                if(gamePlayersCookie == "6" && reOrderUser.length > 2){
+                                  console.log(' Player Order 6 > 2 -- : ',reOrderUser[i]);
+                                           $('.player_1').attr('data-user', "");
+                                            $('.player_1 .player_pic_1 img').css({'display': 'none'});
+                                            $('.player_1 .player_name .player_name_1').text("");
+                                            $('.player_1 .player_name').css({'display': 'none'});
+
+                                            $('.player_2').attr('data-user', "");
+                                            $('.player_2 .player_pic_2 img').css({'display': 'none'});
+                                            $('.player_2 .player_name .player_name_2').text("");
+                                            $('.player_2 .player_name').css({'display': 'none'});
+
+                                            $('.player_3').attr('data-user', "");
+                                            $('.player_3 .player_pic_3 img').css({'display': 'none'});
+                                            $('.player_3 .player_name .player_name_3').text("");
+                                            $('.player_3 .player_name').css({'display': 'none'});
+
+                                             $('.player_4').attr('data-user', "");
+                                            $('.player_4 .player_pic_4 img').css({'display': 'none'});
+                                            $('.player_4 .player_name .player_name_4').text("");
+                                            $('.player_4 .player_name').css({'display': 'none'});
+
+                                            $('.player_5').attr('data-user', "");
+                                            $('.player_5 .player_pic_5 img').css({'display': 'none'});
+                                            $('.player_5 .player_name .player_name_5').text("");
+                                            $('.player_5 .player_name').css({'display': 'none'});    
+
+
+
+                                        for(var i = 0; i < reOrderUser.length; i++){
+                                                console.log(' Player Order 6 > 2 : ',reOrderUser[i]);
+                                                if(reOrderUser[i] != parseInt(userId)){
+
+                                                    // get player name 
+
+                                                var ajxData20 = {'action': 'get-players', player: reOrderUser[i]};
+                                                  console.log(ajxData20);
+                                                      $.ajax({
+                                                          type: 'POST',
+                                                          url: 'ajax/getAllPlayers.php',
+                                                          cache: false,
+                                                          data: ajxData20,
+                                                          async:false,
+                                                          dataType: "json",
+                                                          success: function(player){
+
+
+
+                                                            console.log("Player ", player.name ," - ", player.id);
+
+
+                                                                
+
+
+                                                               if( !$('.player_1').attr('data-user') ){ 
+                                                                 
+                                                                  $('.player_1 .player_pic_1 img').css({'display': 'block'});
+                                                                  $('.player_1 .player_name .player_name_1').text(player.name);
+                                                                  $('.player_1 .player_name').css({'display': 'block'});
+
+                                                                  $('.player_1').attr('data-user', player.id);
+                                                               
+                                                               }else if( !$('.player_2').attr('data-user') ){ 
+                                                                
+                                                                 $('.player_2 .player_pic_2 img').css({'display': 'block'});
+                                                                  $('.player_2 .player_name .player_name_2').text(player.name);
+                                                                  $('.player_2 .player_name').css({'display': 'block'});
+
+                                                                  $('.player_2').attr('data-user', player.id);
+                                                              
+                                                               }else if( !$('.player_3').attr('data-user') ){ 
+                                                                 $('.player_3 .player_pic_3 img').css({'display': 'block'});
+                                                                  $('.player_3 .player_name .player_name_3').text(player.name);
+                                                                  $('.player_3 .player_name').css({'display': 'block'});
+
+                                                                  $('.player_3').attr('data-user', player.id);
+                                                              
+                                                               }else if( !$('.player_4').attr('data-user') ){ 
+                                                                 $('.player_4 .player_pic_4 img').css({'display': 'block'});
+                                                                  $('.player_4 .player_name .player_name_4').text(player.name);
+                                                                  $('.player_4 .player_name').css({'display': 'block'});
+
+                                                                  $('.player_4').attr('data-user', player.id);
+                                                              
+                                                               }else if( !$('.player_5').attr('data-user') ){ 
+                                                                 $('.player_5 .player_pic_5 img').css({'display': 'block'});
+                                                                  $('.player_5 .player_name .player_name_5').text(player.name);
+                                                                  $('.player_5 .player_name').css({'display': 'block'});
+
+                                                                  $('.player_5').attr('data-user', player.id);
+                                                               }   
+                                                            
+
+
+                                                           
+                                                          
+
+
+
+                                                          }
+
+                                                     });
+
+
+                                                }
+
+
+                                            }
+
+
+                                          
+
+
+                                }else if(gamePlayersCookie == "6" && reOrderUser.length == 2){
+                                    console.log(' Player Order -- : ',reOrderUser[i]);
+
+                                            $('.player_1').attr('data-user', "");
+                                            $('.player_1 .player_pic_1 img').css({'display': 'none'});
+                                            $('.player_1 .player_name .player_name_1').text("");
+                                            $('.player_1 .player_name').css({'display': 'none'});
+
+                                            $('.player_2').attr('data-user', "");
+                                            $('.player_2 .player_pic_2 img').css({'display': 'none'});
+                                            $('.player_2 .player_name .player_name_2').text("");
+                                            $('.player_2 .player_name').css({'display': 'none'});
+
+                                            $('.player_3').attr('data-user', "");
+                                            $('.player_3 .player_pic_3 img').css({'display': 'none'});
+                                            $('.player_3 .player_name .player_name_3').text("");
+                                            $('.player_3 .player_name').css({'display': 'none'});
+
+                                             $('.player_4').attr('data-user', "");
+                                            $('.player_4 .player_pic_4 img').css({'display': 'none'});
+                                            $('.player_4 .player_name .player_name_4').text("");
+                                            $('.player_4 .player_name').css({'display': 'none'});
+
+                                            $('.player_5').attr('data-user', "");
+                                            $('.player_5 .player_pic_5 img').css({'display': 'none'});
+                                            $('.player_5 .player_name .player_name_5').text("");
+                                            $('.player_5 .player_name').css({'display': 'none'});    
+
+
+
+
+
+
+                                                for(var i = 0; i < reOrderUser.length; i++){
+                                                    console.log(' Player Order : ',reOrderUser[i]);
+                                                    if(reOrderUser[i] != parseInt(userId)){
+
+                                                        // get player name
+
+                                                        var ajxData20 = {'action': 'get-players', player: reOrderUser[i]};
+
+                                                              $.ajax({
+                                                                  type: 'POST',
+                                                                  url: 'ajax/getAllPlayers.php',
+                                                                  cache: false,
+                                                                  async:false,
+                                                                  data: ajxData20,
+                                                                  dataType: "json",
+                                                                  success: function(player){
+
+
+
+
+                                                                    // console.log("Player ", player.name ," - ", player.id);
+
+                                                                    $('.player_3 .player_pic_3 img').css({'display': 'block'});
+                                                                    $('.player_3 .player_name .player_name_3').text(player.name);
+                                                                    $('.player_3 .player_name').css({'display': 'block'});
+
+                                                                    $('.player_3').attr('data-user', player.id);
+
+
+                                                          // $('.player_1 .player_pic_1 img').css({'display': 'none'});
+                                                          // $('.player_1 .player_name .player_name_1').text('');
+                                                          // $('.player_1 .player_name').css({'display': 'none'});
+
+                                                          // $('.player_1').attr('data-user', '');
+
+
+                                                           } });
+
+
+                                                      }    
+
+
+
+
+
+
+                                           } 
+
+
+                                }
+
+
+                                /* Re init end--------------- */
 
                                  var largestCardValueToss = Math.max.apply(Math, tossArray.map(function(fn){
                                 return fn.value;} ));
@@ -2405,7 +2656,10 @@ socket.on(socketEventName, function(e){
 
                                                                 /* select joker for this game */
                                                         
-                                                                setTimeout(function(){    
+                                                                setTimeout(function(){
+
+                                                                  $.post('ajax/updateGameType.php',{roomId: sessionKeyCookie, gameType:$.cookie("game-type")});
+                                                                    
 
                                                                     var ajxData201 = {'action': 'choose-joker', roomId: roomIdCookie, sessionKey: sessionKeyCookie};
 
@@ -2623,7 +2877,8 @@ socket.on(socketEventName, function(e){
                                                                    var signal2 = {room:roomName, type: 'select-joker', message: 'dealing time', jokerCard: resultJoker, throw_card: throwCard, tossWinner: tossWinner.player, winningAmount: winningAmount};
                                                                
                                                                     //connection.send(JSON.stringify(signal2));
-                                                                    socket.emit(socketEventName, JSON.stringify(signal2));
+                                                  /********/
+                                                  socket.emit(socketEventName, JSON.stringify(signal2));
 
 
 
@@ -4547,10 +4802,10 @@ socket.on(socketEventName, function(e){
 
 
 
-                                                       var signal13 = {room:roomName, type: 'get-scoreboard-melder-six-player', message: 'asking the melder to get scoreboard', myStatus: "lost", gameStatusTrick: true, playersPlaying: playersPlaying, playersPlayingTemp:playersPlayingTemp, melder: melder};
+                                                    var signal13 = {room:roomName, type: 'get-scoreboard-melder-six-player', message: 'asking the melder to get scoreboard', myStatus: "lost", gameStatusTrick: true, playersPlaying: playersPlaying, playersPlayingTemp:playersPlayingTemp, melder: melder};
 
-                                                         //connection.send(JSON.stringify(signal13));   
-                                                         socket.emit(socketEventName, JSON.stringify(signal13));
+                                                    //connection.send(JSON.stringify(signal13));   
+                                                    socket.emit(socketEventName, JSON.stringify(signal13));
 
 
                                                
@@ -6075,6 +6330,8 @@ socket.on(socketEventName, function(e){
 
                              console.log(" TESTING FLAG ", testingFlag); 
                            
+                             console.log('Next play counter function called.. FirstMelder:',firstMelder,' userId: ', userId ,' TestingFlag: ',testingFlag);
+
 
                             if(firstMelder == userId && testingFlag == 1){
 
@@ -6136,8 +6393,15 @@ socket.on(socketEventName, function(e){
                                         console.log("Count of melding ", count);
 
                                         console.log("Increasing melding count by user currently dissconnected...");
-                                        var dissUser = dissconnectedUsers.length;                                      
-                                       if((dissUser+count) >= playersPlaying.length){
+                                        var dissUser = dissconnectedUsers.length;
+
+                                        console.log('dissconnected users', dissUser);    
+                                                                       
+                                         var totalUser  = parseInt(dissUser) + parseInt(count);
+
+                                         console.log('condition', totalUser, ' - ', (totalUser >= playersPlaying.length));        
+
+                                       if(totalUser >= playersPlaying.length){
 
                                             
 
@@ -6214,7 +6478,7 @@ socket.on(socketEventName, function(e){
                                                                      }
 
                                                            }else{
-
+                                                               console.log('else player', player.id);    
 
                                                                  if(player.id != userId){
                                                             
@@ -6793,7 +7057,7 @@ socket.on(socketEventName, function(e){
                                     //if(!tossWinner){
 
 
-                                         var ajxData235 = {'action': 'get-toss-winner', roomId: roomIdCookie, sessionKey: sessionKeyCookie};
+                                         var ajxData235 = {'action': 'get-toss-winner', roomId: roomIdCookie, sessionKey: sessionKeyCookie, player:userId};
 
                                          $.ajax({
 
@@ -6807,7 +7071,9 @@ socket.on(socketEventName, function(e){
                                                 tossWinner = winner;
                                                 console.log("HIHIHIHIHIHI ", tossWinner);
 
+                                            
 
+                                           // console.log(nextActiveUser);
 
                                              /* Update player won and wrong melders  */
 

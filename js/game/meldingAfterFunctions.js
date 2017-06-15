@@ -670,7 +670,7 @@ function wrongValidationDisplayProcess2(totalScoreSum, roomIdCookie, gameType, s
 
 function wrongValidationDisplayProcessSixPlayers_offline(points, roomIdCookie, gameType, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, event,_userId){
 
-
+console.log('Cards in hand ',cardsInHand);
 
 $('.leave_table_btn').attr('disabled', true);
 intervalCounter = window.clearInterval(intervalCounter);
@@ -717,6 +717,8 @@ if(playersPlayingTemp.length > 2){
             /* DB UPDATES */
 
             /* update melded count */
+
+            console.log('Cards in hand ',cardsInHand);
 
             var ajxData850 = { 'action': 'update-melded-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie};
 
@@ -781,7 +783,7 @@ if(playersPlayingTemp.length > 2){
                     } }); 
 
 
-              var ajxData852 = { 'action': 'meld-card-validation-no-group', roomId: roomIdCookie, player: _userId, gameType: gameType, sessionKey: sessionKeyCookie, betValue: betValueCookie, points: points};
+              var ajxData852 = { 'action': 'meld-card-validation-no-group', roomId: roomIdCookie, player: _userId, gameType: gameType, sessionKey: sessionKeyCookie, betValue: betValueCookie, points: points, offline:'offline'};
 
                
 
@@ -801,6 +803,7 @@ if(playersPlayingTemp.length > 2){
 
                     /* Check If I need to remove me out of the array */ 
 
+                    console.log('Cards in hand ',cardsInHand);
                        if(gameType == "101"){ 
                         
                             if(totalPoints >= 101){
@@ -885,17 +888,19 @@ if(playersPlayingTemp.length > 2){
 
                         setTimeout(function(){
 
-
+                            
                           
 
-                      
+                                    console.log('Cards in hand ',cardsInHand);
                                     var nextPlayer1;
 
-                                    if( getItem(playersPlayingTemp, parseInt(_userId)) ){
+                                    /*if( getItem(playersPlayingTemp, parseInt(_userId)) ){
                                         nextPlayer1 = getItem(playersPlayingTemp, parseInt(_userId));
                                     }else{
                                         nextPlayer1 = playersPlayingTemp[0];
-                                    }
+                                    }*/
+                                    nextPlayer1 = findNextPlayer(playersPlayingTemp,parseInt(userId));
+
 
                                     $('.drop button').attr('disabled', false);
                                     $('.drop button').css({'cursor':'pointer'});
@@ -911,7 +916,7 @@ if(playersPlayingTemp.length > 2){
 
                                    var signal1011 = {room:roomName, type: 'wrong-meld-six-players_offline', message: 'wrong meld six players game', firstMelder: _userId, totalPoints: totalPoints, event: event, nextPlayer:nextPlayer1};
 
-
+                                   console.log('Cards in hand ',cardsInHand);
                                      //connection.send(JSON.stringify(signal1011));
                                   // connection.send(JSON.stringify(signal14)); 
                                    // socket.emit("allmsg", JSON.stringify(signal1011));
@@ -1471,11 +1476,14 @@ if(playersPlayingTemp.length > 2){
                       
                                     var nextPlayer1;
 
-                                    if( getItem(playersPlayingTemp, parseInt(userId)) ){
+                                   /* if( getItem(playersPlayingTemp, parseInt(userId)) ){
                                         nextPlayer1 = getItem(playersPlayingTemp, parseInt(userId));
                                     }else{
                                         nextPlayer1 = playersPlayingTemp[0];
-                                    }
+                                    }*/
+
+                                    nextPlayer1 = findNextPlayer(playersPlayingTemp,parseInt(userId));
+                                    
 
                                     $('.drop button').attr('disabled', false);
                                     $('.drop button').css({'cursor':'pointer'});
@@ -1843,6 +1851,382 @@ if(playersPlayingTemp.length > 2){
 }    
 
 }     
+
+
+/* wrong validation offline */
+
+function wrongValidationDisplayProcess_offline(points, roomIdCookie, gameType, sessionKeyCookie, chipsToTablePRCookie, currentBalanceCookie, minBuyingPRCookie, betValueCookie, event, _user){
+
+
+$('.leave_table_btn').attr('disabled', true); 
+intervalCounter = window.clearInterval(intervalCounter);
+playerCounterFlag = 0;
+$('.current-player .card_submit_time').hide(); 
+$('.current-player .card_submit_time').text("");
+
+console.log("wrong validation display process 1 hit");   
+console.log("playersPlayingTemp ", playersPlayingTemp);
+$('.result_bottom').text("");
+// alert("wrong melder wrong val dis process");
+
+/* update melded count */
+
+        var ajxData850 = { 'action': 'update-melded-count', roomId: roomIdCookie, sessionKey: sessionKeyCookie};
+
+
+         $.ajax({
+                type: 'POST',
+                data: ajxData850,
+                cache: false,
+                url: 'ajax/updateMeldedCount.php',
+                success: function(result){
+                    console.log(result);
+                } });
+
+           /* update player has melded */
+           
+              var ajxData853 = { 'action': 'update-player-melded', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+
+             $.ajax({
+                    type: 'POST',
+                    data: ajxData853,
+                    cache: false,
+                    url: 'ajax/updatePlayerMelded.php',
+                    success: function(result){
+                        console.log(result);
+                    } }); 
+
+              if($.trim(event) == "wrongshow"){
+                var statusScoreboard = "wrongshow";
+              }else if($.trim(event) == "drop"){
+                 var statusScoreboard = "drop";
+              }else if($.trim(event) == "middledrop"){
+                 var statusScoreboard = "middle drop";
+              }else if($.trim(event) == "lost"){
+                var statusScoreboard = "lost";
+              }  
+
+                var ajxDataLost = { 'action': 'update-player-scoreboard-status', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie, status:statusScoreboard};
+
+
+             $.ajax({
+                    type: 'POST',
+                    data: ajxDataLost,
+                    cache: false,
+                    url: 'ajax/updatePlayerScoreboardStatus.php',
+                    success: function(result){
+                        console.log(result);
+                    } }); 
+
+
+            
+
+              var ajxData852ss = { 'action': 'update-wrong-melders', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+
+             $.ajax({
+                    type: 'POST',
+                    data: ajxData852ss,
+                    cache: false,
+                    url: 'ajax/updateWrongMelders.php',
+                    success: function(result){
+                        console.log("sql ", result);
+                    } });
+
+     
+        var ajxData852 = { 'action': 'meld-card-validation-no-group', roomId: roomIdCookie, player: _user, gameType: gameType, sessionKey: sessionKeyCookie, betValue: betValueCookie, points: points, offline:'offline'};
+
+        console.log("players ", playersPlayingTemp);
+
+        //// points update
+
+        $.ajax({
+            type: 'POST',
+            data: ajxData852,
+            cache: false,
+            url: 'ajax/meldCardValidationNoGroup.php',
+            success: function(totalPoints){
+               
+
+                console.log(" total points received ", totalPoints);
+
+
+
+                    
+
+
+                        for(var i = 0; i < playersPlayingWholeGame.length; i++){
+
+                          console.log("doing for ", playersPlayingWholeGame[i]);
+
+
+                           /* Get user names  */
+
+                            var ajxData856 = { 'action': 'get-players', player: playersPlayingWholeGame[i]};
+
+
+                            $.ajax({
+                                type: 'POST',
+                                data: ajxData856,
+                                dataType: 'json',
+                                cache: false,
+                                url: 'ajax/getAllPlayers.php',
+                                success: function(player){
+
+                                   /*SAGNIK CHA*/
+
+                                   if(gameType != "score"){
+
+                                        console.log(player.id + ' ' + player.name);
+
+                                         var tblRow1 = $('<tr data-user="'+player.id+'"><td id="name">'+player.name+'</td><td id="result"></td><td id="cards"></td><td id="score"></td><td id="total_score"></td></tr>');
+
+                                         $('.result_sec tbody[id="score_reports"]').append(tblRow1);
+
+                                        var ajxData704 = {'action': 'get-scoreboard', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                                          $.ajax({
+                                            type: 'POST',
+                                            data: ajxData704,
+                                            dataType: 'json',
+                                            cache: false,
+                                            url: 'ajax/getScoreBoard.php',
+                                            success: function(results){
+
+                                                var points = results.points;
+                                                var totalPts = results.total_points;
+                                                var scoreboardStatus = results.scoreboard_status;
+
+                                              
+                                                 $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="result"]').text(scoreboardStatus);
+
+
+                                                $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="score"]').text(Math.round(points));
+                                            
+                                                $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="total_score"]').text(Math.round(totalPts));
+
+                                                if( $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="cards"]' .playingCards).length == 0 ){
+
+                                                    $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="cards"]').html(showCardsInScoreboard(_user, roomIdCookie, sessionKeyCookie));
+
+                                                } 
+
+
+
+                                            }
+                                            
+                                         });       
+
+                                   }else{
+
+
+                                        console.log(player.id + ' ' + player.name);
+
+                                         var tblRow1 = $('<tr data-user="'+player.id+'"><td id="name">'+player.name+'</td><td id="result"></td><td id="cards"></td><td id="count"></td><td id="total_chips"></td></tr>');
+
+                                         $('.result_sec tbody[id="score_reports"]').append(tblRow1);
+
+                                        var ajxData704 = {'action': 'get-scoreboard', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+                                          $.ajax({
+                                            type: 'POST',
+                                            data: ajxData704,
+                                            dataType: 'json',
+                                            cache: false,
+                                            url: 'ajax/getScoreBoard.php',
+                                            success: function(results){
+
+                                                var points = results.points;
+                                                var totalPts = results.total_points;
+                                                 var scoreboardStatus = results.scoreboard_status;
+
+                                              
+                                                 $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="result"]').text(scoreboardStatus);
+
+
+                                                $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="count"]').text(Math.round(points));
+                                            
+                                                $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="total_chips"]').text('-'+totalPts);
+
+                                                if( $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="cards"]' .playingCards).length == 0 ){
+
+                                                  $('.result_sec tbody[id="score_reports"] tr[data-user="'+_user+'"] td[id="cards"]').html(showCardsInScoreboard(_user, roomIdCookie, sessionKeyCookie));
+
+                                                } 
+
+
+
+                                            }
+                                            
+                                         });    
+
+
+
+                                   }   
+
+                                }
+                            })        
+
+
+
+
+                        }
+
+                       if(gameType == "101"){ 
+                        
+                            if(totalPoints >= 101){
+                                
+                                 var ajxData704 = {'action': 'update-my-status', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+                                  $.ajax({
+                                    type: 'POST',
+                                    data: ajxData704,
+                                    cache: false,
+                                    url: 'ajax/updateMyStatus.php',
+                                    success: function(results){
+                                       
+                                    } });    
+
+
+                                  /* remove player from playersPlayingTemp array */
+                            
+                                if(removeCardFromGroups(_user, playersPlayingTemp)){
+                                    console.log("player removed ", playersPlayingTemp);
+                                }
+
+
+                                
+                                
+                            }
+
+                       }else if(gameType == "201"){ 
+                        
+                            if(totalPoints >= 201){
+                                
+                                   var ajxData704 = {'action': 'update-my-status', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+                                  $.ajax({
+                                    type: 'POST',
+                                    data: ajxData704,
+                                    cache: false,
+                                    url: 'ajax/updateMyStatus.php',
+                                    success: function(results){
+                                        
+                                    } }); 
+
+                                  /* remove player from playersPlayingTemp array */
+                                    
+                                    if(removeCardFromGroups(_user, playersPlayingTemp)){
+                                        console.log("player removed ", playersPlayingTemp);
+                                    }
+
+                               
+                            }
+
+                       }else if(gameType == "score"){
+
+                             var ajxData704 = {'action': 'update-my-status', roomId: roomIdCookie, player: _user, sessionKey: sessionKeyCookie};
+
+                                  $.ajax({
+                                    type: 'POST',
+                                    data: ajxData704,
+                                    cache: false,
+                                    url: 'ajax/updateMyStatus.php',
+                                    success: function(results){
+                                        
+                                    } }); 
+
+                                  /* remove player from playersPlayingTemp array */
+                                    
+                                    if(removeCardFromGroups(_user, playersPlayingTemp)){
+                                        console.log("player removed ", playersPlayingTemp);
+                                    }
+
+
+                       }  
+
+
+                        /* Send signal to opponent */
+
+                         if($.trim(event) == "wrongshow"){
+                            var status = "wrongshow";
+                         }else if($.trim(event) == "drop" || $.trim(event) == 'middledrop'){
+                            var status = "drop";
+                        }else if($.trim(event) == "lost"){
+                            var status = "lost"
+                        }
+                       
+
+                        var signal1011 = {room:roomName, type: 'get-scoreboard', message: 'get all your scoreboards', firstMelder: _user, status: status, leaveTable:false};
+
+                         var signal14 = {room:roomName, type: 'update-players-playing-melder', message: 'updating players playing', playersPlayingTemp: playersPlayingTemp}
+
+                        //connection.send(JSON.stringify(signal1011));
+                        //connection.send(JSON.stringify(signal14)); 
+
+                        socket.emit(socketEventName, JSON.stringify(signal1011));
+                        socket.emit(socketEventName, JSON.stringify(signal14));
+                        
+
+                        // display win message
+                        $('.loading_container').css({'display':'block'});
+                        $('.loading_container .popup .popup_cont').text("You have won the game!");
+
+                        $.post('ajax/updateGameOver.php',{room:roomName, player: userId });
+
+                         setTimeout(function(){
+                            $('.loading_container').hide();
+                            $('.loading_container .popup .popup_cont').text();
+
+
+                            $('.popup_play_again').show();
+                            $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
+                            
+                         }, 4000);
+
+                        /* Update the realChips table */
+                        var gameTypeCookie = $.cookie("game-type");
+                        if(gameTypeCookie != "score"){
+
+                        var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                        $.ajax({
+                          type: 'POST',
+                          data: ajxData704407,
+                          cache: false,
+                          url: 'ajax/updateRealWallet.php',
+                          success: function(results){
+                              
+                               // alert("Total chips coming.......................");
+                               console.log(results);   
+                        } });
+
+                      }else{
+                        
+                        var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                          $.ajax({
+                              type: 'POST',
+                              data: ajxData704407,
+                              cache: false,
+                              url: 'ajax/updateRealWalletPR.php',
+                              success: function(results){
+                                  
+                                   // alert("Total chips coming.......................");
+                                   console.log(results);   
+                              } }); 
+                      }
+
+
+
+                   
+               
+            }
+        });  
+
+             
+}
 
 
 /* Wrong Meld Validation Display */

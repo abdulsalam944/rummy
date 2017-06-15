@@ -1629,7 +1629,7 @@ experience
      <!-- custom scrollbar plugin -->
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 
     <script src="js/tabs.js"></script>
-    <!--<script type="text/javascript" src="js/checkConnection.js"></script>-->
+    <!-- <script type="text/javascript" src="js/checkConnection.js"></script> -->
 
      <!-- Added by abdul on 2/5/2017 -->
     <script src="js/socket.io.js"></script>
@@ -1837,39 +1837,12 @@ experience
                 count = 0;
 
 
+
+
+
                 //Update Discareded cards
 
-                $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
-                    var thisData = JSON.parse(thisData);
-                    console.log(thisData);
 
-                    $(thisData).each(function(e,j){
-
-                        var playerPlayed = j.user;  
-                        $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
-                        $(j.discarded_cards).each(function(i,k){
-
-                            var cardToBeShown = k;
-
-
-                            if(cardToBeShown != "Joker"){
-                            var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
-                            var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
-
-                            $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
-                             '<span class="rank">'+cardNumber1+'</span>'+
-                             '<span class="suit">&'+cardHouse1+';</span>'+
-                             '</span></li>');
-
-                          }else{
-                              $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
-
-                          } 
-                        });
-
-                    });
-
-                });
 
 
 
@@ -2324,15 +2297,16 @@ experience
                                                         if(parseInt(player) == parseInt(userIdReceived)){
 
 
-                                                          if(getItem(playersPlayingTemp, parseInt(userIdReceived)) ){
+                                                          /*if(getItem(playersPlayingTemp, parseInt(userIdReceived)) ){
 
                                                                 nextPlayer = getItem(playersPlayingTemp, parseInt(userIdReceived));
                                                                    
                                                               }else{
                                                                 nextPlayer = playersPlayingTemp[0];
                                                                    
-                                                              }
-
+                                                              }*/
+                                                                nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
+                                                                
                                                               console.log("nextplayer ", nextPlayer);
 
                                                               var ajxData260 = {'action': 'current-player', roomId: roomIdCookie, player: parseInt(nextPlayer), sessionKey: sessionKeyCookie };
@@ -2400,6 +2374,11 @@ experience
 
             console.log('OnOpen Called');
 
+
+
+
+
+
              var onOpenHitCookie = $.cookie("onOpenHit");
              console.log("connection open called!");
 
@@ -2420,6 +2399,7 @@ experience
                    var sessionKeyCookie = $.trim($.cookie("sessionKey"));
                    var betValueCookie = $.trim($.cookie("betValue"));
                    var gameTypeCookie = $.trim($.cookie("game-type"));    
+
 
 
                    if(gameTypeCookie == "score"){
@@ -2505,7 +2485,7 @@ experience
 
 
                                                 }
-
+                                                // $.post('ajax/updateGameType.php',{roomId: sessionKeyCookie, gameType:$.cookie("game-type")});
 
                                             }
 
@@ -2597,7 +2577,7 @@ experience
 
                                         }
                                      });       
-
+                                
 
 
                         }else if($.trim(result) == "wait"){
@@ -3503,6 +3483,9 @@ if($_REQUEST['id']=='') {
   display: none;
   z-index: 9999999
 }
+.soldiBack {
+    background: #000 !important;
+}
 </style>
 <div class="offlineOverlay">
 </div>
@@ -3512,25 +3495,174 @@ if($_REQUEST['id']=='') {
 
 var checkOffline = false;
 var calSingleTimeOnOnline = false;
+
+var checkLost = false;
+
 Offline.on('confirmed-down',function(){
   $('.offlineOverlay').fadeIn();
   checkOffline = true;
   calSingleTimeOnOnline = false;
+  tossFlag = 1;
 });
 Offline.on('confirmed-up',function(){
-  $('.offlineOverlay').fadeOut();   
-  if(checkOffline && tossFlag==1){
-    console.log('flag called');    
-    $('.tempBackdrop').fadeIn();
-    tossFlag = 0;
-  } 
+    
+    $('.offlineOverlay').fadeOut();   
+    
+    if(!calSingleTimeOnOnline){
+        updateMYCardInHand();
 
-  if(!calSingleTimeOnOnline){
-    updateMYCardInHand();
-    calSingleTimeOnOnline = true;
-  }
+        $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
+            var thisData = JSON.parse(thisData);
+            console.log(thisData);
+
+            $(thisData).each(function(e,j){
+                console.log(j);
+                 var playerPlayed = j.user; 
+                console.log($('.current-player[data-user="'+playerPlayed+'"] .player_name #score'));
+                $('.current-player[data-user="'+playerPlayed+'"] .player_name #score').text(parseInt(j.points));
+
+                
+                $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
+                $(j.discarded_cards).each(function(i,k){
+
+                    var cardToBeShown = k;
+
+
+                    if(cardToBeShown != "Joker"){
+                    var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                    var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
+
+                    $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                     '<span class="rank">'+cardNumber1+'</span>'+
+                     '<span class="suit">&'+cardHouse1+';</span>'+
+                     '</span></li>');
+
+                  }else{
+                      $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
+
+                  } 
+                });
+
+            });
+
+        });
+
+        calSingleTimeOnOnline = true;
+    }
+    if(checkOffline && tossFlag==1){
+        console.log('flag called');
+
+        $.post('ajax/checkGameStatus.php',{playerId:userId, gameSession:$.trim($.cookie("sessionKey"))},function(data){
+            console.log(data);
+            data  = JSON.parse(data);
+            // if(data.scoreboard_status == "middle drop" || data.scoreboard_status == "drop"){
+
+            //     if(playersPlaying.length==2){
+                    
+            //         $('.loading_container').css({'display':'block'});
+            //         $('.loading_container .popup .popup_cont').text("You have lost the game!");
+            //         setTimeout(function(){
+            //           $('.loading_container').hide();
+            //           $('.loading_container .popup .popup_cont').text();
+
+
+            //           $('.popup_play_again').show();
+            //           $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
+                      
+            //        }, 4000);
+
+            //     }else{
+            //         $('.me .toss_me .playingCards').html('<div class="card card_2 back board_center_back showMyHand"></div>');
+            //         $('.player_card_me').hide();
+            //     }
+
+            // }
+            console.log(data);
+            if(data.status=="over"){
+                console.log('1');
+                $('.loading_container').css({'display':'block'});
+                $('.loading_container').addClass('soldiBack');
+                $('.loading_container .popup .popup_cont').text("You have lost the game!");
+                setTimeout(function(){
+                  $('.loading_container').hide();
+                  $('.loading_container .popup .popup_cont').text();
+                  //$('.loading_container').removeClass('soldiBack');
+
+                  $('.popup_play_again').show();
+                  $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
+                  
+               }, 4000);
+
+            }else if(data.status=="" && data.scoreboard_status == "won"){
+                console.log('2');
+                // display win message
+                $('.loading_container').css({'display':'block'});
+                $('.loading_container .popup .popup_cont').text("You have won the game!");
+                $('.loading_container').addClass('soldiBack');
+                 setTimeout(function(){
+                    $('.loading_container').hide();
+                    $('.loading_container .popup .popup_cont').text();
+                    $('.popup_play_again').show();
+                    $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
+                    
+                 }, 4000);
+
+                /* Update the realChips table */
+                var gameTypeCookie = $.cookie("game-type");
+                if(gameTypeCookie != "score"){
+
+                    var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                    $.ajax({
+                      type: 'POST',
+                      data: ajxData704407,
+                      cache: false,
+                      url: 'ajax/updateRealWallet.php',
+                      success: function(results){                          
+                           // alert("Total chips coming.......................");
+                           console.log(results);   
+                    } });
+                }
+
+            }else if(data.scoreboard_status == "drop" || data.scoreboard_status == "middle drop"){
+                console.log('3');
+                $('.player_card_me .hand li a').removeClass('handCard');
+              $('.group_blog5 .playingCards .hand li a').removeClass('handCard');
+
+              $('.player_card_me .hand li a').addClass('showFoldedCard');
+              $('.group_blog .playingCards .hand li a').addClass('showFoldedCard');
+
+              $('.player_card_me').hide();
+              $('.group_blog5').hide();
+              $('.drop').hide();
+              $('.sort').hide();
+              $('.current-player[data-user="'+userId+'"] .toss .playingCards').html('<div class="card card_2 back board_center_back showMyHand"></div>');
+
+
+            }else{
+                console.log('4');
+                $('.tempBackdrop').fadeIn();
+            }
+        });
+
+
+        tossFlag = 0;
+    }
 
 });
+
+// Check is that game over
+/*$.post('ajax/checkGameStatus.php',{playerId:userId, gameSession:$.trim($.cookie("sessionKey"))},function(data){
+    console.log(data);
+    data  = JSON.parse(data);
+
+    if(data.scoreboard_status == "middle drop" || data.scoreboard_status == "drop"){
+        $('.loading_container').css({'display':'block'});
+        $('.loading_container .popup .popup_cont').text("You have lost the game!");
+    }else{
+        
+    }
+});*/
 </script>  
 
 <style>

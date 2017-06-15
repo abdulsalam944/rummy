@@ -1547,18 +1547,20 @@
 
                           console.log("toss winner received now :) : " + lastWinner);
 
-                        
+                          
                          
 
 
-                          if(getItem(playersPlaying, parseInt(lastWinner)) ){
+                          /*if(getItem(playersPlaying, parseInt(lastWinner)) ){
                             
                             nextPlayer = getItem(playersPlaying, parseInt(lastWinner));
                                
                           }else{
                             nextPlayer = playersPlaying[0];
                                
-                          }
+                          }*/
+                          nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
+                          
 
                           console.log("nextplayer ", nextPlayer);
 
@@ -1615,8 +1617,42 @@
                                            
                                            tossWinner = result.toss_winner;
 
-                                         
 
+                                            // get next connected user
+                                            var nextActiveUser = tossWinner;
+                                            console.log("Tosswiner: ",tossWinner);
+                                            if($.inArray(parseInt(tossWinner),dissconnectedUsers)>=0){
+                                              var gotOne = true;
+
+                                              console.log("FOund as dissconnected: ",tossWinner);
+
+                                              $(playersPlaying).each(function(e,v){
+                                                  if(($.inArray(parseInt(v),dissconnectedUsers) < 0) && gotOne){
+                                                    nextActiveUser = parseInt(v);
+                                                     console.log("New user is: ",nextActiveUser);
+                                                    var ajxData260 = {'action': 'current-player', roomId: roomIdCookie, 
+                                                    player: nextActiveUser, sessionKey: sessionKeyCookie };
+
+                                                     $.ajax({
+
+                                                        type: 'POST',
+                                                        url: 'ajax/updateCurrentPlayer.php', 
+                                                        cache: false,
+                                                        data: ajxData260,
+                                                        success: function(result){ 
+                                                            if($.trim(result) == "ok"){
+                                                                console.log("current player updated");
+                                                            }
+                                                            
+                                                        }
+                                                     }); 
+
+                                                    gotOne = false;
+                                                  }
+                                              });
+                                              tossWinner = nextActiveUser;
+                                            }
+                                            console.log("Final toss winer ",tossWinner);
                                             if(throwCard != "Joker"){ 
 
                                              var cardNumber = throwCard.substr(0, throwCard.indexOf('OF'));

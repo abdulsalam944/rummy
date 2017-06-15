@@ -1685,12 +1685,12 @@
                                 });
                                
                                
-                                if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                                /*if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
                                     nextPlayerToSend = playersPlayingTemp[0];
-                                }
-
+                                }*/
+                                nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').hide(); 
                                 $('.current-player[data-user="'+userId+'"] .card_submit_time').text(""); 
@@ -1831,12 +1831,12 @@
 
 
 
-                                if(getItem(playersPlayingTemp, parseInt(userId)) ){
+                               /* if(getItem(playersPlayingTemp, parseInt(userId)) ){
                                     nextPlayerToSend = getItem(playersPlayingTemp, parseInt(userId));
                                 }else{
                                     nextPlayerToSend = playersPlayingTemp[0];
-                                }
-
+                                }*/
+                                nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
 
                                 var PlayerCounterHandler = new playerCounterHandler(nextPlayerToSend);
                                 intervalCounter = window.clearInterval(intervalCounter);
@@ -1860,11 +1860,12 @@
                                             if($.trim(result) == "ok"){
                                                 console.log("current player updated");
 
-                                                if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
+                                                /*if(getItem_prev(playersPlayingTemp, parseInt(userId)) ){
                                                     nextPlayerToSend = getItem_prev(playersPlayingTemp, parseInt(userId));
                                                 }else{
                                                     nextPlayerToSend = playersPlayingTemp[0];
-                                                }
+                                                }*/
+                                                nextPlayerToSend = findNextPlayer(playersPlayingTemp,parseInt(userId));
                                                 checkDissconnected(dissconnectedUsers,playersPlaying,nextPlayerToSend);
 
                                             }
