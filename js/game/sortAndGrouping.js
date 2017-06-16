@@ -41,9 +41,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="1"></div>');
 	         var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="1">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	        //$hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group1.length; i++){
@@ -67,7 +67,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	        //$hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -84,9 +84,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="2"></div>');
 	         var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="2">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	        // $hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group2.length; i++){
@@ -110,7 +110,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	        //$hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -126,9 +126,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="3"></div>');
 	         var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="3">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	        //$hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group3.length; i++){
@@ -152,7 +152,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	       // $hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -169,9 +169,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="4"></div>');
 	        var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="4">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	      //  $hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group4.length; i++){
@@ -195,7 +195,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	       // $hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -212,9 +212,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="5"></div>');
 	        var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="5">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	       // $hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group5.length; i++){
@@ -238,7 +238,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	        //$hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -255,9 +255,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="6"></div>');
 	        var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="6">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
-	        $hand.append('<li></li>');
+	      //  $hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < group6.length; i++){
@@ -281,7 +281,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	       // $hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -330,13 +330,13 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	        var $each_group = $('<div class="group_blog5" data-group="'+flag+'"></div>');
 	        var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="'+flag+'">Meld</button></div>');
 	        var $playingCards = $('<div class="playingCards"></div>');
-	        var $hand = $('<ul class="hand"></ul>');
+	        var $hand = $('<ul class="hand sortable"></ul>');
 
 	        eval('group'+flag).sort(function(a, b){
 	            return a.value - b.value;
 	        });
 
-	        $hand.append('<li></li>');
+	       // $hand.append('<li></li>');
 
 	       
 	        for(var i = 0; i < eval('group'+flag).length; i++){
@@ -360,7 +360,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	             $hand.append(li);
 	        }
 
-	        $hand.append('<li></li>');
+	      //  $hand.append('<li></li>');
 
 	         $playingCards.append($hand);
 	         $each_group.append($meld_group_btn);
@@ -378,9 +378,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	                        var $each_group = $('<div class="group_blog5" data-group="'+i+'"></div>');
 	                        var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="'+i+'">Meld</button></div>');
 	                        var $playingCards = $('<div class="playingCards"></div>');
-	                        var $hand = $('<ul class="hand"></ul>');
+	                        var $hand = $('<ul class="hand sortable"></ul>');
 
-	                        $hand.append('<li></li>');
+	                      //  $hand.append('<li></li>');
 
 
 	                        console.log("Group ", eval('group'+i));
@@ -407,7 +407,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	                             $hand.append(li);
 	                        }
 
-	                        $hand.append('<li></li>');
+	                      //  $hand.append('<li></li>');
 
 	                         $playingCards.append($hand);
 	                         $each_group.append($meld_group_btn);
@@ -426,9 +426,9 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	            var $each_group = $('<div class="group_blog5" data-group="2"></div>');
 	            var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="2">Meld</button></div>');
 	            var $playingCards = $('<div class="playingCards"></div>');
-	            var $hand = $('<ul class="hand"></ul>');
+	            var $hand = $('<ul class="hand sortable"></ul>');
 
-	            $hand.append('<li></li>');
+	          //  $hand.append('<li></li>');
 
 	            group2.sort(function(a, b){
 	                return a.value - b.value;
@@ -456,7 +456,7 @@ function cardGetAndSorting1(group1, group2, group3, group4, group5, group6){
 	                 $hand.append(li);
 	            }
 
-	            $hand.append('<li></li>');
+	           // $hand.append('<li></li>');
 
 	             $playingCards.append($hand);
 	             $each_group.append($meld_group_btn);
@@ -558,13 +558,13 @@ function cardSorting(){
             var $each_group = $('<div class="group_blog5" data-group="1"></div>');
             var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="1">Meld</button></div>');
             var $playingCards = $('<div class="playingCards"></div>');
-            var $hand = $('<ul class="hand"></ul>');
+            var $hand = $('<ul class="hand sortable"></ul>');
 
             group1.sort(function(a, b){
                 return a.value - b.value;
             });
 
-            $hand.append('<li></li>');
+          //  $hand.append('<li></li>');
 
            
             for(var i = 0; i < group1.length; i++){
@@ -580,7 +580,7 @@ function cardSorting(){
                  $hand.append(li);
             }
 
-             $hand.append('<li></li>');   
+             //$hand.append('<li></li>');   
              $playingCards.append($hand);
              $each_group.append($meld_group_btn);
              $each_group.append($playingCards);
@@ -595,13 +595,13 @@ function cardSorting(){
             var $each_group = $('<div class="group_blog5" data-group="2"></div>');
             var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="2">Meld</button></div>');
             var $playingCards = $('<div class="playingCards"></div>');
-            var $hand = $('<ul class="hand"></ul>');
+            var $hand = $('<ul class="hand sortable"></ul>');
 
             group2.sort(function(a, b){
                 return a.value - b.value;
             });
 
-            $hand.append('<li></li>');
+           // $hand.append('<li></li>');
 
             for(var i = 0; i < group2.length; i++){
                  var cardNumber = group2[i].card.substr(0, group2[i].card.indexOf('OF'));
@@ -620,7 +620,7 @@ function cardSorting(){
             }
 
 
-             $hand.append('<li></li>');
+          //   $hand.append('<li></li>');
              $playingCards.append($hand);
              $each_group.append($meld_group_btn);
              $each_group.append($playingCards);
@@ -635,13 +635,13 @@ function cardSorting(){
             var $each_group = $('<div class="group_blog5" data-group="3"></div>');
             var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="3">Meld</button></div>');
             var $playingCards = $('<div class="playingCards"></div>');
-            var $hand = $('<ul class="hand"></ul>');
+            var $hand = $('<ul class="hand sortable"></ul>');
 
             group3.sort(function(a, b){
                 return a.value - b.value;
             });
 
-            $hand.append('<li></li>');
+           // $hand.append('<li></li>');
 
             for(var i = 0; i < group3.length; i++){
                 var cardNumber = group3[i].card.substr(0, group3[i].card.indexOf('OF'));
@@ -659,7 +659,7 @@ function cardSorting(){
 
             }
 
-             $hand.append('<li></li>');
+            // $hand.append('<li></li>');
              $playingCards.append($hand);
              $each_group.append($meld_group_btn);
              $each_group.append($playingCards);
@@ -674,13 +674,13 @@ function cardSorting(){
             var $each_group = $('<div class="group_blog5" data-group="4"></div>');
              var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="4">Meld</button></div>');
             var $playingCards = $('<div class="playingCards"></div>');
-            var $hand = $('<ul class="hand"></ul>');
+            var $hand = $('<ul class="hand sortable"></ul>');
 
             group4.sort(function(a, b){
                 return a.value - b.value;
             });
 
-            $hand.append('<li></li>');
+          //  $hand.append('<li></li>');
 
             for(var i = 0; i < group4.length; i++){
                 var cardNumber = group4[i].card.substr(0, group4[i].card.indexOf('OF'));
@@ -696,7 +696,7 @@ function cardSorting(){
 
             }
 
-             $hand.append('<li></li>');   
+          //   $hand.append('<li></li>');   
              $playingCards.append($hand);
              $each_group.append($meld_group_btn);
              $each_group.append($playingCards);
@@ -710,10 +710,10 @@ function cardSorting(){
             var $each_group = $('<div class="group_blog5" data-group="5"></div>');
             var $meld_group_btn = $('<div class="meld_group_btn"><button type="button" class="meld_group" data-button="5">Meld</button></div>');
             var $playingCards = $('<div class="playingCards"></div>');
-            var $hand = $('<ul class="hand"></ul>');
+            var $hand = $('<ul class="hand sortable"></ul>');
 
            
-            $hand.append('<li></li>');
+          //  $hand.append('<li></li>');
 
             for(var i = 0; i < group5.length; i++){
                 
@@ -724,7 +724,7 @@ function cardSorting(){
 
             }
 
-             $hand.append('<li></li>');
+          //   $hand.append('<li></li>');
              $playingCards.append($hand);
              $each_group.append($meld_group_btn);
              $each_group.append($playingCards);

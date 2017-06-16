@@ -25,7 +25,7 @@ if($_REQUEST['login_id']!='')
 }
 
  //header("Location: https://".$_SERVER['HTTP_HOST']."/rummy-game/newgame.php");
-header("Location: /P-732-rummy/rummy-game/newgame.php");
+header("Location: /rummy-game/newgame.php");
 
 ?>
 

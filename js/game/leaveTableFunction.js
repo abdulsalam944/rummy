@@ -173,7 +173,7 @@
                         //connection.send(JSON.stringify(signalLeaveTable));
                         socket.emit(socketEventName, JSON.stringify(signalLeaveTable));
                          
-                             connection.close();
+//                             connection.close();
                              location.reload();
                         
                 } })  

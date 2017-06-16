@@ -2319,48 +2319,15 @@ socket.on(socketEventName, function(e){
 
                                 }
 
-                                //setTimeout(function(){
-                                  console.log('tt');
-                                  console.log(tossArray_);
-                                //},1000);
-
-
-                                // var tossArray_ = [];
-
-                                // $(tossArray).each(function(){
-                                //   tossArray_.push(this);
-                                // });
-
-
-                                // console.log('Before sorting..');
-                                // console.log(tossArray_);
-
-                                // //sort array
+                               
                                  tossArray = tossArray_.sort(function(b,a){ return a.value - b.value;  });
-                                // console.log('After sorting');
-                                // console.log(tossArray_);
-                              
-                                // console.debug('Players Playing');
-                                // console.debug(playersPlaying);
-
-                                playersPlaying = [];
-                                console.log(tossArray);
+                               /************************/
+                                playersPlaying.length = 0; // = [];
                                 $(tossArray).each(function(e,j){
                                   playersPlaying.push(j.player);
                                 });
-                                // console.debug('Players after');
-                                // console.debug(playersPlaying);
-
-                                console.log(playersPlaying);
-
-                                playersPlayingTemp = playersPlaying;
-                                console.log(playersPlayingTemp);
-                                /*
-                                    Re init player
-                                */
-
-
-                                // regenerate array
+                                playersPlayingTemp = playersPlaying.slice();
+                                
 
                                 var index = playersPlayingTemp.indexOf(parseInt(userId));
                                 var reOrderUser = [];
@@ -2382,14 +2349,7 @@ socket.on(socketEventName, function(e){
                                     }
                                   }
                                 }
-                                console.log('Sitting Players');
-                                console.log(reOrderUser);
-
-                                // playersPlayingTemp = [];
-                                // playersPlaying = [];
-
-                                // playersPlayingTemp = reOrderUser;
-                                // playersPlaying = reOrderUser;
+                            
 
 
                                 console.log('Re init player');
@@ -2590,7 +2550,7 @@ socket.on(socketEventName, function(e){
 
 
                                 }
-
+/************************/
 
                                 /* Re init end--------------- */
 
@@ -7238,7 +7198,20 @@ socket.on(socketEventName, function(e){
 
                                     if(parseInt(userId) === parseInt(winner)){
                                       
-                                   
+                                        var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            data: ajxData704407,
+                                            cache: false,
+                                            url: 'ajax/updateRealWalletPR.php',
+                                            success: function(results){
+                                                
+                                                 // alert("Total chips coming.......................");
+                                                 console.log(results);   
+                                            } }); 
+                                      
+                                        
                                        setTimeout(function(){
                                          
                                           if(dealMeOut == 1){
@@ -7251,7 +7224,7 @@ socket.on(socketEventName, function(e){
 
                                                setTimeout(function(){ 
                                                 location.reload();
-                                                connection.close();
+//                                                connection.close();
                                               }, 2000);
 
                                             }else{
@@ -7330,7 +7303,7 @@ socket.on(socketEventName, function(e){
 
                                         setTimeout(function(){ 
                                             location.reload();
-                                            connection.close();
+//                                            connection.close();
                                         }, 2000);
 
                                      }

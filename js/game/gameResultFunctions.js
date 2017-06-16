@@ -475,7 +475,7 @@
 
                                                          }else{
 
-                                                             connection.close();
+//                                                             connection.close();
 
                                                               $('.loading_container').hide();
                                                               $('.loading_container .popup .popup_cont').text();
@@ -711,6 +711,20 @@
                                                 socket.emit(socketEventName, JSON.stringify(signalOthers));
                                                 if(parseInt(userId) === parseInt(result.playerWon)){
 
+
+                                                  var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                                                  $.ajax({
+                                                      type: 'POST',
+                                                      data: ajxData704407,
+                                                      cache: false,
+                                                      url: 'ajax/updateRealWalletPR.php',
+                                                      success: function(results){
+                                                          
+                                                           // alert("Total chips coming.......................");
+                                                           console.log(results);   
+                                                      } }); 
+
                                                   //alert("won 1");
 
                                                   
@@ -732,7 +746,7 @@
 
                                                            setTimeout(function(){
                                                               location.reload();
-                                                              connection.close();
+//                                                              connection.close();
                                                           }, 3000);
 
                                                       }else{
@@ -813,7 +827,7 @@
 
                                                            setTimeout(function(){
                                                               location.reload();
-                                                              connection.close();
+//                                                              connection.close();
                                                           }, 3000);
                                                   }
 
@@ -1063,6 +1077,20 @@
                                                 socket.emit(socketEventName, JSON.stringify(signalOthers));
 
                                                   if(parseInt(userId) === parseInt(result.playerWon)){
+
+                                                    var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        data: ajxData704407,
+                                                        cache: false,
+                                                        url: 'ajax/updateRealWalletPR.php',
+                                                        success: function(results){
+                                                            
+                                                             // alert("Total chips coming.......................");
+                                                             console.log(results);   
+                                                        } }); 
+                                                    
                                                    // $('.loading_container').css({'display':'block'});
                                                    // $('.loading_container .popup .popup_cont').text("You have won the game!");
 
@@ -1084,7 +1112,7 @@
 
                                                           setTimeout(function(){
                                                               location.reload();
-                                                              connection.close();
+//                                                              connection.close();
                                                           }, 3000);
                                                          
 
@@ -1166,7 +1194,7 @@
 
                                                           setTimeout(function(){
                                                               location.reload();
-                                                              connection.close();
+//                                                              connection.close();
                                                           }, 3000);
 
                                                   }
@@ -1559,7 +1587,10 @@
                             nextPlayer = playersPlaying[0];
                                
                           }*/
-                          nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
+
+                           console.debug('New toss player');
+                           console.log(playersPlayingTemp, lastWinner)
+                          nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(lastWinner));
                           
 
                           console.log("nextplayer ", nextPlayer);

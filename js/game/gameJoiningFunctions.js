@@ -377,7 +377,7 @@ function rejoinRequest(){
 
 
                     
-
+                ConnectSocket();
 
                 console.log("don't have to create room");
             }else if($.trim(sessionKey) == "no"){
@@ -401,7 +401,7 @@ function rejoinRequest(){
 
   function rejoinRequestPR(){
 
-
+    console.log('Rejoin PR called');
 
        /* Rejoin Another game */
         $.cookie("creator", null);
@@ -512,7 +512,7 @@ function rejoinRequest(){
 
 
                     
-
+                ConnectSocket();
 
                 console.log("don't have to create room");
             }else if($.trim(sessionKey) == "no"){
@@ -633,7 +633,7 @@ function rejoinRequest(){
                         } });
 
 
-                    
+                 ConnectSocket();   
 
 
                 console.log("don't have to create room");

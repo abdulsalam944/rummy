@@ -833,7 +833,7 @@ function dropFunction_offline(_userId){
                                           $('.loading_container .popup .popup_cont').text("Please wait... You will be taken to another table!");
 
                                             setTimeout(function(){
-                                              connection.close();
+//                                              connection.close();
                                               $.cookie("rejoinPR", "1");
                                               $.cookie("rejoin", "0");
                                               $.cookie("onOpenHit", null);
@@ -1099,7 +1099,7 @@ function dropFunction_offline(_userId){
                                           $('.loading_container .popup .popup_cont').text("Please wait... You will be taken to another table!");
 
                                             setTimeout(function(){
-                                              connection.close();
+//                                              connection.close();
                                               $.cookie("rejoinPR", "1");
                                               $.cookie("rejoin", "0");
                                               $.cookie("onOpenHit", null);
@@ -1171,16 +1171,3 @@ function reShuffleDeck(roomIdCookie, sessionKeyCookie, callback){
 
 }
 
-function findNextPlayer(players, currentUser){
-  if(players){
-    var playersLength = (players.length - 1);
-    var curUserPos = players.indexOf(currentUser);
-
-    if(playersLength == curUserPos){
-      return players[0];
-    }else{
-      ++curUserPos;
-      return players[curUserPos];
-    }
-  }
-}

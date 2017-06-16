@@ -1,12 +1,17 @@
-   $('.group').delegate('.hand','mouseover', function(){
+   $('.group').delegate('.sortable','mouseover', function(){
 
         var roomIdCookie = $.cookie("room");
         var sessionKeyCookie = $.trim($.cookie("sessionKey"));
       
+
+
+
+
         $(this).sortable({
-            connectWith: '.group .hand',
+            connectWith: '.group .sortable',
             start: function(event, ui){
                 console.log("starting....");
+                ui.item.toggleClass("highlight");
                   
                   parentgroupRemoving = $(ui.item).closest('.group_blog5').attr('data-group');
 
@@ -16,6 +21,7 @@
             stop: function(event, ui){
 
                 /* get rank and house */
+                ui.item.toggleClass("highlight");
 
                 var card;
 
@@ -124,26 +130,46 @@
                 }
 
             }
-        })
+        });
+
+        $(".ui-sortable-handle").disableSelection();
     });
 
-    $('.player_card_me').delegate('.hand', 'mouseover', function(){
+    $('.player_card_me').delegate('.sortable', 'mouseover', function(){
 
         $(this).sortable({
-            connectWith: '.player_card_me .hand',
+            connectWith: '.player_card_me .sortable',
             // axis: "x",
             start: function(event, ui){
                console.log("starting...");
+               ui.item.toggleClass("highlight");
             },
             stop: function(event, ui){
                 $(ui.item).removeAttr('style');
+                ui.item.toggleClass("highlight");
                 // $(ui.item).css({'left': ''});
                 console.log( $(ui.item) );
             }
           
 
-        })
+        });
+
+        $(".ui-sortable-handle").disableSelection();
 
         // $(this).removeAttr('style');
 
     })
+
+
+//     $(function () {
+//     $(".sortable").sortable({
+//         connectWith: ".sortable",
+//         start: function (event, ui) {
+//             ui.item.toggleClass("highlight");
+//         },
+//         stop: function (event, ui) {
+//             ui.item.toggleClass("highlight");
+//         }
+//     });
+//     $(".ui-sortable-handle").disableSelection();
+// });

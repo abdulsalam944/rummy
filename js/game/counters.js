@@ -124,7 +124,7 @@ var gameStartHandler = function(callback){
 
             $('.popup_rejoin .popup_counter p').text("");
              clearInterval(rejoinGameCounter);
-             connection.close();
+           //  connection.close();
              location.reload();
               //$('.popup_rejoin #rejoinBtn').attr('disabled', true);
         }    

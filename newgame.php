@@ -187,7 +187,7 @@ if($_REQUEST['id']!='')
         <div class="container">
             <div class="row margin_top_9">
             <div class="col-xs-12 col-sm-4 col-md-4">
-                <?php $actual_link = "http://$_SERVER[HTTP_HOST]/index.php/index/link"; ?>
+                <?php $actual_link = "//$_SERVER[HTTP_HOST]/index.php/index/link"; ?>
                 
                 
             </div>
@@ -1371,7 +1371,7 @@ experience
                         <div class="me_pic"><img src="images/me.png" alt="" style="display: none;"></div>
                         
                         <div class="playingCards player_card_me">
-                            <ul class="hand">
+                            <ul class="hand sortable">
 
                             </ul>
                         </div>
@@ -1611,12 +1611,13 @@ experience
 
     
 
-    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
     <script type="text/javascript" src="js/tytabs.jquery.min.js"></script>
 
     <script src="webrtc/RTCMulticonnection.js"></script>
-    <script src="http://134.119.221.139:8080/socket.io/socket.io.js"></script>
+    <script src="https://game.1strummy.in:8080/socket.io/socket.io.js"></script>
     <script src="webrtc/gumAdapter.js"></script>
  
   
@@ -1817,7 +1818,7 @@ experience
         var userid;
 
 
-        socket = io('http://134.119.221.139:8080');
+        socket = io('https://game.1strummy.in:8080');
         socket.on('connect', function() {            
               
             currentUsersId = socket.io.engine.id;

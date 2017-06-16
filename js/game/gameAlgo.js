@@ -273,3 +273,17 @@
                 }
                 return prevUser;
             }
+            function findNextPlayer(players, currentUser){
+              console.log("Fineding Next player : ",players, currentUser);
+              if(players){
+                var playersLength = (players.length - 1);
+                var curUserPos = players.indexOf(currentUser);
+
+                if(playersLength == curUserPos){
+                  return players[0];
+                }else{
+                  ++curUserPos;
+                  return players[curUserPos];
+                }
+              }
+            }
