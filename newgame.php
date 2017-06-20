@@ -187,7 +187,7 @@ if($_REQUEST['id']!='')
         <div class="container">
             <div class="row margin_top_9">
             <div class="col-xs-12 col-sm-4 col-md-4">
-                <?php $actual_link = "//$_SERVER[HTTP_HOST]/index.php/index/link"; ?>
+                <?php $actual_link = "http://$_SERVER[HTTP_HOST]/index.php/index/link"; ?>
                 
                 
             </div>
@@ -1371,7 +1371,7 @@ experience
                         <div class="me_pic"><img src="images/me.png" alt="" style="display: none;"></div>
                         
                         <div class="playingCards player_card_me">
-                            <ul class="hand sortable">
+                            <ul class="hand">
 
                             </ul>
                         </div>
@@ -1611,8 +1611,7 @@ experience
 
     
 
-    <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-
+    <script src="js/jquery-ui.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
     <script type="text/javascript" src="js/tytabs.jquery.min.js"></script>
 
@@ -1838,12 +1837,39 @@ experience
                 count = 0;
 
 
-
-
-
                 //Update Discareded cards
 
+                $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
+                    var thisData = JSON.parse(thisData);
+                    console.log(thisData);
 
+                    $(thisData).each(function(e,j){
+
+                        var playerPlayed = j.user;  
+                        $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
+                        $(j.discarded_cards).each(function(i,k){
+
+                            var cardToBeShown = k;
+
+
+                            if(cardToBeShown != "Joker"){
+                            var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
+                            var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
+
+                            $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
+                             '<span class="rank">'+cardNumber1+'</span>'+
+                             '<span class="suit">&'+cardHouse1+';</span>'+
+                             '</span></li>');
+
+                          }else{
+                              $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
+
+                          } 
+                        });
+
+                    });
+
+                });
 
 
 
@@ -2298,16 +2324,15 @@ experience
                                                         if(parseInt(player) == parseInt(userIdReceived)){
 
 
-                                                          /*if(getItem(playersPlayingTemp, parseInt(userIdReceived)) ){
+                                                          if(getItem(playersPlayingTemp, parseInt(userIdReceived)) ){
 
                                                                 nextPlayer = getItem(playersPlayingTemp, parseInt(userIdReceived));
                                                                    
                                                               }else{
                                                                 nextPlayer = playersPlayingTemp[0];
                                                                    
-                                                              }*/
-                                                                nextPlayer = findNextPlayer(playersPlayingTemp,parseInt(userId));
-                                                                
+                                                              }
+
                                                               console.log("nextplayer ", nextPlayer);
 
                                                               var ajxData260 = {'action': 'current-player', roomId: roomIdCookie, player: parseInt(nextPlayer), sessionKey: sessionKeyCookie };
@@ -3508,48 +3533,6 @@ Offline.on('confirmed-down',function(){
 Offline.on('confirmed-up',function(){
     
     $('.offlineOverlay').fadeOut();   
-    
-    if(!calSingleTimeOnOnline){
-        updateMYCardInHand();
-
-        $.post('ajax/getAllUsersDIscarededCard.php',{room:roomName},function(thisData){
-            var thisData = JSON.parse(thisData);
-            console.log(thisData);
-
-            $(thisData).each(function(e,j){
-                console.log(j);
-                 var playerPlayed = j.user; 
-                console.log($('.current-player[data-user="'+playerPlayed+'"] .player_name #score'));
-                $('.current-player[data-user="'+playerPlayed+'"] .player_name #score').text(parseInt(j.points));
-
-                
-                $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').html('');
-                $(j.discarded_cards).each(function(i,k){
-
-                    var cardToBeShown = k;
-
-
-                    if(cardToBeShown != "Joker"){
-                    var cardNumber1 = cardToBeShown.substr(0, cardToBeShown.indexOf('OF'));
-                    var cardHouse1 =  cardToBeShown.substr(cardToBeShown.indexOf("OF") + 2);
-
-                    $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card card_3 rank-'+cardNumber1+' '+cardHouse1+'">'+
-                     '<span class="rank">'+cardNumber1+'</span>'+
-                     '<span class="suit">&'+cardHouse1+';</span>'+
-                     '</span></li>');
-
-                  }else{
-                      $('.current-player[data-user="'+playerPlayed+'"] .playingCardsDiscard .hand').append('<li><span class="card joker card_3"></span></li>');
-
-                  } 
-                });
-
-            });
-
-        });
-
-        calSingleTimeOnOnline = true;
-    }
     if(checkOffline && tossFlag==1){
         console.log('flag called');
 
@@ -3578,9 +3561,8 @@ Offline.on('confirmed-up',function(){
             //     }
 
             // }
-            console.log(data);
             if(data.status=="over"){
-                console.log('1');
+
                 $('.loading_container').css({'display':'block'});
                 $('.loading_container').addClass('soldiBack');
                 $('.loading_container .popup .popup_cont').text("You have lost the game!");
@@ -3595,7 +3577,7 @@ Offline.on('confirmed-up',function(){
                }, 4000);
 
             }else if(data.status=="" && data.scoreboard_status == "won"){
-                console.log('2');
+
                 // display win message
                 $('.loading_container').css({'display':'block'});
                 $('.loading_container .popup .popup_cont').text("You have won the game!");
@@ -3625,29 +3607,17 @@ Offline.on('confirmed-up',function(){
                     } });
                 }
 
-            }else if(data.scoreboard_status == "drop" || data.scoreboard_status == "middle drop"){
-                console.log('3');
-                $('.player_card_me .hand li a').removeClass('handCard');
-              $('.group_blog5 .playingCards .hand li a').removeClass('handCard');
-
-              $('.player_card_me .hand li a').addClass('showFoldedCard');
-              $('.group_blog .playingCards .hand li a').addClass('showFoldedCard');
-
-              $('.player_card_me').hide();
-              $('.group_blog5').hide();
-              $('.drop').hide();
-              $('.sort').hide();
-              $('.current-player[data-user="'+userId+'"] .toss .playingCards').html('<div class="card card_2 back board_center_back showMyHand"></div>');
-
-
             }else{
-                console.log('4');
                 $('.tempBackdrop').fadeIn();
             }
         });
 
 
         tossFlag = 0;
+    }
+    if(!calSingleTimeOnOnline){
+        updateMYCardInHand();
+        calSingleTimeOnOnline = true;
     }
 
 });

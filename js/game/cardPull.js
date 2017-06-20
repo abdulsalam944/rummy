@@ -20,6 +20,7 @@ function updateJokerPulledCount(roomIdCookie, sessionKeyCookie){
 
    function cardPulledOpenDeck(roomIdCookie, sessionKeyCookie, self, card, rank, suit){
 
+
          /*  If group exists */
 
         if(group1.length != 0 || group2.length != 0 || group3.length != 0 || group4.length != 0 || group5.length != 0 || group6.length != 0){
@@ -202,9 +203,14 @@ function updateJokerPulledCount(roomIdCookie, sessionKeyCookie){
 
 $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
+
+
   if( $(this).hasClass('clickable') ){
 
     var this_ = this; 
+
+    cardPull = 1;
+    $('.cardDeckSelect').removeClass('clickable').addClass('noSelect');
 
   // var dataTosend = {
   //   room:roomName,
@@ -293,7 +299,8 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
                                                         //alert("You cannot pull joker card");
                                                         $('.loading_container').show();
                                                         $('.loading_container .popup .popup_cont').text("You cannot pull joker card");
-
+                                                        cardPull = 0;
+                                                        $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
                                                         setTimeout(function(){
                                                           $('.loading_container').hide();
                                                           $('.loading_container .popup .popup_cont').text("");
@@ -361,6 +368,9 @@ $('.card-throw').delegate('#cardDeckSelectShow'+userId, 'click', function(){
 
                                             $('.loading_container').show();
                                             $('.loading_container .popup .popup_cont').text("You cannot pull joker card");
+
+                                            cardPull = 0;
+                                            $('.cardDeckSelect').removeClass('noSelect').addClass('clickable');
 
                                             setTimeout(function(){
                                               $('.loading_container').hide();

@@ -275,6 +275,8 @@ function leaveTableOnDisconnection(userLeft, nextPlayer){
 
                                     $('.loading_container').css({'display':'block'});
                                     $('.loading_container .popup .popup_cont').text("You have won the game!");
+                                    // Delete all user on this gameplay from dissconnect user table
+                                    $.post('ajax/deleteDissconnectedUsers.php',{session:sessionKeyCookie});
 
                                   }, 2000);
 
@@ -516,6 +518,8 @@ function leaveTableOnDisconnection(userLeft, nextPlayer){
 
                                     $('.loading_container').css({'display':'block'});
                                     $('.loading_container .popup .popup_cont').text("You have won the game!");
+                                    // Delete all user on this gameplay from dissconnect user table
+                                    $.post('ajax/deleteDissconnectedUsers.php',{session:sessionKeyCookie});
 
                                   }, 2000);
 
@@ -814,6 +818,8 @@ function leaveTableOnDisconnection(userLeft, nextPlayer){
 
                                     $('.loading_container').css({'display':'block'});
                                     $('.loading_container .popup .popup_cont').text("You have won the game!");
+                                    // Delete all user on this gameplay from dissconnect user table
+                                    $.post('ajax/deleteDissconnectedUsers.php',{session:sessionKeyCookie});
 
                                   }, 2000);
 

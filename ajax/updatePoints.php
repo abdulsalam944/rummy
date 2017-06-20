@@ -13,7 +13,7 @@ if($_POST['gameTypeCookie']=="score"){
 }
 
 
-echo $query = "update player_gamedata set points = '".$ponit."', total_points = total_points + '".$ponitAdd."' where  session_key = '".$_POST['sessionKey']."' and user_id = '".$_POST['player']."' ";
+echo $query = "update player_gamedata set points = '".$ponit."', scoreboard_status = 'middle drop' total_points = '".$ponitAdd."' where  session_key = '".$_POST['sessionKey']."' and user_id = '".$_POST['player']."' ";
 mysql_query($query);
 
 ?>

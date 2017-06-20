@@ -2158,36 +2158,44 @@ $('.result_bottom').text("");
                         }
                        
 
-                        var signal1011 = {room:roomName, type: 'get-scoreboard', message: 'get all your scoreboards', firstMelder: _user, status: status, leaveTable:false};
+                        var signal1011 = {room:roomName, type: 'get-scoreboard_offline', message: 'get all your scoreboards', firstMelder: _user, status: status, leaveTable:false};
 
                          var signal14 = {room:roomName, type: 'update-players-playing-melder', message: 'updating players playing', playersPlayingTemp: playersPlayingTemp}
 
                         //connection.send(JSON.stringify(signal1011));
                         //connection.send(JSON.stringify(signal14)); 
 
-                        socket.emit(socketEventName, JSON.stringify(signal1011));
-                        socket.emit(socketEventName, JSON.stringify(signal14));
+
+
+                        //socket.emit(socketEventName, JSON.stringify(signal1011));
+                        socket.emit("allmsg", JSON.stringify(signal1011));
+
+                        //socket.emit(socketEventName, JSON.stringify(signal14));                        
+                        socket.emit("allmsg", JSON.stringify(signal14));
                         
 
                         // display win message
-                        $('.loading_container').css({'display':'block'});
-                        $('.loading_container .popup .popup_cont').text("You have won the game!");
-
-                        $.post('ajax/updateGameOver.php',{room:roomName, player: userId });
-
-                         setTimeout(function(){
-                            $('.loading_container').hide();
-                            $('.loading_container .popup .popup_cont').text();
+                        // $('.loading_container').css({'display':'block'});
+                        // $('.loading_container .popup .popup_cont').text("You have won the game!");
+                        // // Delete all user on this gameplay from dissconnect user table
+                        // $.post('ajax/deleteDissconnectedUsers.php',{session:sessionKeyCookie});
 
 
-                            $('.popup_play_again').show();
-                            $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
+                        // $.post('ajax/updateGameOver.php',{room:roomName, player: userId });
+
+                        //  setTimeout(function(){
+                        //     $('.loading_container').hide();
+                        //     $('.loading_container .popup .popup_cont').text();
+
+
+                        //     $('.popup_play_again').show();
+                        //     $('.popup_play_again .popup_with_button_cont p').text("Do you want to play again?");
                             
-                         }, 4000);
+                        //  }, 4000);
 
                         /* Update the realChips table */
                         var gameTypeCookie = $.cookie("game-type");
-                        if(gameTypeCookie != "score"){
+                      if(gameTypeCookie != "score"){
 
                         var ajxData704407 = {'action': 'update-real-wallet', roomId: roomIdCookie, player: userId, sessionKey: sessionKeyCookie};
 

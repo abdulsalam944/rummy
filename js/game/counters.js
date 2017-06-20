@@ -31,7 +31,7 @@ var gameStartHandler = function(callback){
 
 
     $('.loading_container').css({'display': 'block'});
-
+   
       var interval = setInterval(function(){
        
         if(sixPlCounter <= 0){

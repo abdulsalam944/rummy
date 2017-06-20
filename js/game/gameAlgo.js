@@ -273,7 +273,14 @@
                 }
                 return prevUser;
             }
-            function findNextPlayer(players, currentUser){
+            function findNextPlayer(players_, currentUser){
+
+              var players = [];
+
+              for(var i = 0; i<players_.length;i++){
+                players.push(parseInt(players_[i]));
+              }
+
               console.log("Fineding Next player : ",players, currentUser);
               if(players){
                 var playersLength = (players.length - 1);
